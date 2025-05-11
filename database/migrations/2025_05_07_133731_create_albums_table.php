@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('albums', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('artist_id')->constrained()->onDelete('cascade');
-            $table->year('release_year')->nullable();
-            $table->string('cover_image_path')->nullable(); // carátula del álbum
+            $table->date('release_date');
+            $table->string('cover_image')->default('images/placeholders/album.png');
+            $table->text('description')->nullable();
+            $table->enum('type', ['Album', 'EP', 'Single']);
             $table->timestamps();
         });
-
     }
 
     /**

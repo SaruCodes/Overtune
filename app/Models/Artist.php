@@ -1,17 +1,23 @@
 <?php
 
+
+// app/Models/Artist.php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
-    public function albums() {
-        return $this->belongsToMany(Album::class, 'album_artist');
-    }
+    use HasFactory;
 
-    public function favoritedBy() {
-        return $this->belongsToMany(User::class, 'favorite_artists');
-    }
+    protected $fillable = ['name', 'bio', 'image'];
 
+    public function albums()
+    {
+        return $this->belongsToMany(Album::class);
+    }
 }
+
+
+

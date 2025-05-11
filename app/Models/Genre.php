@@ -3,11 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Genre extends Model
 {
-    public function albums() {
-        return $this->belongsToMany(Album::class, 'album_genre');
-    }
+    use HasFactory;
 
+    protected $fillable = ['name'];
+
+    public function albums()
+    {
+        return $this->belongsToMany(Album::class);
+    }
 }
+

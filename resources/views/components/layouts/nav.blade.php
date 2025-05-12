@@ -10,10 +10,11 @@
     <!-- Menú de Navegación -->
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1 space-x-4 flex items-center h-full">
-            <li><a class="btn btn-outline btn-secondary" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
-            <li><a class="btn btn-outline btn-secondary" href="">{{ __('Novedades') }}</a></li>
-            <li><a class="btn btn-outline btn-secondary" href="">{{ __('Mejor puntuados') }}</a></li>
-            <li><a class="btn btn-outline btn-secondary" href="">{{ __('Artistas') }}</a></li>
+            <li><a class="btn btn-outline" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
+            <li><a class="btn btn-outline" href="">{{ __('Noticias') }}</a></li>
+            <li><a class="btn btn-outline" href="">{{ __('Reseñas') }}</a></li>
+            <li><a class="btn btn-outline" href="">{{ __('Artistas') }}</a></li>
+            <li><a class="btn btn-outline" href="">{{ __('Reseñas') }}</a></li>
             <!--<li class="flex items-center">
                 <x-layouts.lang />
             </li>-->

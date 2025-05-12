@@ -22,11 +22,11 @@ export default {
             },
 
             colors: {
-                "header":"#2e0059",
-                "nav":"#2e0059",
+                "header":"#783F8E",
+                "nav":"#4f1271",
                 "main":"#f4eeff",
-                "footer":"#130630",
-                "text-dark": "#111111",
+                "footer":"#4f1271",
+                "text-dark": "#F35B04", //f18701
                 "text": "#141414"
             },
         },

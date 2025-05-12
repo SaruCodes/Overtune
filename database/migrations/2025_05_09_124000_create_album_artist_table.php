@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('artist_id')->constrained()->onDelete('cascade');
             $table->primary(['album_id', 'artist_id']);
         });
-
     }
 
     /**

@@ -1,9 +1,8 @@
 <?php
-use App\Http\Controllers\HomeController;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\Api\ArtistController;
+use App\Http\Controllers\Api\AlbumController;
 
 Route::apiResource('artists', ArtistController::class);
+Route::apiResource('albums', AlbumController::class);
 
-Route::get('/', [HomeController::class, 'index']);
 

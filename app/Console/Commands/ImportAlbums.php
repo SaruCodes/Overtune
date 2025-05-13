@@ -9,34 +9,40 @@ use Illuminate\Support\Facades\Storage;
 
 class ImportAlbums extends Command
 {
-    protected $signature = 'import:albums';
+    protected $signature = 'app:import-albums';
     protected $description = 'Importar álbumes desde un archivo JSON';
 
+    // app/Console/Commands/ImportAlbums.php
     public function handle()
     {
-        $json = Storage::get('albums.json');
-        $data = json_decode($json, true);
-
-        if (!$data) {
-            $this->error('El archivo JSON está vacío o mal formado.');
+        $path = storage_path('app/data/albums.json');
+        if (! file_exists($path)) {
+            $this->error("❌ No existe: {$path}");
             return;
         }
 
-        foreach ($data as $item) {
-            $artist = \App\Models\Artist::firstOrCreate([
-                'nombre' => $item['artist_name'],
-            ]);
-
-            $album = \App\Models\Album::create([
-                'titulo' => $item['title'],
-                'anio' => substr($item['release_date'], 0, 4),
-                'cover_image' => $item['cover_image'],
-                'descripcion' => $item['description'] ?? null,
-            ]);
-            $album->artists()->attach($artist->id);
+        $albums = json_decode(file_get_contents($path), true);
+        if (! is_array($albums)) {
+            $this->error('❌ JSON mal formado.');
+            return;
         }
 
-        $this->info('Álbumes importados correctamente.');
+        foreach ($albums as $item) {
+            $artist = \App\Models\Artist::firstOrCreate(['name' => $item['artist_name']]);
+            $album = \App\Models\Album::firstOrCreate(
+                ['title' => $item['title']],
+                [
+                    'release_date' => $item['release_date'],
+                    'type'         => $item['type'],
+                    'cover_image'  => $item['cover_image']  ?? null,
+                    'description'  => $item['description']  ?? null,
+                ]
+            );
+            $album->artists()->syncWithoutDetaching($artist->id);
+        }
+
+        $this->info('✅ Álbumes importados.');
     }
+
 
 }

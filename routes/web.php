@@ -24,5 +24,4 @@ Route::resource('albums', AlbumController::class);
 Route::resource('reviews', ReviewController::class)->middleware('auth');
 Route::resource('comments', CommentController::class)->middleware('auth');
 
-
 require __DIR__.'/auth.php';

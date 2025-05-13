@@ -11,7 +11,14 @@ class Artist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'bio', 'image'];
+    protected $fillable = [
+        'name',
+        'bio',
+        'image',
+        'country',
+        'debut',
+    ];
+
 
     public function albums()
     {

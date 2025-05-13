@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->enum('genre', ['Rock', 'Pop', 'Jazz', 'Hip-Hop', 'Clasica', 'Electronica', 'Indie', 'R&B', 'Latina', 'Alternativa']);
             $table->timestamps();  // ← Añade esto
         });
 

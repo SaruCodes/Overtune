@@ -9,7 +9,7 @@ class Genre extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['genre'];
 
     public function albums()
     {

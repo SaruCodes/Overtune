@@ -10,11 +10,11 @@
     <!-- Menú de Navegación -->
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1 space-x-4 flex items-center h-full">
-            <li><a class="btn btn-outline" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
-            <li><a class="btn btn-outline" href="">{{ __('Noticias') }}</a></li>
-            <li><a class="btn btn-outline" href="">{{ __('Reseñas') }}</a></li>
-            <li><a class="btn btn-outline" href="">{{ __('Artistas') }}</a></li>
-            <li><a class="btn btn-outline" href="">{{ __('Reseñas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Noticias') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Reseñas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Artistas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Reseñas') }}</a></li>
             <!--<li class="flex items-center">
                 <x-layouts.lang />
             </li>-->
@@ -29,11 +29,23 @@
                     </details>
                 @endguest
                 @auth
-                    <span class="text-white mx-2">{{ auth()->user()->name }}</span>
-                    <form action="{{ route('logout') }}" method="POST">
+                <li class="flex items-center space-x-4">
+                    <!-- Enlace al perfil propio -->
+                    <a href="{{ route('user.profile') }}"
+                       class="btn btn-outline border-[#F35B04] text-[#F35B04]
+                  hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]">
+                        {{ __('Perfil') }}
+                    </a>
+
+                    <!-- Botón cerrar sesión -->
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
-                        <input class="btn btn-primary" type="submit" value="{{ __('Cerrar sesión') }}">
+                        <button type="submit"
+                                class="btn btn-primary">
+                            {{ __('Cerrar sesión') }}
+                        </button>
                     </form>
+                </li>
                 @endauth
             </li>
         </ul>

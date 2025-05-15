@@ -2,63 +2,78 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
+use App\Models\Artist;
 use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $albums = Album::with('artist')->latest()->paginate(10);
+        return view('albums.index', compact('albums'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $artists = Artist::all();
+        return view('albums.create', compact('artists'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title'        => 'required|string|max:255',
+            'release_date' => 'required|date',
+            'cover_image'  => 'nullable|image|max:2048',
+            'description'  => 'nullable|string',
+            'type'         => 'required|in:Album,EP,Single',
+            'artist_id'    => 'required|exists:artists,id',
+        ]);
+
+        if ($request->hasFile('cover_image')) {
+            $validated['cover_image'] = $request->file('cover_image')->store('albums', 'public');
+        }
+
+        Album::create($validated);
+
+        return redirect()->route('albums.index')->with('success', 'Álbum creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Album $album)
     {
-        //
+        return view('albums.show', compact('album'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Album $album)
     {
-        //
+        $artists = Artist::all();
+        return view('albums.edit', compact('album', 'artists'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Album $album)
     {
-        //
+        $validated = $request->validate([
+            'title'        => 'required|string|max:255',
+            'release_date' => 'required|date',
+            'cover_image'  => 'nullable|image|max:2048',
+            'description'  => 'nullable|string',
+            'type'         => 'required|in:Album,EP,Single',
+            'artist_id'    => 'required|exists:artists,id',
+        ]);
+
+        if ($request->hasFile('cover_image')) {
+            $validated['cover_image'] = $request->file('cover_image')->store('albums', 'public');
+        }
+
+        $album->update($validated);
+
+        return redirect()->route('albums.index')->with('success', 'Álbum actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Album $album)
     {
-        //
+        $album->delete();
+        return redirect()->route('albums.index')->with('success', 'Álbum eliminado correctamente.');
     }
 }

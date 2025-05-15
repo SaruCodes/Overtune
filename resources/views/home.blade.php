@@ -39,7 +39,7 @@
 
     <!-- Sección de discos con margen superior añadido -->
     <section class="p-8 bg-violet-100 mt-12">
-        <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Los 3 Mejores Álbumes') }}</h2>
+        <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Últimas reseñas') }}</h2>
         <div class="flex justify-center gap-6">
             @foreach ($albums as $album)
                 <div class="card w-60 shadow-xl bg-gray-50">
@@ -57,9 +57,13 @@
             @endforeach
         </div>
     </section>
+    <section>
+        <div class="w-full bg-violet-400">
+            <p>Reseña Destacada</p>
+        </div>
+    </section>
 
     @guest
-        <!-- Sección Adicional de Presentación -->
         <section class="p-8 bg-violet-100">
             <h2 class="text-3xl font-semibold text-center mb-8">{{__ ('Bienvenido a Overtune')}}</h2>
             <div class="max-w-4xl mx-auto text-center">
@@ -81,7 +85,7 @@
                 <h2 class="card-title">{{__('Gestión de biblioteca de Música')}}</h2>
                 <p>{{__('Gestionamos altas, bajas, actualizaciones y borrado de una tabla de álbumes musicales')}}</p>
                 <div class="card-actions justify-end mt-4">
-                    <a class="btn btn-outline btn-primary" href="{{ route('discos.index') }}">{{__('Acceso a gestión')}}</a>
+                    <a class="btn btn-outline btn-primary" href="{{ route('albums.index') }}">{{__('Acceso a gestión')}}</a>
                 </div>
             </div>
         </div>

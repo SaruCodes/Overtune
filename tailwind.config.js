@@ -14,22 +14,37 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
-
-            height:{
-                "10v":"10vh",
-                "15v":"15vh",
-                "65v":"65vh"
+            height: {
+                '10v': '10vh',
+                '15v': '15vh',
+                '65v': '65vh',
             },
-
             colors: {
-                "header":"#783F8E",
-                "nav":"#4f1271",
-                "main":"#f4eeff",
-                "footer":"#33094a",
-                "text-dark": "#F35B04", //f18701
-                "text": "#141414"
+                header: '#783F8E',
+                nav: '#4f1271',
+                main: '#f4eeff',
+                footer: '#33094a',
+                'text-dark': '#141414',
+                text: '#141414',
             },
         },
     },
-    plugins: [forms, require("daisyui")],
+
+    plugins: [forms, require('daisyui')],
+
+    daisyui: {
+        themes: [
+            {
+                mytheme: {
+                    primary: '#783F8E',
+                    secondary: '#f18701',
+                    accent: "#F35B04", //
+                    neutral: '#33094a',
+                    'base-100': '#ffffff',
+                    'base-content': '#222222',
+                },
+            },
+        ],
+        darkTheme: 'dark',
+    },
 };

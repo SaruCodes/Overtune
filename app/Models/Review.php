@@ -18,4 +18,10 @@ class Review extends Model
         return $this->hasMany(ReviewComment::class);
     }
 
+    public function comentarios()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+
 }

@@ -5,55 +5,70 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use Illuminate\Http\Request;
 
-
 class ArtistController extends Controller
 {
-    // GET /api/artists
     public function index()
     {
-        return Artist::all();
+        $artists = Artist::latest()->paginate(10);
+        return view('artists.index', compact('artists'));
     }
 
-    // POST /api/artists
+    public function create()
+    {
+        return view('artists.create');
+    }
+
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'name'    => 'required|string|max:255',
             'bio'     => 'nullable|string',
-            'image'   => 'nullable|string',
             'country' => 'nullable|string|max:100',
-            'debut'   => 'nullable|string|max:50',
+            'debut'   => 'nullable|integer',
+            'image'   => 'nullable|image|max:2048',
         ]);
 
-        $artist = Artist::create($data);
-        return response()->json($artist, 201);
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('artists', 'public');
+        }
+
+        Artist::create($validated);
+
+        return redirect()->route('artists.index')->with('success', 'Artista creado correctamente.');
     }
 
-    // GET /api/artists/{artist}
     public function show(Artist $artist)
     {
-        return $artist;
+        return view('artists.show', compact('artist'));
     }
 
-    // PUT|PATCH /api/artists/{artist}
+    public function edit(Artist $artist)
+    {
+        return view('artists.edit', compact('artist'));
+    }
+
     public function update(Request $request, Artist $artist)
     {
-        $data = $request->validate([
-            'name'    => 'sometimes|required|string|max:255',
+        $validated = $request->validate([
+            'name'    => 'required|string|max:255',
             'bio'     => 'nullable|string',
-            'image'   => 'nullable|string',
             'country' => 'nullable|string|max:100',
-            'debut'   => 'nullable|string|max:50',
+            'debut'   => 'nullable|integer',
+            'image'   => 'nullable|image|max:2048',
         ]);
 
-        $artist->update($data);
-        return $artist;
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('artists', 'public');
+        }
+
+        $artist->update($validated);
+
+        return redirect()->route('artists.index')->with('success', 'Artista actualizado correctamente.');
     }
 
-    // DELETE /api/artists/{artist}
     public function destroy(Artist $artist)
     {
         $artist->delete();
-        return response()->json(null, 204);
+        return redirect()->route('artists.index')->with('success', 'Artista eliminado correctamente.');
     }
 }

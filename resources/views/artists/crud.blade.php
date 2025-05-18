@@ -63,18 +63,27 @@
                 @endforeach
                 </tbody>
             </table>
+            <div class="mt-4">
+                {{ $artists->onEachSide(1)->links('components.pagination') }}
+            </div>
         </div>
     </div>
 
     <script>
         function confirmDelete(id) {
-            swal({
+            Swal.fire({
                 title: "{{ __('¿Confirmar borrado?') }}",
                 text: "{{ __('Esta acción no se puede deshacer') }}",
                 icon: "warning",
-                buttons: true
-            }).then(ok => {
-                if (ok) document.getElementById('formulario' + id).submit();
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "{{ __('Sí, borrar') }}",
+                cancelButtonText: "{{ __('Cancelar') }}"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("formulario" + id).submit();
+                }
             });
         }
         function confirmEdit(id) {

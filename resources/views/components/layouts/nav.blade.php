@@ -14,7 +14,7 @@
             <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('news.index') }}">{{ __('Noticias') }}</a></li>
             <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('review.index') }}">{{ __('Reseñas') }}</a></li>
             <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('artists.index') }}">{{ __('Artistas') }}</a></li>
-            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('listas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Listas') }}</a></li>
             <!--<li class="flex items-center">
                 <x-layouts.lang />
             </li>-->

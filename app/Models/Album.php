@@ -21,4 +21,9 @@ class Album extends Model
         return $this->belongsToMany(Genre::class, 'album_genre');
     }
 
+    public function review()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }

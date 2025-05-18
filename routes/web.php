@@ -52,10 +52,12 @@ Route::get('/news',   [NewsController::class,   'index'])->name('news.index');
 Route::get('/review',[ReviewController::class, 'index'])->name('review.index');
 
 Route::resource('reviews', ReviewController::class)->only(['index', 'detail']);
+Route::resource('reviews', ReviewController::class);
 
 Route::middleware('auth')->group(function () {
     Route::resource('reviews', ReviewController::class)->except(['crud', 'show']);
     Route::post('/reviews/{review}/comments', [ReviewController::class, 'storeComment'])->name('reviews.comments.store');
 });
+
 
 require __DIR__.'/auth.php';

@@ -8,11 +8,18 @@ use Illuminate\Support\Facades\Gate;
 
 class ArtistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $artists = Artist::latest()->paginate(12);
+        $query = Artist::query();
+
+        if ($request->filled('debut')) {
+            $query->where('debut', $request->debut);
+        }
+
+        $artists = $query->orderByDesc('id')->paginate(10);
         return view('artists.crud', compact('artists'));
     }
+
 
     public function create()
     {

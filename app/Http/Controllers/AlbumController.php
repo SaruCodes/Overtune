@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\Artist;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,10 +16,13 @@ class AlbumController extends Controller
         return view('albums.crud', compact('albums'));
     }
 
+
     public function create()
     {
         $artists = Artist::all();
-        return view('albums.create', compact('artists'));
+        $genres = Genre::all();
+
+        return view('albums.create', compact('artists', 'genres'));
     }
 
     public function store(Request $request)
@@ -27,20 +31,22 @@ class AlbumController extends Controller
             'title' => 'required|string|max:255',
             'artist_id' => 'required|exists:artists,id',
             'release_date' => 'required|date',
-            'cover_image' => 'nullable|url',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'type' => 'required|in:Album,EP,Single',
             'genres' => 'required|array',
-            'genres.*' => 'exists:genres,id',
+            'genres.*' => 'exists:genres,id'
         ]);
 
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('album-covers', 'public');
+            $validated['cover_image'] = $path;
+        }
 
-        $albumData = $validated;
-        unset($albumData['genres']);
-        $album = Album::create($albumData);
-
-        $album->genres()->sync($validated['genres']);
-        return redirect()->route('albums.crud')->with('success', 'Álbum creado correctamente.');
+        $album = Album::create($validated);
+        $album->genres()->sync($request->genres);
+        return redirect()->route('albums.index')
+            ->with('success', 'Álbum creado exitosamente!');
     }
 
     public function edit(Album $album)

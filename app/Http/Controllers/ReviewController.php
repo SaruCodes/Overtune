@@ -11,17 +11,28 @@ class ReviewController extends Controller
 {
     public function index()
     {
-        $reviews = Review::with(['user', 'album'])
+        $recentReviews = Review::with(['user', 'album'])
+            ->withCount('comentarios')
             ->latest()
-            ->paginate(10);
+            ->paginate(5);
 
-        return view('reviews.index', compact('reviews'));
+        $topAlbums = Album::withCount('review')
+        ->orderByDesc('review_count')
+            ->limit(5)
+            ->get();
+
+        $featuredReview = Review::with(['user', 'album'])
+            ->withCount('comentarios')
+            ->orderByDesc('comentarios_count')
+            ->first();
+
+        return view('review.index', compact('recentReviews', 'topAlbums', 'featuredReview'));
     }
 
     public function create()
     {
         $albums = Album::all();
-        return view('reviews.create', compact('albums'));
+        return view('review.create', compact('albums'));
     }
 
     public function store(Request $request)
@@ -34,21 +45,21 @@ class ReviewController extends Controller
 
         $review = auth()->user()->reviews()->create($validated);
 
-        return redirect()->route('reviews.show', $review)
+        return redirect()->route('review.show', $review)
             ->with('success', 'Reseña creada exitosamente!');
     }
 
     public function show(Review $review)
     {
         $review->load(['user', 'album', 'comentarios.user']);
-        return view('reviews.show', compact('review'));
+        return view('review.show', compact('review'));
     }
 
     public function edit(Review $review)
     {
         Gate::authorize('update', $review);
         $albums = Album::all();
-        return view('reviews.edit', compact('review', 'albums'));
+        return view('review.edit', compact('review', 'albums'));
     }
 
     public function update(Request $request, Review $review)
@@ -62,7 +73,7 @@ class ReviewController extends Controller
 
         $review->update($validated);
 
-        return redirect()->route('reviews.show', $review)
+        return redirect()->route('review.show', $review)
             ->with('success', 'Reseña actualizada!');
     }
 

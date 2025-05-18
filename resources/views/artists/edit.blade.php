@@ -57,8 +57,11 @@
                 </div>
 
                 <div class="mb-4">
-                    <x-input-label for="image" value="{{ __('Nueva Imagen') }}" class="text-text-dark" />
-                    <input type="file" name="image" id="image" class="w-full mt-1">
+                    <x-input-label for="image" value="{{ __('Imagen') }}" class="text-text-dark" />
+                    <div class="flex flex-col items-center gap-4">
+                        <input type="file" name="image" id="image" class="file-input file-input-bordered w-full">
+                    </div>
+                    @error('image') <p class="text-error text-sm">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="flex justify-end space-x-4 mt-8">

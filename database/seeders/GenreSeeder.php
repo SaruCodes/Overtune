@@ -28,8 +28,8 @@ class GenreSeeder extends Seeder
             'Trap'
         ];
 
-        foreach ($genres as $name) {
-            Genre::firstOrCreate(['genre' => $name]);
+        foreach ($genres as $genre) {
+            Genre::create(['genre' => $genre]);
         }
     }
 }

@@ -14,7 +14,6 @@
         @endif
     </div>
 
-    <!-- Detalles del artista -->
     <div class="text-center mb-6 mx-8">
         <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ $artist->name }}</h3>
         <p><strong>{{ __('País:') }}</strong> {{ $artist->country ?? __('No especificado') }}</p>

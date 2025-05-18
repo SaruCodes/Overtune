@@ -2,6 +2,7 @@
     <div class="min-h-screen flex flex-col">
         @if (session('mensaje'))
             <div id="message" role="alert" class="alert alert-success">
+                <!-- icono -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -18,6 +19,15 @@
                     {{ __('Volver') }}
                 </a>
             </div>
+
+            <!-- Filtro por debut -->
+            <form method="GET" action="{{ route('artists.crud') }}">
+                <div class="flex items-center space-x-2">
+                    <label for="debut" class="font-semibold">{{ __('Filtrar por debut') }}</label>
+                    <input type="number" name="debut" id="debut" placeholder="Ej: 2010" value="{{ request('debut') }}" class="input input-bordered w-24" />
+                    <button type="submit" class="btn btn-outline btn-info">{{ __('Filtrar') }}</button>
+                </div>
+            </form>
         </div>
 
         <div class="max-h-full overflow-x-auto p-4 flex-grow">
@@ -26,6 +36,7 @@
                 <tr>
                     <th class="border border-gray-400 p-2">{{ __('ID') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Nombre') }}</th>
+                    <th class="border border-gray-400 p-2">{{ __('Debut') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Creado') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Editar') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Acciones') }}</th>
@@ -36,11 +47,12 @@
                     <tr class="border border-gray-300 hover:bg-gray-100">
                         <td class="border border-gray-300 p-3">{{ $artist->id }}</td>
                         <td class="border border-gray-300 p-3">{{ $artist->name }}</td>
+                        <td class="border border-gray-300 p-3">{{ $artist->debut ?? '-' }}</td>
                         <td class="border border-gray-300 p-3">{{ $artist->created_at->format('Y-m-d') }}</td>
                         <td class="border border-gray-300 p-3">
                             <a href="#" onclick="confirmEdit({{ $artist->id }})">
                                 <!-- icono lápiz -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="hover:text-blue-600 w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="hover:text-orange-600 w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
                                 </svg>
                             </a>
@@ -49,7 +61,6 @@
                             <form id="formulario{{ $artist->id }}" action="{{ route('artists.destroy', $artist) }}" method="POST">
                                 @csrf @method('DELETE')
                                 <button type="button" onclick="confirmDelete({{ $artist->id }})" class="text-red-600 hover:text-red-800">
-                                    <!-- icono basurero -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9M4.772 5.79a48.108 48.108 0 013.478-.397m7.5 0a48.11 48.11 0 013.478.397M18 14v4.75A2.25 2.25 0 0115.75 21H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79" />
                                     </svg>
@@ -64,12 +75,11 @@
                 </tbody>
             </table>
             <div class="mt-4">
-                {{ $artists->onEachSide(1)->links('components.pagination') }}
+                {{ $artists->appends(request()->query())->onEachSide(1)->links('components.pagination') }}
             </div>
         </div>
     </div>
-
-    <script>
+<script>
         function confirmDelete(id) {
             Swal.fire({
                 title: "{{ __('¿Confirmar borrado?') }}",

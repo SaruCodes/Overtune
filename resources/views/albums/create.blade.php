@@ -1,8 +1,8 @@
 <x-layouts.layout titulo="Nuevo Álbum">
     <div class="flex flex-col justify-center items-center min-h-screen py-12">
-        <form action="{{ route('albums.store') }}" method="POST" class="w-full max-w-lg bg-white p-6 rounded shadow">
+        <form action="{{ route('albums.store') }}" method="POST" enctype="multipart/form-data"
+              class="w-full max-w-lg bg-white p-6 rounded shadow">
             @csrf
-
             <h1 class="text-2xl font-semibold mb-6 text-center">Crear Nuevo Álbum</h1>
 
             <div class="mb-4">
@@ -14,7 +14,6 @@
             <div class="mb-4">
                 <x-input-label for="artist_id" value="Artista" />
                 <select id="artist_id" name="artist_id" required class="w-full p-2 border rounded">
-                    <option value="">-- Selecciona un artista --</option>
                     @foreach ($artists as $artist)
                         <option value="{{ $artist->id }}" {{ old('artist_id') == $artist->id ? 'selected' : '' }}>
                             {{ $artist->name }}
@@ -26,13 +25,18 @@
 
             <div class="mb-4">
                 <x-input-label for="release_date" value="Fecha de lanzamiento" />
-                <x-text-input id="release_date" name="release_date" type="date" value="{{ old('release_date') }}" required class="w-full" />
+                <input type="date"
+                       id="release_date"
+                       name="release_date"
+                       value="{{ old('release_date') }}"
+                       class="w-full p-2 border rounded"
+                       required>
                 @error('release_date') <p class="text-error text-sm">{{ $message }}</p> @enderror
             </div>
 
             <div class="mb-4">
-                <x-input-label for="cover_image" value="URL de la portada (opcional)" />
-                <x-text-input id="cover_image" name="cover_image" type="url" value="{{ old('cover_image') }}" class="w-full" />
+                <x-input-label for="cover_image" value="Portada del álbum" />
+                <input type="file" id="cover_image" name="cover_image" class="file-input file-input-bordered w-full">
                 @error('cover_image') <p class="text-error text-sm">{{ $message }}</p> @enderror
             </div>
 
@@ -54,14 +58,17 @@
             </div>
 
             <div class="mb-4">
-                <x-input-label for="genres" value="Géneros" />
-                <select id="genres" name="genres[]" multiple required class="w-full p-2 border rounded h-32">
+                <x-input-label value="Géneros" />
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
                     @foreach ($genres as $genre)
-                        <option value="{{ $genre->id }}" {{ (collect(old('genres'))->contains($genre->id)) ? 'selected' : '' }}>
-                            {{ $genre->genre }}
-                        </option>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" name="genres[]" value="{{ $genre->id }}"
+                                   {{ in_array($genre->id, old('genres', [])) ? 'checked' : '' }}
+                                   class="checkbox checkbox-primary checkbox-sm">
+                            <span>{{ $genre->genre }}</span>
+                        </label>
                     @endforeach
-                </select>
+                </div>
                 @error('genres') <p class="text-error text-sm">{{ $message }}</p> @enderror
             </div>
 

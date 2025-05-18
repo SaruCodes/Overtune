@@ -1,10 +1,9 @@
 <x-layouts.layout titulo="Editar Perfil - Overtune">
     <div class="container mx-auto my-8">
-        <!-- Formulario para editar perfil -->
         <div class="card bg-white shadow-md w-full max-w-lg mx-auto">
             <div class="card-body">
                 <h2 class="text-2xl font-bold mb-4">{{ __('Editar Perfil') }}</h2>
-                <form action="{{ route('user.update', auth()->user()->id) }}" method="POST">
+                <form action="{{ route('user.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -21,6 +20,11 @@
                     <div class="mb-4">
                         <label for="bio" class="block text-sm font-semibold">{{ __('Bio') }}</label>
                         <textarea id="bio" name="bio" class="textarea textarea-bordered w-full mt-2">{{ auth()->user()->bio }}</textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label>Avatar</label>
+                        <input type="file" name="avatar">
                     </div>
 
                     <div class="flex justify-end mt-6">

@@ -77,15 +77,30 @@
     @endguest
 
     @auth
-        <div class="card bg-base-100 image-full w-104 mx-auto shadow-sm mt-12">
-            <figure class="h-full">
-                <img src="{{ asset('/images/guitar.jpg') }}" alt="Album" class="object-cover w-full h-full"/>
+        <div class="card lg:card-side bg-base-100 shadow-xl mx-4 mt-12 bg-primary/10">
+            <figure class="lg:w-1/3">
+                <img src="{{ asset('images/review-banner.jpg') }}" alt="Escribe reseñas" class="w-full h-64 lg:h-full object-cover">
             </figure>
-            <div class="card-body flex items-center justify-center flex-col text-center">
-                <h2 class="card-title">{{__('Gestión de biblioteca de Música')}}</h2>
-                <p>{{__('Gestionamos altas, bajas, actualizaciones y borrado de una tabla de álbumes musicales')}}</p>
+            <div class="card-body lg:w-2/3">
+                <h2 class="card-title text-3xl text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4 4.536-4.082c.297-.268.406-.686.278-1.065z"/>
+                    </svg>
+                    {{ __('¡Comparte tu opinión!') }}
+                </h2>
+                <p class="text-lg text-gray-600">
+                    {{ __('¿Te gustó un álbum? ¡Califícalo y escribe tu reseña!') }}<br>
+                    {{ __('Ayuda a otros amantes de la música a descubrir nuevos talentos.') }}
+                </p>
                 <div class="card-actions justify-end mt-4">
-                    <a class="btn btn-outline btn-primary" href="{{ route('albums.index') }}">{{__('Acceso a gestión')}}</a>
+                    <a href="" class="btn btn-primary gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 3l0 18" />
+                            <path d="M3 12l18 0" />
+                        </svg>
+                        {{ __('Crear Reseña') }}
+                    </a>
                 </div>
             </div>
         </div>

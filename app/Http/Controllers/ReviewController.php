@@ -2,63 +2,89 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
+use App\Models\Album;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $reviews = Review::with(['user', 'album'])
+            ->latest()
+            ->paginate(10);
+
+        return view('reviews.index', compact('reviews'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $albums = Album::all();
+        return view('reviews.create', compact('albums'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'album_id' => 'required|exists:albums,id',
+            'rating' => 'required|numeric|min:0.5|max:5|multiple_of:0.5',
+            'content' => 'required|string|min:100|max:2000'
+        ]);
+
+        $review = auth()->user()->reviews()->create($validated);
+
+        return redirect()->route('reviews.show', $review)
+            ->with('success', 'Reseña creada exitosamente!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Review $review)
     {
-        //
+        $review->load(['user', 'album', 'comentarios.user']);
+        return view('reviews.show', compact('review'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Review $review)
     {
-        //
+        Gate::authorize('update', $review);
+        $albums = Album::all();
+        return view('reviews.edit', compact('review', 'albums'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Review $review)
     {
-        //
+        Gate::authorize('update', $review);
+
+        $validated = $request->validate([
+            'rating' => 'required|numeric|min:0.5|max:5|multiple_of:0.5',
+            'content' => 'required|string|min:100|max:2000'
+        ]);
+
+        $review->update($validated);
+
+        return redirect()->route('reviews.show', $review)
+            ->with('success', 'Reseña actualizada!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Review $review)
     {
-        //
+        Gate::authorize('delete', $review);
+        $review->delete();
+        return redirect()->route('reviews.index')
+            ->with('success', 'Reseña eliminada!');
+    }
+
+    public function storeComment(Request $request, Review $review)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string|min:10|max:500'
+        ]);
+
+        $review->comentarios()->create([
+            'user_id' => auth()->id(),
+            'content' => $validated['content']
+        ]);
+
+        return back()->with('success', 'Comentario agregado!');
     }
 }

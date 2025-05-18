@@ -24,9 +24,9 @@
     </div>
 
     <div class="text-center my-6">
-        <a href="{{ route('artists.index') }}" class="btn btn-secondary">
+        <a href="{{ route('artists.crud') }}" class="btn btn-secondary">
             {{ __('Volver a la lista') }}
-        </a>
+        </a>s
     </div>
 
 </x-layouts.layout>

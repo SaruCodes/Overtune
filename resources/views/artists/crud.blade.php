@@ -14,7 +14,7 @@
                 <a class="btn btn-primary text-lg" href="{{ route('artists.create') }}">
                     {{ __('Nuevo Artista') }}
                 </a>
-                <a class="btn btn-secondary text-lg" href="{{ route('home') }}">
+                <a class="btn btn-secondary text-lg" href="{{ route('user.profile') }}">
                     {{ __('Volver') }}
                 </a>
             </div>
@@ -76,8 +76,8 @@
                 text: "{{ __('Esta acción no se puede deshacer') }}",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
+                confirmButtonColor: "#783F8E",
+                cancelButtonColor: "#f18701",
                 confirmButtonText: "{{ __('Sí, borrar') }}",
                 cancelButtonText: "{{ __('Cancelar') }}"
             }).then((result) => {
@@ -86,19 +86,31 @@
                 }
             });
         }
+
         function confirmEdit(id) {
-            swal({
+            Swal.fire({
                 title: "{{ __('¿Seguro que quiere editar?') }}",
-                text: "{{ __('Va a editar un artista en la BBDD') }}",
+                text: "{{ __('Va a editar un artista') }}",
                 icon: "warning",
-                buttons: true
-            }).then(ok => {
-                if (ok) window.location.href = `/artists/${id}/edit`;
+                showCancelButton: true,
+                confirmButtonColor: "#783F8E",
+                cancelButtonColor: "#f18701",
+                confirmButtonText: "{{ __('Sí, editar') }}",
+                cancelButtonText: "{{ __('Cancelar') }}"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/artists/${id}/edit`;
+                }
             });
         }
+
         setTimeout(() => {
             const msg = document.getElementById('message');
-            if (msg) msg.style.opacity = 0;
+            if (msg) {
+                msg.style.transition = 'opacity 0.5s ease';
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 500);
+            }
         }, 5000);
     </script>
 </x-layouts.layout>

@@ -1,11 +1,9 @@
 <x-layouts.layout titulo="Perfil de Usuario - Overtune">
-    <div class="container mx-auto my-8">
-        <!-- Tarjeta superior con información básica del usuario -->
         <div class="card bg-white shadow-md w-full max-w-lg mx-auto">
             <div class="card-body text-center">
                 <div class="avatar">
                     <div class="w-24 rounded-full">
-                        <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                        <img src="{{ auth()->user()->avatar ?? 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp' }}" />
                     </div>
                 </div>
                 <h2 class="card-title text-2xl font-bold">{{ auth()->user()->name }}</h2>
@@ -17,8 +15,6 @@
             </div>
         </div>
 
-        <!-- Sección privada para editor y admin -->
-        {{-- Sección privada para editor y admin --}}
         @php
             $user = auth()->user();
         @endphp
@@ -30,19 +26,13 @@
                     <div class="card bg-gray-100 shadow-xl">
                         <div class="card-body text-center">
                             <h4 class="text-lg font-semibold">{{ __('Gestión de Artistas') }}</h4>
-                            <a href="{{ route('artists.index') }}" class="btn btn-outline btn-primary">{{ __('Acceder') }}</a>
+                            <a href="{{ route('artists.crud') }}" class="btn btn-outline btn-primary">{{ __('Acceder') }}</a>
                         </div>
                     </div>
                     <div class="card bg-gray-100 shadow-xl">
                         <div class="card-body text-center">
                             <h4 class="text-lg font-semibold">{{ __('Gestión de Álbumes') }}</h4>
-                            <a href="" class="btn btn-outline btn-primary">{{ __('Acceder') }}</a>
-                        </div>
-                    </div>
-                    <div class="card bg-gray-100 shadow-xl">
-                        <div class="card-body text-center">
-                            <h4 class="text-lg font-semibold">{{ __('Gestión de Noticias') }}</h4>
-                            <a href="" class="btn btn-outline btn-primary">{{ __('Acceder') }}</a>
+                            <a href="{{ route('albums.crud') }}" class="btn btn-outline btn-primary">{{ __('Acceder') }}</a>
                         </div>
                     </div>
                 </div>

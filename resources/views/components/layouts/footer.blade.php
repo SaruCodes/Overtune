@@ -40,15 +40,17 @@
         </nav>
     </aside>
     <ul class="menu bg-base-50 rounded-box w-26">
-        <li><a>Item 1</a></li>
-        <li><a>Item 2</a></li>
-        <li><a>Item 3</a></li>
+        <li>Menú de Contacto</li>
+        <li><a>Coontacto</a></li>
+        <li><a>Unete al equipo</a></li>
     </ul>
 
     <ul class="menu bg-base-50 rounded-box w-26">
-        <li><a>Item 1</a></li>
-        <li><a>Item 2</a></li>
-        <li><a>Item 3</a></li>
+        <li>Menú Legal</li>
+        <li><a>Politica de Privacidad</a></li>
+        <li><a>Política de Cookies</a></li>
+        <li><a>Consentimiento</a></li>
+        <li><a>Términos de Servicio</a></li>
     </ul>
 
 </footer>

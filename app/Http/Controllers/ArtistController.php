@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Artist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ArtistController extends Controller
 {
     public function index()
     {
-        $artists = Artist::latest()->paginate(10);
-        return view('artists.index', compact('artists'));
+        $artists = Artist::latest()->paginate(12);
+        return view('artists.crud', compact('artists'));
     }
 
     public function create()

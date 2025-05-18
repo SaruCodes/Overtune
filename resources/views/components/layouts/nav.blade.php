@@ -11,17 +11,17 @@
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1 space-x-4 flex items-center h-full">
             <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
-            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Noticias') }}</a></li>
-            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Reseñas') }}</a></li>
-            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Artistas') }}</a></li>
-            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('Reseñas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('news.index') }}">{{ __('Noticias') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('review.index') }}">{{ __('Reseñas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="{{ route('artists.index') }}">{{ __('Artistas') }}</a></li>
+            <li><a class="btn btn-outline border-[#F35B04] text-[#F35B04] hover:bg-[#f18701] hover:border-[#f18701] hover:text-[#4f1271]" href="">{{ __('listas') }}</a></li>
             <!--<li class="flex items-center">
                 <x-layouts.lang />
             </li>-->
             <li class="flex items-center relative z-50">
                 @guest
                     <details class="relative flex items-center z-50">
-                        <summary class="btn btn-outline btn-primary">{{ __('Acceso') }}</summary>
+                        <summary class="btn btn-outline btn-secondary">{{ __('Acceso') }}</summary>
                         <ul class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 max-w-[80vw] w-auto bg-violet-900 text-white rounded-md shadow-lg p-2 z-50">
                             <li><a class="block px-4 py-2 hover:bg-violet-800 rounded-md" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                             <li><a class="block px-4 py-2 hover:bg-violet-800 rounded-md" href="{{ route('register') }}">{{ __('Registro') }}</a></li>

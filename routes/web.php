@@ -1,49 +1,61 @@
 <?php
 
 use App\Http\Controllers\AlbumController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReviewController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Models\Album;
-
-
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::middleware(['auth','verified'])->get('/dashboard', function () {return redirect()->route('home');})->name('dashboard');
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $albums = Album::latest()->limit(3)->get();
     return view('home', compact('albums'));
-})->middleware(['auth','verified'])->name('home');
-
-//Rutas de usuario y acceso al perfil
-Route::get('/perfil/{user}', function (\App\Models\User $user) {
-    return view('user.profile', compact('user'));
-})->name('user.profile');
-
-
-Route::put('/mi-perfil/{user}', [UserController::class, 'update'])->middleware('auth')->name('user.update');
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/perfil', [UserController::class, 'show'])->name('user.profile');
-    Route::get('/perfil/editar', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/perfil/{user}', [UserController::class, 'update'])->name('user.update');
-});
+})->name('home');
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/perfil',        [UserController::class, 'show'])->name('user.profile');
+    Route::get('/perfil/editar', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/perfil',        [UserController::class, 'update'])->name('user.update');
 });
 
-Route::resource('artists', ArtistController::class);
-Route::resource('albums', AlbumController::class);
-Route::resource('reviews', ReviewController::class)->middleware('auth');
-Route::resource('comments', CommentController::class)->middleware('auth');
+
+Route::get('/perfil/{user}', [UserController::class, 'show'])
+    ->name('user.profile.public');
+
+
+Route::middleware('auth')->group(function () {
+    Route::resource('reviews',  ReviewController::class);
+    Route::resource('comments', CommentController::class);
+});
+
+//CRUD Privado de Álbumes y Artistas — solo Admin/Editor
+Route::middleware(['auth','can:manage-content'])->group(function () {
+    Route::get('artists/crud', [ArtistController::class, 'index'])
+        ->name('artists.crud');
+    Route::get('albums/crud',  [AlbumController::class, 'index'])
+        ->name('albums.crud');
+
+    // Rutas de creación, edición, borrado
+    Route::resource('artists', ArtistController::class)
+        ->except(['index','show']);
+    Route::resource('albums',  AlbumController::class)
+        ->except(['index','show']);
+});
+
+
+Route::resource('albums',  AlbumController::class)->only(['index','show']);
+Route::resource('artists', ArtistController::class)->only(['index','show']);
+Route::get('/news',   [NewsController::class,   'index'])->name('news.index');
+Route::get('/review',[ReviewController::class, 'index'])->name('review.index');
+
+Route::resource('reviews', ReviewController::class)->only(['index', 'detail']);
+
+Route::middleware('auth')->group(function () {
+    Route::resource('reviews', ReviewController::class)->except(['crud', 'show']);
+    Route::post('/reviews/{review}/comments', [ReviewController::class, 'storeComment'])->name('reviews.comments.store');
+});
 
 require __DIR__.'/auth.php';

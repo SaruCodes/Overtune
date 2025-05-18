@@ -11,13 +11,14 @@ class Album extends Model
 
     protected $fillable = ['title', 'release_date', 'cover_image', 'description', 'type'];
 
-    public function artists()
+    public function artist()
     {
-        return $this->belongsToMany(Artist::class);
+        return $this->belongsTo(Artist::class);
     }
 
-    public function genres()
+    public function genre()
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class, 'album_genre');
     }
+
 }

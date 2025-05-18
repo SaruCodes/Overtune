@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('albums', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('artist_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->date('release_date');
             $table->string('cover_image')->default('images/placeholders/album.png');

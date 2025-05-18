@@ -1,46 +1,50 @@
 <?php
 
-// app/Http/Controllers/UserController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    // Mostrar perfil
-    public function show()
+    public function show($id = null)
     {
-        return view('user.profile');
+        $user = $id ? User::findOrFail($id) : Auth::user();
+        return view('user.profile', compact('user'));
     }
 
-    // Mostrar formulario para editar perfil
     public function edit()
     {
-        return view('user.edit');
+        $user = Auth::user();
+        return view('user.edit', compact('user'));
     }
 
-    // Actualizar perfil
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        // Asegúrate de que solo el usuario que está logueado pueda editar su perfil
-        if ($user->id != Auth::id()) {
-            abort(403);
-        }
+        $user = Auth::user();
 
-        // Validar los datos
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'bio' => 'nullable|string|max:1000',
+        $data = $request->validate([
+            'name'   => 'required|string|max:255',
+            'email'  => 'required|string|email|unique:users,email,'.$user->id,
+            'bio'    => 'nullable|string|max:1000',
+            'avatar' => 'nullable|image|max:2048',
         ]);
 
-        // Actualizar los campos
-        $user->update($request->all());
+        if ($request->hasFile('avatar')) {
+            // Borra avatar anterior
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $path = $request->file('avatar')
+                ->storeAs('images/avatars', $user->id.'.'.$request->avatar->extension(), 'public');
+            $data['avatar'] = $path;
+        }
 
-        // Redirigir con mensaje de éxito
-        return redirect()->route('user.profile')->with('success', 'Perfil actualizado correctamente.');
+        $user->update($data);
+
+        return redirect()->route('user.profile')
+            ->with('success','Perfil actualizado correctamente.');
     }
 }

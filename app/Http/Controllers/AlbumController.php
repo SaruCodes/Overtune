@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Artist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AlbumController extends Controller
 {
     public function index()
     {
         $albums = Album::with('artist')->latest()->paginate(10);
-        return view('albums.index', compact('albums'));
+        return view('albums.crud', compact('albums'));
     }
 
     public function create()
@@ -23,26 +24,23 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'        => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'artist_id' => 'required|exists:artists,id',
             'release_date' => 'required|date',
-            'cover_image'  => 'nullable|image|max:2048',
-            'description'  => 'nullable|string',
-            'type'         => 'required|in:Album,EP,Single',
-            'artist_id'    => 'required|exists:artists,id',
+            'cover_image' => 'nullable|url',
+            'description' => 'nullable|string',
+            'type' => 'required|in:Album,EP,Single',
+            'genres' => 'required|array',
+            'genres.*' => 'exists:genres,id',
         ]);
 
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')->store('albums', 'public');
-        }
 
-        Album::create($validated);
+        $albumData = $validated;
+        unset($albumData['genres']);
+        $album = Album::create($albumData);
 
-        return redirect()->route('albums.index')->with('success', 'Álbum creado correctamente.');
-    }
-
-    public function show(Album $album)
-    {
-        return view('albums.show', compact('album'));
+        $album->genres()->sync($validated['genres']);
+        return redirect()->route('albums.crud')->with('success', 'Álbum creado correctamente.');
     }
 
     public function edit(Album $album)
@@ -54,26 +52,27 @@ class AlbumController extends Controller
     public function update(Request $request, Album $album)
     {
         $validated = $request->validate([
-            'title'        => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'artist_id' => 'required|exists:artists,id',
             'release_date' => 'required|date',
-            'cover_image'  => 'nullable|image|max:2048',
-            'description'  => 'nullable|string',
-            'type'         => 'required|in:Album,EP,Single',
-            'artist_id'    => 'required|exists:artists,id',
+            'cover_image' => 'nullable|url',
+            'description' => 'nullable|string',
+            'type' => 'required|in:Album,EP,Single',
+            'genres' => 'required|array',
+            'genres.*' => 'exists:genres,id',
         ]);
 
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')->store('albums', 'public');
-        }
+        $albumData = $validated;
+        unset($albumData['genres']);
 
-        $album->update($validated);
-
-        return redirect()->route('albums.index')->with('success', 'Álbum actualizado correctamente.');
+        $album->update($albumData);
+        $album->genres()->sync($validated['genres']);
+        return redirect()->route('albums.crud')->with('success', 'Álbum actualizado correctamente.');
     }
 
     public function destroy(Album $album)
     {
         $album->delete();
-        return redirect()->route('albums.index')->with('success', 'Álbum eliminado correctamente.');
+        return redirect()->route('albums.crud')->with('success', 'Álbum eliminado.');
     }
 }

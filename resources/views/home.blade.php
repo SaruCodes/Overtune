@@ -93,7 +93,7 @@
                     {{ __('Ayuda a otros amantes de la música a descubrir nuevos talentos.') }}
                 </p>
                 <div class="card-actions justify-end mt-4">
-                    <a href="" class="btn btn-primary gap-2">
+                    <a href="{{ route('albums.search')}}" class="btn btn-primary gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                             <path d="M12 3l0 18" />

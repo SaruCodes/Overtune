@@ -29,11 +29,15 @@ class ReviewController extends Controller
         return view('review.index', compact('recentReviews', 'topAlbums', 'featuredReview'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $albums = Album::all();
-        return view('review.create', compact('albums'));
+        $album = null;
+        if ($request->filled('album_id')) {
+            $album = Album::findOrFail($request->album_id);
+        }
+        return view('reviews.create', compact('album'));
     }
+
 
     public function store(Request $request)
     {

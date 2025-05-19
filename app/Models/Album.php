@@ -9,17 +9,23 @@ class Album extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'release_date', 'cover_image', 'description', 'type'];
+    protected $casts = [
+        'release_date' => 'date',
+    ];
+
+    protected $fillable = ['title', 'artist_id', 'release_date', 'cover_image', 'description', 'type'];
+
 
     public function artist()
     {
         return $this->belongsTo(Artist::class);
     }
 
-    public function genre()
+    public function genres()
     {
         return $this->belongsToMany(Genre::class, 'album_genre');
     }
+
 
     public function review()
     {

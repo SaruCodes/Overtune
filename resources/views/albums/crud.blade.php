@@ -56,9 +56,6 @@
                                     </svg>
                                 </button>
                             </form>
-                            <a href="{{ route('albums.show', $album) }}" class="text-blue-600 font-bold hover:text-blue-800">
-                                {{ __('Ver') }}
-                            </a>
                         </td>
                     </tr>
                 @endforeach

@@ -5,6 +5,10 @@
             <div class="lg:col-span-2">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-primary">Últimas Reseñas</h2>
+
+                    @auth
+                        <a href="{{ route('albums.search') }}" class="btn btn-primary">+ Añadir Reseña</a>
+                    @endauth
                 </div>
 
                 <div class="space-y-6">

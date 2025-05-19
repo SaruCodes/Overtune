@@ -1,76 +1,86 @@
-<x-layouts.layout titulo="Editar Álbum">
-    <div class="flex flex-col justify-center items-center min-h-screen py-12">
-        <form action="{{ route('albums.update', $album) }}" method="POST" class="w-full max-w-lg bg-white p-6 rounded shadow">
-            @csrf
-            @method('PUT')
+<x-layouts.layout titulo="{{ __('Overtune - Editar Álbum') }}">
+    <div class="flex flex-col md:flex-row justify-center items-start gap-10 min-h-screen bg-main py-12 px-6">
 
-            <h1 class="text-2xl font-semibold mb-6 text-center">Editar Álbum</h1>
+        {{-- Información Actual --}}
+        <div class="bg-base-100 rounded-lg shadow-md p-6 w-full md:w-1/2">
+            <h2 class="text-xl font-semibold text-primary mb-4">{{ __('Información actual') }}</h2>
 
-            <div class="mb-4">
-                <x-input-label for="title" value="Título" />
-                <x-text-input id="title" name="title" type="text" value="{{ old('title', $album->title) }}" required class="w-full" />
-                @error('title') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+            <p><strong class="text-text-dark">{{ __('Título') }}:</strong> {{ $album->title }}</p>
+            <p><strong class="text-text-dark">{{ __('Artista') }}:</strong> {{ $album->artist->name }}</p>
+            <p><strong class="text-text-dark">{{ __('Fecha de Lanzamiento') }}:</strong> {{ $album->release_date->format('Y-m-d') }}</p>
+            <p><strong class="text-text-dark">{{ __('Tipo') }}:</strong> {{ $album->type }}</p>
+            <p><strong class="text-text-dark">{{ __('Descripción') }}:</strong></p>
+            <p class="whitespace-pre-line mb-4">{{ $album->description ?? '—' }}</p>
 
-            <div class="mb-4">
-                <x-input-label for="artist_id" value="Artista" />
-                <select id="artist_id" name="artist_id" required class="w-full p-2 border rounded">
-                    <option value="">-- Selecciona un artista --</option>
-                    @foreach ($artists as $artist)
-                        <option value="{{ $artist->id }}" {{ (old('artist_id', $album->artist_id) == $artist->id) ? 'selected' : '' }}>
-                            {{ $artist->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('artist_id') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+            @if ($album->cover_image)
+                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="Portada del álbum" class="rounded-md mt-4 w-full max-w-xs">
+            @endif
+        </div>
 
-            <div class="mb-4">
-                <x-input-label for="release_date" value="Fecha de lanzamiento" />
-                <x-text-input id="release_date" name="release_date" type="date" value="{{ old('release_date', $album->release_date) }}" required class="w-full" />
-                @error('release_date') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+        {{-- Formulario de Edición --}}
+        <div class="bg-base-100 rounded-lg shadow-md p-6 w-full md:w-1/2">
+            <form action="{{ route('albums.update', $album) }}" method="POST" enctype="multipart/form-data">
+                @csrf @method('PUT')
 
-            <div class="mb-4">
-                <x-input-label for="cover_image" value="URL de la portada (opcional)" />
-                <x-text-input id="cover_image" name="cover_image" type="url" value="{{ old('cover_image', $album->cover_image) }}" class="w-full" />
-                @error('cover_image') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+                <h1 class="text-2xl font-semibold text-primary mb-6 text-center">{{ __('Editar Álbum') }}</h1>
 
-            <div class="mb-4">
-                <x-input-label for="description" value="Descripción" />
-                <textarea id="description" name="description" rows="3" class="w-full p-2 border rounded">{{ old('description', $album->description) }}</textarea>
-                @error('description') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+                <div class="mb-4">
+                    <x-input-label for="title" value="{{ __('Título') }}" class="text-text-dark" />
+                    <x-text-input id="title" name="title" type="text"
+                                  value="{{ old('title', $album->title) }}"
+                                  class="block mt-1 w-full" required />
+                    @error('title') <p class="text-error text-sm">{{ $message }}</p> @enderror
+                </div>
 
-            <div class="mb-4">
-                <x-input-label for="type" value="Tipo" />
-                <select id="type" name="type" required class="w-full p-2 border rounded">
-                    <option value="">-- Selecciona tipo --</option>
-                    <option value="Album" {{ old('type', $album->type) == 'Album' ? 'selected' : '' }}>Album</option>
-                    <option value="EP" {{ old('type', $album->type) == 'EP' ? 'selected' : '' }}>EP</option>
-                    <option value="Single" {{ old('type', $album->type) == 'Single' ? 'selected' : '' }}>Single</option>
-                </select>
-                @error('type') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+                <div class="mb-4">
+                    <x-input-label for="artist_id" value="{{ __('Artista') }}" class="text-text-dark" />
+                    <select id="artist_id" name="artist_id" class="w-full mt-1 p-2 border border-gray-300 rounded-md" required>
+                        <option value="">{{ __('Seleccione un artista') }}</option>
+                        @foreach($artists as $artist)
+                            <option value="{{ $artist->id }}" {{ old('artist_id', $album->artist_id) == $artist->id ? 'selected' : '' }}>
+                                {{ $artist->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('artist_id') <p class="text-error text-sm">{{ $message }}</p> @enderror
+                </div>
 
-            <div class="mb-4">
-                <x-input-label for="genres" value="Géneros" />
-                <select id="genres" name="genres[]" multiple required class="w-full p-2 border rounded h-32">
-                    @foreach ($genres as $genre)
-                        <option value="{{ $genre->id }}"
-                            {{ (in_array($genre->id, old('genres', $album->genres->pluck('id')->toArray()))) ? 'selected' : '' }}>
-                            {{ $genre->genre }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('genres') <p class="text-error text-sm">{{ $message }}</p> @enderror
-            </div>
+                <div class="mb-4">
+                    <x-input-label for="release_date" value="{{ __('Fecha de Lanzamiento') }}" class="text-text-dark" />
+                    <x-text-input id="release_date" name="release_date" type="date"
+                                  value="{{ old('release_date', $album->release_date->format('Y-m-d')) }}"
+                                  class="block mt-1 w-full" required />
+                    @error('release_date') <p class="text-error text-sm">{{ $message }}</p> @enderror
+                </div>
 
-            <div class="flex justify-end space-x-4 mt-6">
-                <a href="{{ route('albums.index') }}" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-primary">Actualizar</button>
-            </div>
-        </form>
+                <div class="mb-4">
+                    <x-input-label for="type" value="{{ __('Tipo') }}" class="text-text-dark" />
+                    <select id="type" name="type" class="w-full mt-1 p-2 border border-gray-300 rounded-md" required>
+                        @foreach(['Album', 'EP', 'Single'] as $type)
+                            <option value="{{ $type }}" {{ old('type', $album->type) == $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                    @error('type') <p class="text-error text-sm">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="mb-4">
+                    <x-input-label for="description" value="{{ __('Descripción') }}" class="text-text-dark" />
+                    <textarea id="description" name="description" rows="4"
+                              class="w-full mt-1 p-2 border border-gray-300 rounded-md">{{ old('description', $album->description) }}</textarea>
+                    @error('description') <p class="text-error text-sm">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="mb-4">
+                    <x-input-label for="cover_image" value="{{ __('Imagen de Portada') }}" class="text-text-dark" />
+                    <input type="file" name="cover_image" id="cover_image" class="file-input file-input-bordered w-full" />
+                    @error('cover_image') <p class="text-error text-sm">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="flex justify-end space-x-4 mt-8">
+                    <a href="{{ route('albums.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
+                    <button type="submit" class="btn btn-primary">{{ __('Guardar Cambios') }}</button>
+                </div>
+            </form>
+        </div>
     </div>
 </x-layouts.layout>

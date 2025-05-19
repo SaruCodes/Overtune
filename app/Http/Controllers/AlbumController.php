@@ -43,8 +43,17 @@ class AlbumController extends Controller
             $validated['cover_image'] = $path;
         }
 
-        $album = Album::create($validated);
-        $album->genres()->sync($request->genres);
+        $album = Album::create([
+            'title' => $validated['title'],
+            'artist_id' => $validated['artist_id'],
+            'release_date' => $validated['release_date'],
+            'cover_image' => $validated['cover_image'] ?? 'images/placeholders/album.png',
+            'description' => $validated['description'] ?? null,
+            'type' => $validated['type'],
+        ]);
+
+        $album->genres()->sync($validated['genres']);
+
         return redirect()->route('albums.index')
             ->with('success', 'Álbum creado exitosamente!');
     }
@@ -81,4 +90,37 @@ class AlbumController extends Controller
         $album->delete();
         return redirect()->route('albums.crud')->with('success', 'Álbum eliminado.');
     }
+
+    public function show($id)
+    {
+        $album = Album::findOrFail($id);
+        return view('albums.show', compact('album'));
+    }
+
+
+    public function search(Request $request)
+    {
+        $query = Album::query()->with(['artist', 'genres']);
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('year')) {
+            $query->whereYear('release_date', $request->year);
+        }
+
+        if ($request->filled('genres')) {
+            $query->whereHas('genres', function ($q) use ($request) {
+                $q->whereIn('genres.id', $request->genres);
+            });
+        }
+
+        $albums = $query->get();
+        $genres = Genre::all();
+
+        return view('albums.search', compact('albums', 'genres'));
+    }
+
+
 }

@@ -38,7 +38,6 @@
                     <th class="border border-gray-400 p-2">{{ __('Nombre') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Debut') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Creado') }}</th>
-                    <th class="border border-gray-400 p-2">{{ __('Editar') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Acciones') }}</th>
                 </tr>
                 </thead>
@@ -49,15 +48,12 @@
                         <td class="border border-gray-300 p-3">{{ $artist->name }}</td>
                         <td class="border border-gray-300 p-3">{{ $artist->debut ?? '-' }}</td>
                         <td class="border border-gray-300 p-3">{{ $artist->created_at->format('Y-m-d') }}</td>
-                        <td class="border border-gray-300 p-3">
+                        <td class="border border-gray-300 p-3 flex space-x-2">
                             <a href="#" onclick="confirmEdit({{ $artist->id }})">
-                                <!-- icono lápiz -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="hover:text-orange-600 w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
                                 </svg>
                             </a>
-                        </td>
-                        <td class="border border-gray-300 p-3 flex space-x-2">
                             <form id="formulario{{ $artist->id }}" action="{{ route('artists.destroy', $artist) }}" method="POST">
                                 @csrf @method('DELETE')
                                 <button type="button" onclick="confirmDelete({{ $artist->id }})" class="text-red-600 hover:text-red-800">
@@ -66,9 +62,6 @@
                                     </svg>
                                 </button>
                             </form>
-                            <a href="{{ route('artists.show', $artist) }}" class="text-blue-600 font-bold hover:text-blue-800">
-                                {{ __('Ver') }}
-                            </a>
                         </td>
                     </tr>
                 @endforeach

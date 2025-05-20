@@ -1,16 +1,19 @@
 <?php
 // app/Http/Controllers/NewsController.php
-namespace App\Http\Controllers;
+namespace App\Http\Middleware;
 
+use App\Http\Controllers\Auth;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
     public function index()
     {
         $latestNews = News::orderBy('created_at', 'desc')->take(6)->get();
+
         $categoriesWithNews = Category::with(['latestNews' => function ($query) {
             $query->latest()->take(3);
         }])->get();

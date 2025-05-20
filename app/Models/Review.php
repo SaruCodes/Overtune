@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
+    protected $fillable = [
+        'user_id',
+        'album_id',
+        'rating',
+        'content',
+    ];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -14,14 +21,14 @@ class Review extends Model
         return $this->belongsTo(Album::class);
     }
 
-    public function comments() {
-        return $this->hasMany(ReviewComment::class);
-    }
-
-    public function comentarios()
+    public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
 
 
+    public function comentarios()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

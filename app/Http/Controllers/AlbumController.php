@@ -61,8 +61,10 @@ class AlbumController extends Controller
     public function edit(Album $album)
     {
         $artists = Artist::all();
-        return view('albums.edit', compact('album', 'artists'));
+        $genres = Genre::all();
+        return view('albums.edit', compact('album', 'artists', 'genres'));
     }
+
 
     public function update(Request $request, Album $album)
     {

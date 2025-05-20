@@ -41,7 +41,7 @@
                                 <p class="text-gray-600 line-clamp-3 mb-4">{{ $review->content }}</p>
 
                                 <div class="card-actions justify-between items-center">
-                                    <a href="{{ route('reviews.show', $review) }}" class="btn btn-ghost">
+                                    <a href="{{ route('review.show', $review) }}" class="btn btn-ghost">
                                         Leer completa
                                     </a>
                                     <div class="flex items-center gap-2 text-sm text-gray-500">
@@ -113,7 +113,7 @@
                             </div>
                             <p class="mt-4 line-clamp-4">{{ $featuredReview->content }}</p>
                             <div class="card-actions justify-end mt-4">
-                                <a href="{{ route('reviews.show', $featuredReview) }}"
+                                <a href="{{ route('review.show', $featuredReview) }}"
                                    class="btn btn-ghost btn-sm text-white">
                                     Leer completa
                                 </a>

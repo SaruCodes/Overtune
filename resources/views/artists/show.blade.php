@@ -1,6 +1,4 @@
 <x-layouts.layout titulo="{{ __('Overtune - ') . $artist->name }}">
-
-    {{-- Banner imagen artista --}}
     @if ($artist->image)
         <div class="w-full h-64 md:h-96 overflow-hidden rounded-b-lg shadow-lg mb-8">
             <img src="{{ asset('storage/' . $artist->image) }}" alt="Imagen del Artista" class="w-full h-full object-cover object-center">
@@ -10,8 +8,6 @@
             <p class="text-gray-500 text-xl">{{ __('No hay imagen disponible') }}</p>
         </div>
     @endif
-
-    {{-- Tarjeta con info del artista --}}
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 mb-12">
         <h1 class="text-4xl font-bold text-violet-900 mb-4 text-center">{{ $artist->name }}</h1>
 

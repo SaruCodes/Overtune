@@ -27,7 +27,8 @@
                         <input type="file" name="avatar">
                     </div>
 
-                    <div class="flex justify-end mt-6">
+                    <div class="flex justify-end mt-6 space-x-2">
+                        <a href="{{ route('user.profile') }}" class="btn btn-secondary">{{ __('Volver') }}</a>
                         <button type="submit" class="btn btn-primary">{{ __('Actualizar Perfil') }}</button>
                     </div>
                 </form>

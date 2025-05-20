@@ -17,7 +17,7 @@ class ReviewController extends Controller
             ->paginate(5);
 
         $topAlbums = Album::withCount('review')
-        ->orderByDesc('review_count')
+            ->orderByDesc('review_count')
             ->limit(5)
             ->get();
 
@@ -35,7 +35,7 @@ class ReviewController extends Controller
         if ($request->filled('album_id')) {
             $album = Album::findOrFail($request->album_id);
         }
-        return view('reviews.create', compact('album'));
+        return view('review.create', compact('album'));
     }
 
 
@@ -43,19 +43,21 @@ class ReviewController extends Controller
     {
         $validated = $request->validate([
             'album_id' => 'required|exists:albums,id',
-            'rating' => 'required|numeric|min:0.5|max:5|multiple_of:0.5',
-            'content' => 'required|string|min:100|max:2000'
+            'rating' => 'required|numeric|min:0.5|multiple_of:0.5',
+            'content' => 'required|string|min:50|max:3000',
         ]);
 
-        $review = auth()->user()->reviews()->create($validated);
+        $validated['user_id'] = auth()->id();
 
-        return redirect()->route('review.show', $review)
-            ->with('success', 'Reseña creada exitosamente!');
+        Review::create($validated);
+
+        return redirect()->route('review.index')->with('success', 'Reseña creada correctamente.');
     }
 
-    public function show(Review $review)
+    public function show($id)
     {
-        $review->load(['user', 'album', 'comentarios.user']);
+        $review = Review::with(['comments.user', 'album.artist'])->findOrFail($id);
+
         return view('review.show', compact('review'));
     }
 
@@ -72,7 +74,7 @@ class ReviewController extends Controller
 
         $validated = $request->validate([
             'rating' => 'required|numeric|min:0.5|max:5|multiple_of:0.5',
-            'content' => 'required|string|min:100|max:2000'
+            'content' => 'required|string|min:100|max:3000'
         ]);
 
         $review->update($validated);
@@ -85,8 +87,20 @@ class ReviewController extends Controller
     {
         Gate::authorize('delete', $review);
         $review->delete();
-        return redirect()->route('reviews.index')
+        return redirect()->route('review.crud')
             ->with('success', 'Reseña eliminada!');
+    }
+
+    public function crud()
+    {
+        $user = auth()->user();
+
+        $reviews = Review::with('album.artist')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->paginate(10);
+
+        return view('review.crud', compact('reviews'));
     }
 
     public function storeComment(Request $request, Review $review)

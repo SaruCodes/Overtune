@@ -44,7 +44,7 @@
                             <p class="text-sm text-gray-600">Lanzado: {{ \Carbon\Carbon::parse($album->release_date)->year }}</p>
 
                             @auth
-                                <a href="{{ route('reviews.create', ['album_id' => $album->id]) }}"
+                                <a href="{{ route('review.create', ['album_id' => $album->id]) }}"
                                    class="inline-flex items-center mt-3 text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded">
                                     <span class="text-xl font-bold mr-1">+</span> Añadir Reseña
                                 </a>

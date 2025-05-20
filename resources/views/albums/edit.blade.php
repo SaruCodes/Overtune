@@ -70,6 +70,22 @@
                     @error('description') <p class="text-error text-sm">{{ $message }}</p> @enderror
                 </div>
 
+                {{-- NUEVO: Géneros --}}
+                <div class="mb-4">
+                    <x-input-label value="{{ __('Géneros') }}" class="text-text-dark" />
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
+                        @foreach ($genres as $genre)
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="genres[]" value="{{ $genre->id }}"
+                                       class="checkbox checkbox-primary checkbox-sm"
+                                    {{ (collect(old('genres', $album->genres->pluck('id')->toArray()))->contains($genre->id)) ? 'checked' : '' }}>
+                                <span>{{ $genre->genre }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('genres') <p class="text-error text-sm mt-1">{{ $message }}</p> @enderror
+                </div>
+
                 <div class="mb-4">
                     <x-input-label for="cover_image" value="{{ __('Imagen de Portada') }}" class="text-text-dark" />
                     <input type="file" name="cover_image" id="cover_image" class="file-input file-input-bordered w-full" />

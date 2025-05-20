@@ -41,7 +41,7 @@
     <section class="p-8 bg-violet-100 mt-12">
         <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Últimas reseñas') }}</h2>
         <div class="flex justify-center gap-6">
-            @foreach ($albums as $album)
+            @foreach ($latestAlbums as $album)
                 <div class="card w-60 shadow-xl bg-gray-50">
                     <figure>
                         <img class="w-full h-40 object-cover"
@@ -56,12 +56,27 @@
                 </div>
             @endforeach
         </div>
-    </section>
-    <section>
-        <div class="w-full bg-violet-400">
-            <p>Reseña Destacada</p>
-        </div>
-    </section>
+        <section>
+            <div class="flex flex-col md:flex-row bg-violet-400 text-white p-8 gap-6 items-center">
+                <div class="w-full md:w-1/3">
+                    <img src="{{ $featuredReview->album->cover_image ? asset('storage/' . $featuredReview->album->cover_image) : 'https://via.placeholder.com/400' }}"
+                         class="w-full h-72 object-cover rounded-md shadow-md" alt="{{ $featuredReview->album->titulo }}">
+                </div>
+                <div class="w-full md:w-2/3">
+                    <h2 class="text-2xl font-bold mb-2">{{ __('Reseña destacada:') }} {{ $featuredReview->album->titulo }}</h2>
+                    <p class="mb-4">
+                        {{ Str::limit($featuredReview->content, 500) }}
+                        @if (strlen($featuredReview->content) > 500)
+                            <span class="text-sm italic text-gray-100">... </span>
+                            <a href="{{ route('review.show', $featuredReview->id) }}" class="underline text-white text-sm">{{ __('Leer más') }}</a>
+                        @endif
+                    </p>
+                    <a href="{{ route('review.show', $featuredReview->id) }}" class="btn btn-secondary">
+                        {{ __('Ver reseña completa') }}
+                    </a>
+                </div>
+            </div>
+        </section>
 
     @guest
         <section class="p-8 bg-violet-100">

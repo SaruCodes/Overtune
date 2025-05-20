@@ -48,6 +48,8 @@ Route::resource('review', ReviewController::class);
 Route::middleware(['auth'])->group(function () {
     Route::get('/reviews/crud', [ReviewController::class, 'crud'])->name('review.crud');
 });
-
+Route::middleware(['auth'])->group(function () {
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+});
 
 require __DIR__.'/auth.php';

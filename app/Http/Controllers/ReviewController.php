@@ -12,7 +12,7 @@ class ReviewController extends Controller
     public function index()
     {
         $recentReviews = Review::with(['user', 'album'])
-            ->withCount('comentarios')
+            ->withCount('comments')
             ->latest()
             ->paginate(5);
 
@@ -22,8 +22,8 @@ class ReviewController extends Controller
             ->get();
 
         $featuredReview = Review::with(['user', 'album'])
-            ->withCount('comentarios')
-            ->orderByDesc('comentarios_count')
+            ->withCount('comments')
+            ->orderByDesc('comments_count')
             ->first();
 
         return view('review.index', compact('recentReviews', 'topAlbums', 'featuredReview'));

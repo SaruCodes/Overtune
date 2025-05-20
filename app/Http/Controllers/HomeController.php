@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Review;
 use App\Models\Album;
+use App\Models\News;
 
 class HomeController extends Controller
 {
+
     public function index()
     {
-        $albums = Album::latest()->take(3)->get();
-        return view('home', compact('albums'));
+        $latestAlbums = Album::orderBy('created_at', 'desc')->take(3)->get();
+        $featuredReview = Review::with('album')->latest()->first();
+        $latestNews = News::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('home', [
+            'latestAlbums' => $latestAlbums,
+            'featuredReview' => $featuredReview,
+            'latestNews' => $latestNews,
+        ]);
     }
+
 }

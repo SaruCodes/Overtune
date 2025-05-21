@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->enum('category', ['Conciertos', 'Festivales', 'Lanzamientos', 'Overtune', 'Recomendaciones']);
             $table->timestamps();
         });
+
     }
 
     /**

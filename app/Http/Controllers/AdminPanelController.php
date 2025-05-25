@@ -63,4 +63,11 @@ class AdminPanelController extends Controller
 
         return redirect()->back()->with('success', 'Reseña destacada actualizada.');
     }
+
+    public function reports()
+    {
+        $reports = Report::latest()->paginate(10);
+
+        return view('admin.report', compact('reports'));
+    }
 }

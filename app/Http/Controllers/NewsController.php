@@ -12,15 +12,11 @@ class NewsController extends Controller
     {
         $carouselNews = News::latest()->take(5)->get();
         $latestNews = News::latest()->take(3)->get();
-        $categories = Category::all();
-
-        $categoriesWithNews = $categories->map(function ($category) {
-            $category->latestNews = $category->news()->latest()->take(5)->get();
-            return $category;
-        });
+        $categoriesWithNews = Category::with('latestNews')->get();
 
         return view('news.index', compact('carouselNews', 'latestNews', 'categoriesWithNews'));
     }
+
 
     public function show(News $news)
     {

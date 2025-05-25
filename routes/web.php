@@ -30,6 +30,8 @@ Route::get('/albums/{album}', [AlbumController::class, 'show'])->name('albums.sh
 Route::resource('review', ReviewController::class);
 Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');
 Route::resource('lists', ListController::class);
+Route::post('/lists/{list}/favorite', [FavoriteController::class, 'toggle'])->name('lists.favorite');
+
 
 //Rutas accesibles a ususarios autentificados
 Route::middleware(['auth'])->group(function () {
@@ -66,6 +68,8 @@ Route::middleware(['auth', 'can:manage-content'])->group(function () {
     Route::get('/reportes', [AdminPanelController::class, 'reportes'])->name('admin.report');
     Route::put('/reportes/{id}/safe', [AdminPanelController::class, 'marcarComoSeguro'])->name('admin.report.safe');
     Route::delete('/reportes/{id}', [AdminPanelController::class, 'eliminarContenido'])->name('admin.report.delete');
+    Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
+
 });
 
 require __DIR__.'/auth.php';

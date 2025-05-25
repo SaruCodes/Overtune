@@ -37,30 +37,27 @@
         </div>
     </div>
 
-    {{-- Últimas reseñas (álbumes recientes con carátula e info) --}}
     <section class="p-8 bg-violet-100 mt-12">
-        <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Últimas reseñas') }}</h2>
+        <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Álbumes más reseñados') }}</h2>
         <div class="flex flex-wrap justify-center gap-6">
-            @foreach ($latestAlbums as $album)
-                <div class="card w-60 shadow-xl bg-gray-50">
-                    <figure>
-                        <img class="w-full h-40 object-cover"
-                             src="{{ $album->cover_image ? asset('storage/' . $album->cover_image) : 'https://via.placeholder.com/200' }}"
-                             alt="{{ $album->titulo }}" />
-                    </figure>
-                    <div class="card-body">
-                        <h3 class="card-title">{{ $album->titulo }}</h3>
-                        <p>{{ __('Artista: ') }}{{ $album->artista }}</p>
-                        <p>{{ __('Calificación: ')}} {{ $album->average_rating ?? 'N/A' }}/5</p>
+            @foreach ($topReviewedAlbums->take(5) as $album)
+                <a href="{{ route('albums.show', $album->id) }}" class="relative w-60 h-60 overflow-hidden rounded-lg shadow-xl group block">
+                    <img
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        src="{{ $album->cover_image ? asset('storage/' . $album->cover_image) : 'https://via.placeholder.com/200' }}"
+                        alt="{{ $album->titulo }}"
+                    />
+                    <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white text-center p-4">
+                        <h3 class="text-lg font-semibold">{{ $album->titulo }}</h3>
+                        <p class="text-sm">{{ $album->artista }}</p>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </section>
 
-    {{-- Noticia destacada --}}
-    @if ($featuredNews)
-        <section class="bg-violet-400 text-white p-8 mt-12">
+@if ($featuredNews)
+        <section class="bg-purple-900 text-white p-10">
             <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6">
                 <div class="w-full md:w-1/2">
                     <img src="{{ $featuredNews->image ? asset('storage/' . $featuredNews->image) : 'https://via.placeholder.com/600x400' }}"
@@ -75,59 +72,69 @@
         </section>
     @endif
 
-    {{-- Reseña destacada con imagen al lado --}}
     @if ($featuredReview)
-        <section class="p-8 bg-white mt-12">
+        <section class="p-20 bg-purple-100">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-6 items-center">
                 <div class="w-full md:w-1/3">
-                    <img src="{{ $featuredReview->album->cover_image ? asset('storage/' . $featuredReview->album->cover_image) : 'https://via.placeholder.com/400' }}"
-                         class="w-full h-72 object-cover rounded-lg shadow-md" alt="{{ $featuredReview->album->titulo }}">
+                    <img src="{{ asset('storage/' . $featuredReview->album->cover_image) }}"
+                         class="w-full h-72 object-cover rounded-lg shadow-md"
+                         alt="{{ $featuredReview->album->titulo }}">
                 </div>
                 <div class="w-full md:w-2/3">
                     <h2 class="text-2xl font-bold mb-4">{{ __('Reseña destacada: ') }}{{ $featuredReview->album->titulo }}</h2>
-                    <p class="mb-4">
-                        {{ Str::limit($featuredReview->content, 500) }}
-                        @if (strlen($featuredReview->content) > 500)
-                            <a href="{{ route('review.show', $featuredReview->id) }}" class="text-sm underline text-violet-600">{{ __('Leer más') }}</a>
-                        @endif
-                    </p>
+                    <p class="mb-4">{{ Str::limit($featuredReview->content, 500) }}</p>
+                    @if (strlen($featuredReview->content) > 500)
+                        <a href="{{ route('review.show', $featuredReview->id) }}" class="btn btn-secondary">{{ __('Leer más') }}</a>
+                    @endif
                 </div>
             </div>
         </section>
     @endif
 
-    {{-- Carousel de últimas noticias por categoría --}}
-    <section class="p-8 bg-violet-100 mt-12">
+    <!--Noticias!-->
+    <section x-data="carouselNews()" class="p-10 bg-purple-900 text-white">
         <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Últimas Noticias por Categoría') }}</h2>
-        <div class="carousel carousel-center space-x-4 rounded-box">
-            @foreach ($latestByCategory as $news)
-                <div class="carousel-item w-80 bg-white shadow-md rounded-lg p-4">
-                    <h3 class="text-xl font-semibold mb-2">{{ $news->title }}</h3>
-                    <p class="text-sm text-gray-700 mb-4">{{ Str::limit(strip_tags($news->content), 120) }}</p>
-                    <a href="{{ route('news.show', $news->id) }}" class="text-violet-600 hover:underline text-sm">
-                        {{ __('Leer más') }}
-                    </a>
+
+        <div class="flex justify-between items-center mb-6">
+            <button @click="prev" class="btn btn-circle bg-white text-purple-800 hover:bg-purple-200">❮</button>
+            <button @click="next" class="btn btn-circle bg-white text-purple-800 hover:bg-purple-200">❯</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <template x-for="noticia in paginatedNews" :key="noticia.id">
+                <div class="relative h-64 w-full bg-white text-black rounded-lg shadow-lg overflow-hidden flex flex-col justify-end p-4" :style="`background-image: url('${noticia.image_url}'); background-size: cover; background-position: center;`">
+                    <div class="bg-black bg-opacity-60 p-4 rounded">
+                        <h3 class="text-lg font-semibold text-white" x-text="noticia.title"></h3>
+                        <p class="text-sm text-white mb-2" x-text="noticia.summary"></p>
+                        <a :href="noticia.url" class="btn btn-sm btn-outline btn-secondary">{{ __('Leer más') }}</a>
+                    </div>
                 </div>
-            @endforeach
+            </template>
         </div>
     </section>
 
-    {{-- Otra reseña destacada (solo texto) --}}
+
+
+    <!--Reseña Editores-->
     @if ($secondaryReview)
-        <section class="p-8 bg-white mt-12">
-            <div class="max-w-5xl mx-auto">
-                <h2 class="text-2xl font-bold mb-4">{{ __('Reseña especial: ') }}{{ $secondaryReview->album->titulo }}</h2>
-                <p class="text-gray-700 text-lg leading-relaxed">
-                    {{ Str::limit($secondaryReview->content, 800) }}
-                    @if (strlen($secondaryReview->content) > 800)
-                        <a href="{{ route('review.show', $secondaryReview->id) }}" class="text-violet-600 underline text-sm">{{ __('Leer más') }}</a>
-                    @endif
-                </p>
+        <section class="p-20 bg-purple-100">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-6 items-center">
+                <div class="w-full md:w-1/3">
+                    <img src="{{ asset('storage/' . $secondaryReview->album->cover_image) }}"
+                         class="w-full h-72 object-cover rounded-lg shadow-md"
+                         alt="{{ $secondaryReview->album->titulo }}">
+                </div>
+                <div class="w-full md:w-2/3">
+                    <h2 class="text-2xl font-bold mb-4">{{ __('Reseña elegida por los editores: ') }}{{ $secondaryReview->album->titulo }}</h2>
+                    <p class="mb-4">{{ Str::limit($secondaryReview->content, 500) }}</p>
+                    <a href="{{ route('review.show', $secondaryReview->id) }}" class="btn btn-secondary">{{ __('Leer más') }}</a>
+                </div>
             </div>
         </section>
     @endif
+
     @guest
-        <section class="p-8 bg-violet-100">
+        <section class="p-8 bg-purple-300">
             <h2 class="text-3xl font-semibold text-center mb-8">{{__ ('Bienvenido a Overtune')}}</h2>
             <div class="max-w-4xl mx-auto text-center">
                 <p class="text-lg mb-4">
@@ -169,3 +176,30 @@
         </div>
     @endauth
 </x-layouts.layout>
+<script>
+    function carouselNews() {
+        return {
+            allNews: @json($carouselNews),
+            currentIndex: 0,
+            get paginatedNews() {
+                return this.allNews.slice(this.currentIndex, this.currentIndex + 3);
+            },
+            next() {
+                if (this.currentIndex + 3 >= this.allNews.length) {
+                    this.currentIndex = 0;
+                } else {
+                    this.currentIndex += 3;
+                }
+            },
+            prev() {
+                if (this.currentIndex === 0) {
+                    this.currentIndex = this.allNews.length - 3;
+                } else {
+                    this.currentIndex -= 3;
+                }
+            }
+        }
+    }
+</script>
+
+

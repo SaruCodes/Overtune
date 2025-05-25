@@ -17,27 +17,29 @@ class HomeController extends Controller
         $secondaryReview = Review::latest()->skip(1)->first();
         $latestNews = News::orderBy('created_at', 'desc')->take(3)->get();
         $featuredNews = News::latest()->first();
+        $topReviewedAlbums = Album::withCount('review')->orderByDesc('review_count')->take(5)->get();
 
-        $categories = Category::with(['news' => function($query) {
+        $categories = Category::with(['news' => function ($query) {
             $query->latest()->take(1);
         }])->get();
 
         $latestByCategory = collect();
-
         foreach ($categories as $category) {
             if ($category->news->isNotEmpty()) {
                 $latestByCategory->push($category->news->first());
             }
         }
 
-        return view('home', compact(
-            'latestAlbums',
-            'featuredReview',
-            'secondaryReview',
-            'featuredNews',
-            'latestNews',
-            'latestByCategory'
-        ));
-    }
+        $carouselNews = $latestByCategory->map(function ($n) {
+            return [
+                'id' => $n->id,
+                'title' => $n->title,
+                'summary' => \Illuminate\Support\Str::limit(strip_tags($n->content), 120),
+                'url' => route('news.show', $n->id),
+                'image_url' => asset('storage/' . $n->image),
+            ];
+        });
 
+        return view('home', compact('latestAlbums', 'featuredReview', 'secondaryReview', 'featuredNews', 'latestNews', 'latestByCategory', 'topReviewedAlbums', 'carouselNews'));
+    }
 }

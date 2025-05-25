@@ -72,7 +72,7 @@
                 <div class="card-body">
                     <h3 class="text-xl font-semibold flex justify-between items-center"> Tus Reseñas
                         @if(auth()->check() && auth()->id() === $user->id)
-                            <a href="{{ route('review.create') }}" class="btn btn-sm btn-primary">Crear Reseña</a>
+                            <a href="{{ route('albums.search') }}" class="btn btn-sm btn-primary">Crear Reseña</a>
                         @endif
                     </h3>
 

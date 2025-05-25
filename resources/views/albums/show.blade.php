@@ -1,26 +1,59 @@
 <x-layouts.layout titulo="Detalle del Álbum">
-    <div class="max-w-4xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-2">{{ $album->title }}</h1>
-        <p class="text-lg mb-4">Artista: {{ $album->artist }}</p>
-        <p class="text-lg mb-4">Año: {{ $album->year }}</p>
-        <p class="mb-6">{{ $album->description }}</p>
+    <div class="container mx-auto px-4 pt-10 mb-16"> {{-- espacio extra abajo para separar del footer --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div>
+                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="rounded-xl shadow-md w-full max-w-sm mx-auto md:mx-0" />
+            </div>
+            <div>
+                <h1 class="text-4xl font-bold mb-4">{{ $album->title }}</h1>
+                <p class="text-gray-700 mb-4">{{ $album->description ?? 'Sin descripción.' }}</p>
 
-        <h2 class="text-2xl font-semibold mb-4">Reseñas más comentadas</h2>
-        @if ($album->reviews->count() === 0)
-            <p class="italic">No hay reseñas para este álbum.</p>
-        @else
-            @php
-                $sortedReviews = $album->reviews->sortByDesc(fn($review) => $review->comments->count());
-            @endphp
-            @foreach ($sortedReviews as $review)
-                <div class="border rounded p-4 mb-4">
-                    <h3 class="text-xl font-semibold">{{ $review->title }}</h3>
-                    <p class="mb-2">{{ $review->content }}</p>
-                    <p class="text-sm text-gray-600">
-                        Comentarios: {{ $review->comments->count() }}
-                    </p>
+                <div class="bg-purple-300 p-6 rounded-xl shadow">
+                    <h2 class="text-lg font-semibold mb-2">Información del Álbum</h2>
+                    <ul class="space-y-1">
+                        <li><strong>Artista:</strong> {{ $album->artist->name }}</li>
+                        <li><strong>Fecha de lanzamiento:</strong> {{ $album->release_date->format('d/m/Y') }}</li>
+                        <li><strong>Tipo:</strong> {{ $album->type }}</li>
+                        <li><strong>Géneros:</strong>
+                            {{ $album->genres->pluck('genre')->join(', ') }}
+                        </li>
+                    </ul>
                 </div>
-            @endforeach
-        @endif
+            </div>
+        </div>
+
+        <!--TARJETA UNICA CON RECOMENDACIONES Y RESEÑAS-->
+        <div class="bg-purple-300 rounded-xl shadow p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="max-w-sm mx-auto lg:mx-0">
+                <h2 class="text-lg font-semibold mb-4">Recomendaciones</h2>
+                @if($recommendedAlbums->isNotEmpty())
+                    <ul class="space-y-3">
+                        @foreach($recommendedAlbums as $rec)
+                            <li class="flex items-center space-x-3">
+                                <img src="{{ asset('storage/' . $rec->cover_image) }}"
+                                     alt="{{ $rec->title }}"
+                                     class="w-12 h-12 rounded shadow" />
+                                <div>
+                                    <p class="text-sm font-medium">{{ $rec->title }}</p>
+                                    <p class="text-xs text-gray-600">{{ $rec->artist->name }}</p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-sm">No hay recomendaciones disponibles.</p>
+                @endif
+            </div>
+            <div>
+                <h2 class="text-lg font-semibold mb-4">Reseñas mejor valoradas</h2>
+                @foreach($album->review->sortByDesc(fn($review) => $review->comments->count()) as $review)
+                    <div class="mb-6 border-b pb-4">
+                        <p class="font-bold">Por {{ $review->user->name }} el {{ $review->created_at->format('d/m/Y') }}</p>
+                        <p class="text-gray-700 mt-2">{{ $review->content }}</p>
+                    </div>
+                @endforeach
+                <a href="{{ route('review.show', $album->id) }}" class="block text-right text-purple-600 font-semibold hover:underline">Ver más</a>
+            </div>
+        </div>
     </div>
 </x-layouts.layout>

@@ -1,18 +1,32 @@
 <x-layouts.layout titulo="Overtune - Noticias">
     <section class="w-full mb-12">
-        <div class="carousel w-full">
-            @foreach($carouselNews as $news)
-                <div id="slide-{{ $loop->index }}" class="carousel-item relative w-full h-[750px]">
-                    <a href="{{ route('news.show', $news) }}">
-                        <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-full object-cover" />
+        <div class="carousel w-full h-[750px]">
+            @foreach($categoriesWithNews->take(4) as $index => $category)
+                @php $news = $category->latestNews->first(); @endphp
+                @if($news)
+                    <div id="slide{{ $index }}" class="carousel-item relative w-full h-full">
+                        <img src="{{ asset('storage/' . $news->image) }}" class="w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                            <h2 class="text-white text-3xl md:text-5xl font-bold">{{ $news->title }}</h2>
+                            <div class="text-center">
+                                <h2 class="text-white text-4xl md:text-5xl font-bold mb-2">{{ $news->title }}</h2>
+                                <span class="bg-primary text-white px-3 py-1 text-sm rounded">{{ $category->name }}</span>
+                            </div>
                         </div>
-                    </a>
-                </div>
+                        <!-- Controls -->
+                        <a href="#slide{{ $loop->index == 0 ? $categoriesWithNews->take(4)->count() - 1 : $loop->index - 1 }}"
+                           class="absolute left-5 top-1/2 transform -translate-y-1/2 btn btn-circle bg-white bg-opacity-50 hover:bg-opacity-80">
+                            ❮
+                        </a>
+                        <a href="#slide{{ ($loop->index + 1) % $categoriesWithNews->take(4)->count() }}"
+                           class="absolute right-5 top-1/2 transform -translate-y-1/2 btn btn-circle bg-white bg-opacity-50 hover:bg-opacity-80">
+                            ❯
+                        </a>
+                    </div>
+                @endif
             @endforeach
         </div>
     </section>
+
 
     <div class="container mx-auto px-4">
         <section class="mb-12">
@@ -33,7 +47,7 @@
                     @foreach($latestNews->slice(1, 2) as $news)
                         <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
                             <a href="{{ route('news.show', $news) }}">
-                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-36 object-cover rounded" />
+                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded" />
                                 <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
                                     <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
                                 </div>

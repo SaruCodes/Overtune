@@ -1,41 +1,60 @@
 <x-layouts.layout titulo="Reseña - {{ $review->album->title }}">
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded">
-        <div class="flex gap-6 mb-6">
-            <img src="{{ asset('storage/' . $review->album->cover_image) }}" alt="{{ $review->album->title }}" class="w-48 h-48 object-cover rounded">
+    <div class="max-w-4xl mx-auto px-6 py-12 bg-white shadow-lg rounded mt-12 mb-16">
+
+        <div class="flex gap-6 mb-6 items-center">
+            <img src="{{ asset('storage/' . $review->album->cover_image) }}" alt="{{ $review->album->title }}" class="w-48 h-48 object-cover rounded-lg shadow">
             <div>
-                <h1 class="text-3xl font-bold">{{ $review->album->title }}</h1>
-                <p class="text-lg text-gray-700">{{ $review->album->artist->name }} - {{ $review->album->year }}</p>
-                <div class="mt-2 text-yellow-500">
+                <h1 class="text-3xl font-bold mb-1">{{ $review->album->title }}</h1>
+                <p class="text-lg text-gray-700 mb-2">{{ $review->album->artist->name }} &bull; {{ $review->album->year }}</p>
+                <div class="mt-1 flex space-x-1 text-yellow-500 select-none">
                     @for ($i = 1; $i <= 5; $i++)
-                        @if($i <= $review->rating)
-                            ★
+                        @php
+                            $diff = $review->rating - $i;
+                        @endphp
+                        @if($diff >= 0)
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.973c.3.922-.755 1.688-1.538 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.783.57-1.838-.196-1.538-1.118l1.287-3.973a1 1 0 00-.364-1.118L2.036 9.4c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z" />
+                            </svg>
+                        @elseif($diff > -1 && $diff < 0)
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
+                                <defs>
+                                    <linearGradient id="half-grad-{{ $i }}" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="50%" stop-color="currentColor"/>
+                                        <stop offset="50%" stop-color="transparent"/>
+                                    </linearGradient>
+                                </defs>
+                                <path fill="url(#half-grad-{{ $i }})" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.973c.3.922-.755 1.688-1.538 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.783.57-1.838-.196-1.538-1.118l1.287-3.973a1 1 0 00-.364-1.118L2.036 9.4c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z" />
+                            </svg>
                         @else
-                            ☆
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.973c.3.922-.755 1.688-1.538 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.783.57-1.838-.196-1.538-1.118l1.287-3.973a1 1 0 00-.364-1.118L2.036 9.4c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.974z" />
+                            </svg>
                         @endif
                     @endfor
                 </div>
+
             </div>
         </div>
 
-        <div class="mb-8">
-            <p class="text-gray-800 whitespace-pre-wrap">{{ $review->content }}</p>
+        <div class="mb-10">
+            <p class="text-gray-800 whitespace-pre-wrap text-lg leading-relaxed">{{ $review->content }}</p>
         </div>
 
-        <div class="max-w-4xl mx-auto mt-12 p-6">
-            <h2 class="text-2xl font-semibold mb-4">Deja tu comentario</h2>
+        <div class="max-w-4xl mx-auto mt-12 p-6 bg-gray-50 rounded-lg shadow-inner">
+            <h2 class="text-2xl font-semibold mb-6">Deja tu comentario</h2>
             @auth
                 <form method="POST" action="{{ route('comments.store') }}">
                     @csrf
                     <input type="hidden" name="commentable_type" value="reviews">
                     <input type="hidden" name="commentable_id" value="{{ $review->id }}">
-                    <textarea name="content" class="textarea textarea-bordered w-full h-32 mb-4" placeholder="Escribe tu comentario aquí..." required></textarea>
-                    <button class="btn btn-primary">Enviar Comentario</button>
+                    <textarea name="content" class="textarea textarea-bordered w-full h-32 mb-4 resize-none focus:ring-2 focus:ring-blue-500" placeholder="Escribe tu comentario aquí..." required></textarea>
+                    <button class="btn btn-primary hover:bg-blue-600 transition">Enviar Comentario</button>
                 </form>
             @else
                 <p class="text-gray-600">Debes iniciar sesión para comentar.</p>
             @endauth
 
-            <div class="mt-8 space-y-6">
+            <div class="mt-10 space-y-6">
                 @foreach ($comments as $comment)
                     <div
                         x-data="{
@@ -43,16 +62,17 @@
                             content: '{{ addslashes($comment->content) }}',
                             originalContent: '{{ addslashes($comment->content) }}'
                         }"
-                        class="border p-4 rounded bg-gray-50 shadow-sm relative group"
+                        class="border rounded-lg bg-white shadow-sm p-4 relative group hover:shadow-lg transition-shadow"
                     >
-                        <div class="flex items-center gap-4 mb-2">
+                        <div class="flex items-center gap-4 mb-3">
                             <img src="{{ $comment->user->avatar ? asset('storage/' . $comment->user->avatar) : 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp' }}"
-                                 alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover">
+                                 alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover shadow-sm">
                             <div>
-                                <p class="font-semibold">{{ $comment->user->name }}</p>
+                                <p class="font-semibold text-gray-800">{{ $comment->user->name }}</p>
                                 <p class="text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</p>
                             </div>
                         </div>
+
                         <template x-if="!editMode">
                             <p class="text-gray-700 whitespace-pre-wrap" x-text="content"></p>
                         </template>
@@ -64,7 +84,7 @@
                                 <textarea
                                     name="content"
                                     x-model="content"
-                                    class="textarea textarea-bordered w-full h-24"
+                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-purple-900"
                                     required
                                 ></textarea>
                                 <div class="flex gap-2">
@@ -80,20 +100,31 @@
                                 $userIsAdminOrEditor = auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor');
                             @endphp
 
-                            <div class="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute top-3 right-3 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                 @if($userIsOwner)
-                                    <button @click="editMode = true" class="text-orange-600 hover:text-orange-800 text-lg" title="Editar" type="button">✏️</button>
+                                    <button @click="editMode = true" type="button" title="Editar comentario" class="text-indigo-600 hover:text-indigo-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+                                        </svg>
+                                    </button>
                                 @endif
 
                                 @if($userIsOwner || $userIsAdminOrEditor)
                                     <form method="POST" action="{{ route('comments.destroy', $comment) }}" onsubmit="return confirmDelete(event)" id="delete-comment-{{ $comment->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 text-lg" title="Eliminar">🗑️</button>
+                                        <!-- Trash Icon -->
+                                        <button type="submit" title="Eliminar comentario" class="text-red-600 hover:text-red-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+                                            </svg>
+                                        </button>
                                     </form>
                                 @endif
 
-                                <button onclick="confirmReport({{ $comment->id }})" class="text-yellow-500 hover:text-yellow-700 text-sm" title="Reportar">Reportar</button>
+                                <button onclick="confirmReport({{ $comment->id }})" title="Reportar comentario" class="text-yellow-500 hover:text-yellow-700 font-semibold text-sm self-center">
+                                    Reportar
+                                </button>
                             </div>
                         @endauth
                     </div>
@@ -120,21 +151,6 @@
             }
         });
         return false;
-    }
-
-    function confirmEdit(commentId) {
-        Swal.fire({
-            title: 'Editar comentario',
-            text: "¿Quieres editar este comentario?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Sí',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = `/comments/${commentId}/edit`;
-            }
-        });
     }
 
     function confirmReport(commentId) {

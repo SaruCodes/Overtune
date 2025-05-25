@@ -36,13 +36,12 @@
                 @endforeach
             </div>
         </div>
-
+        <div class="divider divider-secondary text-2xl font-bold text-primary mb-6">Destacada esta semana</div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-12">
                 @if($featuredReviews->count() > 4)
-                    <div class="card bg-base-100 border border-transparent hover:border-secondary shadow-md hover:shadow-xl transition transform hover:scale-[1.01] duration-300 flex gap-6 p-6 items-center">
-                        <img src="{{ asset('storage/' . $featuredReviews[4]->album->cover_image) }}"
-                             class="w-32 h-32 object-cover rounded ring-2 ring-secondary" alt="{{ $featuredReviews[4]->album->title }}">
+                    <div class="card bg-base-100 border border-transparent hover:border-secondary shadow-md hover:shadow-xl transition transform hover:scale-[1.01] duration-300 flex flex-col lg:flex-row gap-6 p-6 items-center">
+                        <img src="{{ asset('storage/' . $featuredReviews[4]->album->cover_image) }}" alt="{{ $featuredReviews[4]->album->title }}" class="w-32 h-32 lg:w-40 lg:h-40 object-cover rounded ring-2 ring-secondary flex-shrink-0" />
                         <div class="flex-1">
                             <h4 class="text-xl font-semibold mb-2 text-primary">{{ $featuredReviews[4]->album->title }}</h4>
                             <p class="line-clamp-3 text-gray-700">{{ $featuredReviews[4]->content }}</p>
@@ -54,12 +53,12 @@
                         </div>
                     </div>
                 @endif
-
+                <div class="divider divider-secondary"></div>
                 <div>
                     <h2 class="text-2xl font-bold text-primary mb-6">Últimas Reseñas</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($recentReviews as $review)
-                            <div class="card bg-base-100 border border-transparent hover:border-primary shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition duration-300 ease-in-out">
+                            <div class="card bg-purple-300 border border-transparent hover:border-primary shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition duration-300 ease-in-out">
                                 <div class="card-body">
                                     <div class="flex gap-4 items-center mb-4">
                                         <img src="{{ asset('storage/' . $review->album->cover_image) }}"
@@ -86,15 +85,14 @@
                 </div>
             </div>
 
-            <!--Albumes destacados (columna lateral-->
+            <!--Albumes destacados (columna lateral)-->
             <div class="space-y-6">
                 <div class="card bg-base-100 shadow-lg border border-primary p-6">
                     <h2 class="card-title text-primary mb-4">Álbumes Populares</h2>
                     <div class="space-y-4">
                         @foreach ($topAlbums as $album)
                             <div class="flex items-center gap-4">
-                                <img src="{{ asset('storage/' . $album->cover_image) }}"
-                                     alt="{{ $album->title }}" class="w-16 h-16 object-cover rounded ring-2 ring-primary">
+                                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="w-16 h-16 object-cover">
                                 <div>
                                     <h3 class="font-semibold text-sm text-primary">{{ $album->title }}</h3>
                                     <p class="text-xs text-gray-500">

@@ -18,4 +18,14 @@ class ListModel extends Model
     {
         return $this->belongsToMany(Album::class, 'album_list')->withTimestamps();
     }
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'list_id');
+    }
+
 }

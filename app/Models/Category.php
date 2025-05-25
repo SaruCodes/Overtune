@@ -10,8 +10,8 @@ class Category extends Model
     {
         return $this->hasMany(News::class);
     }
-    public function getLatestNewsAttribute()
+    public function latestNews()
     {
-        return $this->news()->latest()->take(3)->get();
+        return $this->hasMany(News::class)->latest()->limit(5);
     }
 }

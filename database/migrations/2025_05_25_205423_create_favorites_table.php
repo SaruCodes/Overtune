@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('genres', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->enum('genre', ['Rock', 'Pop', 'Hip-Hop', 'Jazz', 'K-pop', 'Hyperpop', 'Indie', 'Electronica', 'Clasica', 'Reggae', 'Metal', 'Folk', 'Latina', 'R&B', 'Soul', 'Trap', 'Synthpop', 'Nu-Metal']);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade');
             $table->timestamps();
+            $table->unique(['user_id', 'list_id']);
         });
 
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('genres');
+        Schema::dropIfExists('favorites');
     }
 };

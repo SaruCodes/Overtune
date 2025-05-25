@@ -1,5 +1,4 @@
 <x-layouts.layout titulo="Panel de Administracion">
-
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-3xl font-bold mb-6">Panel de Control</h1>
         <!--Mensajes de alerta de exito o error-->
@@ -12,10 +11,7 @@
         <!--Panel de reportes-->
         @if(auth()->user()->isAdmin())
         <div class="mb-6">
-            <a href="{{ route('admin.report') }}"
-               class="btn-secondary text-white font-semibold py-2 px-4 rounded">
-                Ver Panel de Reportes
-            </a>
+            <a href="{{ route('admin.report') }}" class="btn btn-secondary text-white font-semibold py-2 px-4 rounded">Ver Panel de Reportes</a>
         </div>
         @endif
 

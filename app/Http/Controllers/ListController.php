@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
 use App\Models\ListModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,31 +15,44 @@ class ListController extends Controller
         $lists = ListModel::where('user_id', Auth::id())->get();
         $latestLists = ListModel::latest()->take(10)->get();
         $recommendedLists = ListModel::inRandomOrder()->take(8)->get();
-        $popularLists = ListModel::orderBy('views', 'desc')->take(8)->get();
+        $popularLists = ListModel::withCount('favorites')->orderBy('favorites_count', 'desc')->take(8)->get();
 
         return view('lists.index', compact('lists', 'latestLists', 'recommendedLists', 'popularLists'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('lists.create');
+        $query = $request->input('search');
+        $albums = null;
+
+        if ($query) {
+            $albums = Album::where('title', 'like', '%' . $query . '%')->orderBy('title')->get();
+        }
+
+        return view('lists.create', compact('albums'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'albums' => 'required|array',
+            'albums.*' => 'exists:albums,id',
         ]);
 
-        $list = ListModel::create([
-            'user_id' => Auth::id(),
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-        ]);
+        $list = new \App\Models\ListModel();
+        $list->title = $request->title;
+        $list->description = $request->description;
+        $list->user_id = auth()->id();
+        $list->save();
+        $list->albums()->sync($request->albums);
+        session()->forget('selected_albums');
+        session()->forget('form_data');
 
-        return redirect()->route('lists.show', $list->id)->with('success', 'Lista creada correctamente.');
+        return redirect()->route('lists.show', $list)->with('success', 'Lista creada correctamente');
     }
+
 
     public function show($id)
     {
@@ -74,4 +88,25 @@ class ListController extends Controller
 
         return redirect()->route('lists.index')->with('success', 'Lista eliminada.');
     }
+
+    public function addAlbumTemp(Request $request)
+    {
+        $request->validate(['album_id' => 'required|exists:albums,id']);
+        $selected = session('selected_albums', []);
+        if (!in_array($request->album_id, $selected)) {
+            $selected[] = $request->album_id;
+            session(['selected_albums' => $selected]);
+        }
+        return redirect()->route('lists.create', ['search' => $request->input('search')]);
+    }
+
+    public function removeAlbumTemp(Request $request)
+    {
+        $request->validate(['album_id' => 'required|exists:albums,id']);
+        $selected = session('selected_albums', []);
+        $selected = array_filter($selected, fn($id) => $id != $request->album_id);
+        session(['selected_albums' => $selected]);
+        return redirect()->route('lists.create', ['search' => $request->input('search')]);
+    }
+
 }

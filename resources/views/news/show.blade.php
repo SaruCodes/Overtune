@@ -73,8 +73,8 @@
                                     required
                                 ></textarea>
                                 <div class="flex gap-2">
-                                    <button type="submit" class="btn btn-primary btn-sm">💾 Guardar</button>
-                                    <button type="button" @click="content = originalContent; editMode = false" class="btn btn-sm">❌ Cancelar</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                    <button type="button" @click="content = originalContent; editMode = false" class="btn btn-sm">Cancelar</button>
                                 </div>
                             </form>
                         </template>
@@ -85,20 +85,30 @@
                                 $userIsAdminOrEditor = auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor');
                             @endphp
 
-                            <div class="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute top-3 right-3 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                 @if($userIsOwner)
-                                    <button @click="editMode = true" class="text-orange-600 hover:text-orange-800 text-lg" title="Editar" type="button">✏️</button>
+                                    <button @click="editMode = true" type="button" title="Editar comentario" class="text-indigo-600 hover:text-indigo-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+                                        </svg>
+                                    </button>
                                 @endif
 
                                 @if($userIsOwner || $userIsAdminOrEditor)
                                     <form method="POST" action="{{ route('comments.destroy', $comment) }}" onsubmit="return confirmDelete(event)" id="delete-comment-{{ $comment->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 text-lg" title="Eliminar">🗑️</button>
+                                        <button type="submit" title="Eliminar comentario" class="text-red-600 hover:text-red-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+                                            </svg>
+                                        </button>
                                     </form>
                                 @endif
 
-                                <button onclick="confirmReport({{ $comment->id }})" class="text-yellow-500 hover:text-yellow-700 text-sm" title="Reportar">Reportar</button>
+                                <button onclick="confirmReport({{ $comment->id }})" title="Reportar comentario" class="text-yellow-500 hover:text-yellow-700 font-semibold text-sm self-center">
+                                    Reportar
+                                </button>
                             </div>
                         @endauth
                     </div>

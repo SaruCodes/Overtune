@@ -77,4 +77,8 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
+    public function favoriteLists()
+    {
+        return $this->belongsToMany(ListModel::class, 'favorites')->withTimestamps();
+    }
 }

@@ -25,7 +25,9 @@ class GenreSeeder extends Seeder
             'Latina',
             'R&B',
             'Soul',
-            'Trap'
+            'Trap',
+            'Synthpop',
+            'Nu-Metal'
         ];
         foreach ($genres as $genre) {
             Genre::firstOrCreate(['genre' => $genre]);

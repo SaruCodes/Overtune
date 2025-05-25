@@ -103,8 +103,14 @@ class AlbumController extends Controller
 
     public function show($id)
     {
-        $album = Album::findOrFail($id);
-        return view('albums.show', compact('album'));
+        $album = Album::with(['artist', 'genres', 'review.user', 'review.comments'])->findOrFail($id);
+        $recommendedAlbums = Album::where('id', '!=', $album->id)->where(function ($query) use ($album) {
+            $query->where('artist_id', $album->artist_id)->orWhereHas('genres', function ($q) use ($album) {
+                return $q->whereIn('genres.id', $album->genres->pluck('id'));
+            });
+            })->with('artist')->limit(5)->get();
+
+        return view('albums.show', compact('album', 'recommendedAlbums'));
     }
 
 

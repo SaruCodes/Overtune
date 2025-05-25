@@ -32,4 +32,9 @@ class Album extends Model
         return $this->hasMany(Review::class);
     }
 
+
+    public function lists()
+    {
+        return $this->belongsToMany(ListModel::class, 'album_list')->withTimestamps();
+    }
 }

@@ -72,13 +72,9 @@ class User extends Authenticatable
         return $this->hasMany(ListModel::class);
     }
 
-    public function followers()
+    public function hasRole($role)
     {
-        return $this->belongsToMany(self::class, 'follows', 'followed_id', 'follower_id');
+        return $this->role === $role;
     }
 
-    public function following()
-    {
-        return $this->belongsToMany(self::class, 'follows', 'follower_id', 'followed_id');
-    }
 }

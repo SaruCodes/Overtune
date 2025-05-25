@@ -1,49 +1,75 @@
 <x-layouts.layout titulo="Overtune - Noticias">
+    <section class="w-full mb-12">
+        <div class="carousel w-full">
+            @foreach($carouselNews as $news)
+                <div id="slide-{{ $loop->index }}" class="carousel-item relative w-full h-[750px]">
+                    <a href="{{ route('news.show', $news) }}">
+                        <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <h2 class="text-white text-3xl md:text-5xl font-bold">{{ $news->title }}</h2>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
     <div class="container mx-auto px-4">
-        <!-- Sección Actualidad -->
         <section class="mb-12">
             <h2 class="text-3xl font-bold mb-6 text-primary">Actualidad</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach($latestNews as $news)
-                    <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-                        <div class="card-body">
-                            <h3 class="card-title text-xl">{{ $news->title }}</h3>
-                            <p class="text-gray-500">{{ $news->excerpt }}</p>
-                            <div class="card-actions justify-end mt-2">
-                                <span class="text-sm text-gray-400">{{ $news->created_at->diffForHumans() }}</span>
-                            </div>
+                <div class="md:col-span-2 relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
+                    <a href="{{ route('news.show', $latestNews[0]) }}">
+                        <img src="{{ asset('storage/' . $latestNews[0]->image) }}" alt="{{ $latestNews[0]->title }}" class="w-full h-full object-cover rounded" />
+                        <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-4">
+                            <h3 class="text-white text-xl font-bold">{{ $latestNews[0]->title }}</h3>
                         </div>
-                    </div>
-                @endforeach
+                        <div class="absolute top-0 left-0 bg-primary text-white px-2 py-1 text-xs rounded-bl">
+                            {{ $latestNews[0]->category->name }}
+                        </div>
+                    </a>
+                </div>
+                <div class="flex flex-col gap-6">
+                    @foreach($latestNews->slice(1, 2) as $news)
+                        <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
+                            <a href="{{ route('news.show', $news) }}">
+                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-36 object-cover rounded" />
+                                <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
+                                    <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
+                                </div>
+                                <div class="absolute top-0 left-0 bg-primary text-white px-2 py-1 text-xs rounded-bl">
+                                    {{ $news->category->name }}
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </section>
 
-        <!-- Sección por categorías -->
         @foreach($categoriesWithNews as $category)
             <section class="mb-12">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-secondary">{{ $category->name }}</h2>
-                    <a href="{{ route('category.show', $category) }}" class="btn btn-ghost btn-sm">
-                        Ver más
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
+                <div class="mb-2 relative">
+                    <h2 class="text-2xl font-bold text-secondary inline-block bg-white px-2 relative z-10">{{ $category->name }}</h2>
+                    <hr class="border-t-2 border-secondary mt-2 -translate-y-3">
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     @foreach($category->latestNews as $news)
-                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-                            <div class="card-body">
-                                <h3 class="card-title">{{ $news->title }}</h3>
-                                <p class="text-gray-500 text-sm">{{ $news->excerpt }}</p>
-                                <div class="card-actions justify-end">
-                                    <span class="text-xs text-gray-400">{{ $news->created_at->diffForHumans() }}</span>
+                        <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
+                            <a href="{{ route('news.show', $news) }}">
+                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-36 object-cover rounded" />
+                                <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
+                                    <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
                                 </div>
-                            </div>
+                                <div class="absolute top-0 left-0 bg-primary text-white px-2 py-1 text-xs rounded-bl">
+                                    {{ $news->category->name }}
+                                </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>
             </section>
         @endforeach
+    </div>
 </x-layouts.layout>

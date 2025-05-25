@@ -13,10 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-        $this->call([
-            GenreSeeder::class,
-        ]);
 
         User::firstOrCreate(
             ['email' => 'test@example.com'],
@@ -25,6 +21,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserSeeder::class);
         $this->call(AlbumSeeder::class);
-
+        $this->call(GenreSeeder::class);
+        $this->call(ArtistSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(NewsSeeder::class);
+        $this->call(ReviewSeeder::class);
     }
 }

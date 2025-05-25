@@ -2,7 +2,6 @@
     <div class="min-h-screen flex flex-col">
         @if (session('mensaje'))
             <div id="message" role="alert" class="alert alert-success">
-                <!-- icono -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -10,7 +9,7 @@
             </div>
         @endif
 
-        <div class="p-4 bg-gray-200 flex justify-between items-center">
+        <div class="p-4 flex justify-between items-center">
             <div class="space-x-4">
                 <a class="btn btn-primary text-lg" href="{{ route('artists.create') }}">
                     {{ __('Nuevo Artista') }}
@@ -20,7 +19,6 @@
                 </a>
             </div>
 
-            <!-- Filtro por debut -->
             <form method="GET" action="{{ route('artists.crud') }}">
                 <div class="flex items-center space-x-2">
                     <label for="debut" class="font-semibold">{{ __('Filtrar por debut') }}</label>

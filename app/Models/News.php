@@ -1,25 +1,42 @@
 <?php
-// app/Models/News.php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titulo', 'contenido', 'user_id'];
+    protected $fillable = [
+        'title',
+        'content',
+        'image',
+        'category_id',
+        'user_id',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function comentarios()
+    public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function getExceptAttribute()
+    {
+        return Str::limit(strip_tags($this->content), 150);
+    }
+
 }
 
 

@@ -6,27 +6,31 @@ use App\Models\Review;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class ReviewController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
-        $recentReviews = Review::with(['user', 'album'])
+        $featuredReviews = Review::with('album', 'user')
             ->withCount('comments')
-            ->latest()
-            ->paginate(5);
+            ->orderBy('comments_count', 'desc')
+            ->take(5)
+            ->get();
+
+        $recentReviews = Review::with('user', 'album')
+            ->orderByDesc('created_at')
+            ->paginate(6);
 
         $topAlbums = Album::withCount('review')
             ->orderByDesc('review_count')
             ->limit(5)
             ->get();
 
-        $featuredReview = Review::with(['user', 'album'])
-            ->withCount('comments')
-            ->orderByDesc('comments_count')
-            ->first();
 
-        return view('review.index', compact('recentReviews', 'topAlbums', 'featuredReview'));
+        return view('review.index', compact('recentReviews', 'topAlbums', 'featuredReviews'));
     }
 
     public function create(Request $request)
@@ -57,8 +61,9 @@ class ReviewController extends Controller
     public function show($id)
     {
         $review = Review::with(['comments.user', 'album.artist'])->findOrFail($id);
+        $comments = $review->comments()->with('user')->get();
 
-        return view('review.show', compact('review'));
+        return view('review.show', compact('review', 'comments'));
     }
 
     public function edit(Review $review)
@@ -116,4 +121,21 @@ class ReviewController extends Controller
 
         return back()->with('success', 'Comentario agregado!');
     }
+    //Método para las reseñas destacadas
+    public function feature(Request $request, Review $review)
+    {
+        $this->authorize('update', $review);
+        $type = $request->input('type');
+        $review->is_featured_primary = $type === 'primary';
+        $review->is_featured_secondary = $type === 'secondary';
+
+        if (!in_array($type, ['primary', 'secondary'])) {
+            $review->is_featured_primary = false;
+            $review->is_featured_secondary = false;
+        }
+
+        $review->save();
+        return redirect()->back()->with('success', 'Tipo de reseña actualizado.');
+    }
+
 }

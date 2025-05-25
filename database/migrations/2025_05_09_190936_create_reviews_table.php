@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('album_id')->constrained()->onDelete('cascade');
-            $table->decimal('rating', 2, 1); // valores como 0.5, 1.0, ..., 5.0
+            $table->decimal('rating', 2, 1);
             $table->text('content');
+            $table->boolean('is_featured_primary')->default(false);
+            $table->boolean('is_featured_secondary')->default(false);
             $table->timestamps();
         });
 

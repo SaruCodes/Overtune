@@ -1,3 +1,59 @@
-<x-layouts.layout titulo="Overtune - Artistas">
+<x-layouts.layout titulo="Artistas - Overtune">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between flex-wrap mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Artistas</h1>
 
+            <div class="space-x-2 mt-4 sm:mt-0">
+                @foreach([1980, 1990, 2000, 2010, 2020] as $decade)
+                    <a href="{{ route('artists.index', ['debut' => $decade]) }}"
+                       class="btn btn-sm {{ request('debut') == $decade ? 'btn-primary' : 'btn-outline' }}">
+                        {{ $decade }}s
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
+        <h2 class="text-xl font-semibold text-purple-800 mb-4 border-b-2 border-purple-700 pb-1">Últimos añadidos</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            @foreach ($artists->take(5) as $artist)
+                <div class="text-center">
+                    <a href="{{ route('artists.show', $artist->id) }}">
+                        <img src="{{ asset('storage/' . $artist->image) }}" class="w-full h-48 object-cover rounded-md shadow" alt="{{ $artist->name }}">
+                        <h3 class="mt-2 font-semibold">{{ $artist->name }}</h3>
+                    </a>
+                    <p class="text-sm text-gray-500">{{ $artist->debut }}</p>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    @php $featured = $artists->first(); @endphp
+    @if ($featured)
+        <div class="bg-gray-50 py-12 border-t">
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6 px-4">
+                <img src="{{ asset('storage/' . $featured->image) }}" class="w-48 h-48 object-cover rounded shadow-lg" alt="{{ $featured->name }}">
+                <div>
+                    <h2 class="text-2xl font-bold text-purple-800">Artista Destacado: {{ $featured->name }}</h2>
+                    <p class="text-gray-600 mt-2">{{ Str::limit($featured->bio, 300) }}</p>
+                    <p class="mt-2 text-sm text-gray-500">Debut: {{ $featured->debut }} | País: {{ $featured->country }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!--Artistas filtrados por decada-->
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <h2 class="text-xl font-semibold text-purple-800 mb-4 border-b-2 border-purple-700 pb-1">Recomendados 80s</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            @foreach ($artists->where('debut', '>=', 1980)->where('debut', '<', 1990)->take(10) as $artist80)
+                <div class="text-center">
+                    <a href="{{ route('artists.show', $artist80->id) }}">
+                        <img src="{{ asset('storage/' . $artist80->image) }}" class="w-full h-48 object-cover rounded-md shadow" alt="{{ $artist80->name }}">
+                        <h3 class="mt-2 font-semibold">{{ $artist80->name }}</h3>
+                    </a>
+                    <p class="text-sm text-gray-500">{{ $artist80->debut }}</p>
+                </div>
+            @endforeach
+        </div>
+    </div>
 </x-layouts.layout>

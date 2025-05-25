@@ -19,14 +19,15 @@ class AlbumSeeder extends Seeder
                 ['bio' => '', 'country' => null, 'debut' => null, 'image' => null]
             );
 
-            Album::create([
-                'title' => $albumData['title'],
-                'artist_id' => $artist->id,
-                'release_date' => $albumData['release_date'],
-                'cover_image' => $albumData['cover_image'],
-                'description' => $albumData['description'] ?? null,
-                'type' => $albumData['type'],
-            ]);
+            Album::updateOrCreate(
+                ['title' => $albumData['title'], 'artist_id' => $artist->id],
+                [
+                    'release_date' => $albumData['release_date'],
+                    'cover_image' => $albumData['cover_image'],
+                    'description' => $albumData['description'] ?? null,
+                    'type' => $albumData['type'],
+                ]
+            );
         }
     }
 }

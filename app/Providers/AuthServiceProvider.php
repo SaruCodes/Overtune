@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use App\Models\User;
+
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,8 @@ class AuthServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Gate::define('manage-content', fn($user) => in_array($user->role, ['admin', 'editor']));
+        Gate::define('manage-content', function (User $user) {
+            return $user->isAdmin() || $user->isEditor();
+        });
     }
 }

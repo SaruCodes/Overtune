@@ -13,7 +13,6 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700">
             <div>
-                <p><strong>{{ __('ID del artista:') }}</strong> {{ $artist->id }}</p>
                 <p><strong>{{ __('País:') }}</strong> {{ $artist->country ?? __('No especificado') }}</p>
                 <p><strong>{{ __('Debut:') }}</strong> {{ $artist->debut ?? __('No especificado') }}</p>
             </div>
@@ -22,7 +21,6 @@
                 <p class="whitespace-pre-line mt-2 text-gray-600">{{ $artist->bio ?? __('No disponible') }}</p>
             </div>
         </div>
-
         <div class="text-center mt-8">
             <a href="{{ route('artists.crud') }}" class="btn btn-secondary inline-block">
                 {{ __('Volver a la lista') }}
@@ -30,7 +28,6 @@
         </div>
     </div>
 
-    {{-- Tabla con álbumes asociados --}}
     <div class="max-w-6xl mx-auto px-4">
         <h2 class="text-3xl font-semibold text-violet-900 mb-6">{{ __('Álbumes de ') . $artist->name }}</h2>
         @if($artist->albums->isEmpty())

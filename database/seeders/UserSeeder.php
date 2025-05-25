@@ -39,5 +39,55 @@ class UserSeeder extends Seeder
                 'bio' => 'Fanático de la música.',
             ]
         );
+
+        User::firstOrCreate(
+            ['email' => 'sara@overtune.com'],
+            [
+                'name' => 'Sara Editor',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_EDITOR,
+                'bio' => 'Editor de contenido.',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'cris@overtune.com'],
+            [
+                'name' => 'Cris Editor',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_EDITOR,
+                'bio' => 'Editor de contenido.',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'eva@overtune.com'],
+            [
+                'name' => 'Eva Overtune',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_USER,
+                'bio' => 'Fanático de la música.',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'sky@overtune.com'],
+            [
+                'name' => 'Sky Overtune',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_USER,
+                'bio' => 'Fanático de la música.',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'jesus@overtune.com'],
+            [
+                'name' => 'Jesus Overtune',
+                'password' => Hash::make('password'),
+                'role' => User::ROLE_USER,
+                'bio' => 'Fanático de la música.',
+            ]
+        );
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Artist;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ArtistController extends Controller
 {
@@ -17,9 +16,23 @@ class ArtistController extends Controller
         }
 
         $artists = $query->orderByDesc('id')->paginate(10);
-        return view('artists.crud', compact('artists'));
+        return view('artists.index', compact('artists'));
     }
 
+    public function crud(Request $request)
+    {
+        if (!auth()->user()->isAdmin() && !auth()->user()->isEditor()) {
+            abort(403, 'No tienes permisos para acceder a esta sección.');
+        }
+        $query = Artist::query();
+
+        if ($request->filled('debut')) {
+            $query->where('debut', $request->debut);
+        }
+
+        $artists = $query->orderByDesc('id')->paginate(10);
+        return view('artists.crud', compact('artists'));
+    }
 
     public function create()
     {

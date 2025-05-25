@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('album_list', function (Blueprint $table) {
             $table->id();
-            $table->enum('category', ['Conciertos', 'Festivales', 'Lanzamientos', 'Overtune', 'Recomendaciones', 'Entrevistas']);
+            $table->foreignId('album_id')->constrained()->onDelete('cascade');
+            $table->foreignId('list_id')->constrained()->onDelete('cascade');
+            $table->unique(['album_id', 'list_id']);
             $table->timestamps();
         });
-
     }
 
     /**
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('album_list');
     }
 };

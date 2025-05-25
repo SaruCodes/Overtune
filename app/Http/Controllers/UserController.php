@@ -33,7 +33,6 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            // Borra avatar anterior
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
@@ -47,4 +46,16 @@ class UserController extends Controller
         return redirect()->route('user.profile')
             ->with('success','Perfil actualizado correctamente.');
     }
+
+    public function updateRole(Request $request, \App\Models\User $user)
+    {
+        $validated = $request->validate([
+            'role' => 'required|in:user,editor,admin',
+        ]);
+
+        $user->role = $validated['role'];
+        $user->save();
+        return redirect()->back()->with('success', 'Rol actualizado correctamente.');
+    }
+
 }

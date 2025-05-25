@@ -25,5 +25,10 @@ class Review extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-    
+    public function reports()
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
+
+
 }

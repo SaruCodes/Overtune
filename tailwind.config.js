@@ -22,7 +22,7 @@ export default {
             colors: {
                 header: '#783F8E',
                 nav: '#4f1271',
-                main: '#f4eeff',
+                main: '#efe7fb',
                 footer: '#33094a',
                 'text-dark': '#141414',
                 text: '#141414',

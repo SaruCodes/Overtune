@@ -27,9 +27,8 @@ class GenreSeeder extends Seeder
             'Soul',
             'Trap'
         ];
-
         foreach ($genres as $genre) {
-            Genre::create(['genre' => $genre]);
+            Genre::firstOrCreate(['genre' => $genre]);
         }
     }
 }

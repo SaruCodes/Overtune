@@ -1,7 +1,6 @@
 <x-layouts.layout titulo="Editar Noticia">
     <div class="container">
         <h1>Editar Noticia</h1>
-
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -11,8 +10,7 @@
                 </ul>
             </div>
         @endif
-
-        <form action="{{ route('news.update', $news->id) }}" method="POST">
+        <form action="{{ route('news.update', $news->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -38,6 +36,16 @@
                 </select>
             </div>
 
+            <div class="mb-3">
+                <label for="image">Imagen (opcional)</label>
+                <input type="file" name="image" class="form-control">
+                @if ($news->image)
+                    <div class="mt-2">
+                        <p>Imagen actual:</p>
+                        <img src="{{ asset('storage/' . $news->image) }}" alt="Imagen actual" width="200" class="img-thumbnail">
+                    </div>
+                @endif
+            </div>
             <button type="submit" class="btn btn-primary">Actualizar Noticia</button>
         </form>
     </div>

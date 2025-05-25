@@ -16,6 +16,14 @@ class AlbumController extends Controller
         return view('albums.crud', compact('albums'));
     }
 
+    public function crud()
+    {
+        if (!auth()->user()->isAdmin() && !auth()->user()->isEditor()) {
+            abort(403, 'No tienes permisos para acceder a esta sección.');
+        }
+        $albums = Album::with('artist')->latest()->paginate(10);
+        return view('albums.crud', compact('albums'));
+    }
 
     public function create()
     {

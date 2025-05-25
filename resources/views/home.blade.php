@@ -37,10 +37,10 @@
         </div>
     </div>
 
-    <!-- Sección de discos con margen superior añadido -->
+    {{-- Últimas reseñas (álbumes recientes con carátula e info) --}}
     <section class="p-8 bg-violet-100 mt-12">
         <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Últimas reseñas') }}</h2>
-        <div class="flex justify-center gap-6">
+        <div class="flex flex-wrap justify-center gap-6">
             @foreach ($latestAlbums as $album)
                 <div class="card w-60 shadow-xl bg-gray-50">
                     <figure>
@@ -51,33 +51,81 @@
                     <div class="card-body">
                         <h3 class="card-title">{{ $album->titulo }}</h3>
                         <p>{{ __('Artista: ') }}{{ $album->artista }}</p>
-                        <p>{{ __('Calificación: ')}} 4.8/5</p>
+                        <p>{{ __('Calificación: ')}} {{ $album->average_rating ?? 'N/A' }}/5</p>
                     </div>
                 </div>
             @endforeach
         </div>
-        <section>
-            <div class="flex flex-col md:flex-row bg-violet-400 text-white p-8 gap-6 items-center">
-                <div class="w-full md:w-1/3">
-                    <img src="{{ $featuredReview->album->cover_image ? asset('storage/' . $featuredReview->album->cover_image) : 'https://via.placeholder.com/400' }}"
-                         class="w-full h-72 object-cover rounded-md shadow-md" alt="{{ $featuredReview->album->titulo }}">
+    </section>
+
+    {{-- Noticia destacada --}}
+    @if ($featuredNews)
+        <section class="bg-violet-400 text-white p-8 mt-12">
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6">
+                <div class="w-full md:w-1/2">
+                    <img src="{{ $featuredNews->image ? asset('storage/' . $featuredNews->image) : 'https://via.placeholder.com/600x400' }}"
+                         class="w-full h-64 object-cover rounded-lg shadow-lg" alt="{{ $featuredNews->title }}">
                 </div>
-                <div class="w-full md:w-2/3">
-                    <h2 class="text-2xl font-bold mb-2">{{ __('Reseña destacada:') }} {{ $featuredReview->album->titulo }}</h2>
-                    <p class="mb-4">
-                        {{ Str::limit($featuredReview->content, 500) }}
-                        @if (strlen($featuredReview->content) > 500)
-                            <span class="text-sm italic text-gray-100">... </span>
-                            <a href="{{ route('review.show', $featuredReview->id) }}" class="underline text-white text-sm">{{ __('Leer más') }}</a>
-                        @endif
-                    </p>
-                    <a href="{{ route('review.show', $featuredReview->id) }}" class="btn btn-secondary">
-                        {{ __('Ver reseña completa') }}
-                    </a>
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-2xl font-bold mb-2">{{ $featuredNews->title }}</h2>
+                    <p class="mb-4">{{ Str::limit(strip_tags($featuredNews->content), 300) }}</p>
+                    <a href="{{ route('news.show', $featuredNews->id) }}" class="btn btn-secondary">{{ __('Leer más') }}</a>
                 </div>
             </div>
         </section>
+    @endif
 
+    {{-- Reseña destacada con imagen al lado --}}
+    @if ($featuredReview)
+        <section class="p-8 bg-white mt-12">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-6 items-center">
+                <div class="w-full md:w-1/3">
+                    <img src="{{ $featuredReview->album->cover_image ? asset('storage/' . $featuredReview->album->cover_image) : 'https://via.placeholder.com/400' }}"
+                         class="w-full h-72 object-cover rounded-lg shadow-md" alt="{{ $featuredReview->album->titulo }}">
+                </div>
+                <div class="w-full md:w-2/3">
+                    <h2 class="text-2xl font-bold mb-4">{{ __('Reseña destacada: ') }}{{ $featuredReview->album->titulo }}</h2>
+                    <p class="mb-4">
+                        {{ Str::limit($featuredReview->content, 500) }}
+                        @if (strlen($featuredReview->content) > 500)
+                            <a href="{{ route('review.show', $featuredReview->id) }}" class="text-sm underline text-violet-600">{{ __('Leer más') }}</a>
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- Carousel de últimas noticias por categoría --}}
+    <section class="p-8 bg-violet-100 mt-12">
+        <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Últimas Noticias por Categoría') }}</h2>
+        <div class="carousel carousel-center space-x-4 rounded-box">
+            @foreach ($latestByCategory as $news)
+                <div class="carousel-item w-80 bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-xl font-semibold mb-2">{{ $news->title }}</h3>
+                    <p class="text-sm text-gray-700 mb-4">{{ Str::limit(strip_tags($news->content), 120) }}</p>
+                    <a href="{{ route('news.show', $news->id) }}" class="text-violet-600 hover:underline text-sm">
+                        {{ __('Leer más') }}
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    {{-- Otra reseña destacada (solo texto) --}}
+    @if ($secondaryReview)
+        <section class="p-8 bg-white mt-12">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">{{ __('Reseña especial: ') }}{{ $secondaryReview->album->titulo }}</h2>
+                <p class="text-gray-700 text-lg leading-relaxed">
+                    {{ Str::limit($secondaryReview->content, 800) }}
+                    @if (strlen($secondaryReview->content) > 800)
+                        <a href="{{ route('review.show', $secondaryReview->id) }}" class="text-violet-600 underline text-sm">{{ __('Leer más') }}</a>
+                    @endif
+                </p>
+            </div>
+        </section>
+    @endif
     @guest
         <section class="p-8 bg-violet-100">
             <h2 class="text-3xl font-semibold text-center mb-8">{{__ ('Bienvenido a Overtune')}}</h2>

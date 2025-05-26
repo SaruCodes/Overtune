@@ -12,11 +12,18 @@ class ArtistController extends Controller
         $query = Artist::query();
 
         if ($request->filled('debut')) {
-            $query->where('debut', $request->debut);
+            $debut = (int) $request->debut;
+            if ($debut % 10 === 0) {
+                $query->where('debut', '>=', $debut)
+                    ->where('debut', '<', $debut + 10);
+            } else {
+                $query->where('debut', $debut);
+            }
         }
-
         $artists = $query->orderByDesc('id')->paginate(10);
-        return view('artists.index', compact('artists'));
+        $artists80 = Artist::where('debut', '>=', 1980)->where('debut', '<', 1990)->orderByDesc('id')->take(10)->get();
+
+        return view('artists.index', compact('artists', 'artists80'));
     }
 
     public function crud(Request $request)
@@ -93,3 +100,4 @@ class ArtistController extends Controller
         return redirect()->route('artists.index')->with('success', 'Artista eliminado correctamente.');
     }
 }
+

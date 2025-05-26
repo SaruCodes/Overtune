@@ -12,7 +12,7 @@ class NewsController extends Controller
     {
         $carouselNews = News::latest()->take(5)->get();
         $latestNews = News::latest()->take(3)->get();
-        $categoriesWithNews = Category::with('latestNews')->get();
+        $categoriesWithNews = Category::with(['latestNews'])->get();
 
         return view('news.index', compact('carouselNews', 'latestNews', 'categoriesWithNews'));
     }
@@ -88,3 +88,4 @@ class NewsController extends Controller
         return redirect()->route('news.crud')->with('mensaje', 'Noticia eliminada con éxito');
     }
 }
+

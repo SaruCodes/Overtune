@@ -5,6 +5,7 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\ReviewController;
@@ -18,37 +19,6 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
-Route::get('/artists', [ArtistController::class, 'index'])->name('artists.index');
-Route::get('/artists/{artist}', [ArtistController::class, 'show'])->name('artists.show');
-Route::get('/perfil/{user}', [UserController::class, 'show'])->name('user.profile.public');
-Route::get('/albums/search', [AlbumController::class, 'search'])->name('albums.search');
-Route::get('/albums/{album}', [AlbumController::class, 'show'])->name('albums.show');
-Route::resource('review', ReviewController::class);
-Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');
-Route::resource('lists', ListController::class);
-Route::post('/lists/{list}/favorite', [FavoriteController::class, 'toggle'])->name('lists.favorite');
-
-
-//Rutas accesibles a ususarios autentificados
-Route::middleware(['auth'])->group(function () {
-    Route::get('/reviews/crud', [ReviewController::class, 'crud'])->name('review.crud');
-    Route::resource('comments', CommentController::class);
-    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-    Route::post('/review/{review}/comments', [ReviewController::class, 'storeComment'])->name('review.comments.store');
-    Route::get('/listas/crear', [ListController::class, 'create'])->name('lists.create');
-    Route::post('/listas', [ListController::class, 'store'])->name('lists.store');
-});
-
-//Rutas DE PERFIL solo para usuarios autentificados!!
-Route::middleware('auth')->group(function () {
-    Route::get('/perfil',        [UserController::class, 'show'])->name('user.profile');
-    Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/perfil', [UserController::class, 'update'])->name('user.update');
-});
 
 //Rutas SOLO accesibles a admin y editor
 Route::middleware(['auth', 'can:manage-content'])->group(function () {
@@ -70,6 +40,41 @@ Route::middleware(['auth', 'can:manage-content'])->group(function () {
     Route::delete('/reportes/{id}', [AdminPanelController::class, 'eliminarContenido'])->name('admin.report.delete');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
 
+
+});
+
+//Rutas accesibles a ususarios autentificados
+Route::middleware(['auth'])->group(function () {
+    Route::get('/reviews/crud', [ReviewController::class, 'crud'])->name('review.crud');
+    Route::resource('comments', CommentController::class);
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/review/{review}/comments', [ReviewController::class, 'storeComment'])->name('review.comments.store');
+    Route::get('/listas/crear', [ListController::class, 'create'])->name('lists.create');
+    Route::post('/listas', [ListController::class, 'store'])->name('lists.store');
+    Route::post('/listas/album-temp/add', [ListController::class, 'addAlbumTemp'])->name('lists.addAlbumTemp');
+    Route::post('/listas/album-temp/remove', [ListController::class, 'removeAlbumTemp'])->name('lists.removeAlbumTemp');
+});
+
+
+//Rutas Públicas
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/artists', [ArtistController::class, 'index'])->name('artists.index');
+Route::get('/artists/{artist}', [ArtistController::class, 'show'])->name('artists.show');
+Route::get('/perfil/{user}', [UserController::class, 'show'])->name('user.profile.public');
+Route::get('/albums/search', [AlbumController::class, 'search'])->name('albums.search');
+Route::get('/albums/{album}', [AlbumController::class, 'show'])->name('albums.show');
+Route::resource('review', ReviewController::class);
+Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');
+Route::resource('lists', ListController::class);
+Route::post('/lists/{list}/favorite', [FavoriteController::class, 'toggle'])->name('lists.favorite');
+
+
+//Rutas DE PERFIL solo para usuarios autentificados!!
+Route::middleware('auth')->group(function () {
+    Route::get('/perfil',        [UserController::class, 'show'])->name('user.profile');
+    Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/perfil', [UserController::class, 'update'])->name('user.update');
 });
 
 require __DIR__.'/auth.php';

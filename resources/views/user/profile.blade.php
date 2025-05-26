@@ -1,6 +1,4 @@
 <x-layouts.layout titulo="Perfil de Usuario - Overtune">
-    dd(auth()->user()->role, auth()->user()->isEditor(), auth()->user()->isAdmin());
-
     <div class="card bg-white shadow-md w-full max-w-lg mx-auto">
         <div class="card-body text-center relative">
             <div class="avatar mx-auto">

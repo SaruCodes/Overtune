@@ -3,14 +3,22 @@
         <div class="flex items-center justify-between flex-wrap mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Artistas</h1>
 
-            <div class="space-x-2 mt-4 sm:mt-0">
+            <div class="space-x-2 mt-4 sm:mt-0 flex flex-wrap items-center">
                 @foreach([1980, 1990, 2000, 2010, 2020] as $decade)
                     <a href="{{ route('artists.index', ['debut' => $decade]) }}"
                        class="btn btn-sm {{ request('debut') == $decade ? 'btn-primary' : 'btn-outline' }}">
                         {{ $decade }}s
                     </a>
                 @endforeach
+                <!--limpiar filtros-->
+                @if(request()->has('debut'))
+                    <a href="{{ route('artists.index') }}"
+                       class="btn btn-sm btn-error btn-outline ml-2">
+                        Quitar filtros
+                    </a>
+                @endif
             </div>
+
         </div>
 
         <h2 class="text-xl font-semibold text-purple-800 mb-4 border-b-2 border-purple-700 pb-1">Últimos añadidos</h2>
@@ -45,7 +53,7 @@
     <div class="max-w-7xl mx-auto px-4 py-12">
         <h2 class="text-xl font-semibold text-purple-800 mb-4 border-b-2 border-purple-700 pb-1">Recomendados 80s</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            @foreach ($artists->where('debut', '>=', 1980)->where('debut', '<', 1990)->take(10) as $artist80)
+            @foreach ($artists80 as $artist80)
                 <div class="text-center">
                     <a href="{{ route('artists.show', $artist80->id) }}">
                         <img src="{{ asset('storage/' . $artist80->image) }}" class="w-full h-48 object-cover rounded-md shadow" alt="{{ $artist80->name }}">
@@ -54,6 +62,8 @@
                     <p class="text-sm text-gray-500">{{ $artist80->debut }}</p>
                 </div>
             @endforeach
+
         </div>
     </div>
 </x-layouts.layout>
+

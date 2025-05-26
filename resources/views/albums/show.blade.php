@@ -1,5 +1,5 @@
 <x-layouts.layout titulo="Detalle del Álbum">
-    <div class="container mx-auto px-4 pt-10 mb-16"> {{-- espacio extra abajo para separar del footer --}}
+    <div class="container mx-auto px-4 pt-10 mb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div>
                 <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="rounded-xl shadow-md w-full max-w-sm mx-auto md:mx-0" />
@@ -57,3 +57,4 @@
         </div>
     </div>
 </x-layouts.layout>
+

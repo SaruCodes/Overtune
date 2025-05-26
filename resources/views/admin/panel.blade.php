@@ -18,23 +18,23 @@
     @if(auth()->user()->isAdmin())
             <section class="mb-8">
                 <h2 class="text-xl font-semibold mb-4">Usuarios</h2>
-                <table class="w-full border-collapse border border-gray-300">
+                <table class="w-full border-collapse">
                     <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border p-2">ID</th>
-                        <th class="border p-2">Nombre</th>
-                        <th class="border p-2">Email</th>
-                        <th class="border p-2">Rol</th>
-                        <th class="border p-2">Acciones</th>
+                    <tr class="bg-purple-800 ">
+                        <th class="border p-2  text-white">ID</th>
+                        <th class="border p-2 text-white">Nombre</th>
+                        <th class="border p-2 text-white">Email</th>
+                        <th class="border p-2 text-white">Rol</th>
+                        <th class="border p-2 text-white">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($users as $user)
                         <tr>
-                            <td class="border p-2">{{ $user->id }}</td>
-                            <td class="border p-2">{{ $user->name }}</td>
-                            <td class="border p-2">{{ $user->email }}</td>
-                            <td class="border p-2">
+                            <td class="border p-2 border-purple-900">{{ $user->id }}</td>
+                            <td class="border p-2 border-purple-900">{{ $user->name }}</td>
+                            <td class="border p-2 border-purple-900">{{ $user->email }}</td>
+                            <td class="border p-2 border-purple-900">
                                 <form action="{{ route('users.updateRole', $user) }}" method="POST">
                                     @csrf
                                     @method('PUT')
@@ -45,7 +45,7 @@
                                     </select>
                                 </form>
                             </td>
-                            <td class="border p-2">
+                            <td class="border p-2 border-purple-900">
                                 @if(auth()->id() !== $user->id)
                                     <form action="" method="POST" onsubmit="return confirm('¿Eliminar usuario?');">
                                         @csrf

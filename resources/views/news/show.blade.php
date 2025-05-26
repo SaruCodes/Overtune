@@ -26,95 +26,97 @@
             </div>
         </div>
         <!--Comentarios-->
-        <div class="max-w-4xl mx-auto mt-12 p-6">
-            <h2 class="text-2xl font-semibold mb-4">Deja tu comentario</h2>
-            @auth
-                <form method="POST" action="{{ route('comments.store') }}">
-                    @csrf
-                    <input type="hidden" name="commentable_type" value="news">
-                    <input type="hidden" name="commentable_id" value="{{ $news->id }}">
-                    <textarea name="content" class="textarea textarea-bordered w-full h-32 mb-4" placeholder="Escribe tu comentario aquí..." required></textarea>
-                    <button class="btn btn-primary">Enviar Comentario</button>
-                </form>
-            @else
-                <p class="text-gray-600">Debes iniciar sesión para comentar.</p>
-            @endauth
-
-            <div class="mt-8 space-y-6">
-                @foreach ($comments as $comment)
-                    <div
-                        x-data="{
-                            editMode: false,
-                            content: '{{ addslashes($comment->content) }}',
-                            originalContent: '{{ addslashes($comment->content) }}'
-                        }"
-                        class="border p-4 rounded bg-gray-50 shadow-sm relative group"
-                    >
-                        <div class="flex items-center gap-4 mb-2">
-                            <img src="{{ $comment->user->avatar ? asset('storage/' . $comment->user->avatar) : 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp' }}"
-                                 alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover">
-                            <div>
-                                <p class="font-semibold">{{ $comment->user->name }}</p>
-                                <p class="text-xs text-gray-400">{{ $comment->created_at->diffForHumans() }}</p>
-                            </div>
-                        </div>
-                        <template x-if="!editMode">
-                            <p class="text-gray-700 whitespace-pre-wrap" x-text="content"></p>
-                        </template>
-
-                        <template x-if="editMode">
-                            <form method="POST" action="{{ route('comments.update', $comment) }}" class="space-y-2">
-                                @csrf
-                                @method('PUT')
-                                <textarea
-                                    name="content"
-                                    x-model="content"
-                                    class="textarea textarea-bordered w-full h-24"
-                                    required
-                                ></textarea>
-                                <div class="flex gap-2">
-                                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                                    <button type="button" @click="content = originalContent; editMode = false" class="btn btn-sm">Cancelar</button>
+        <x-layouts.layout titulo="Overtune - Noticias">
+            <section class="w-full mb-12">
+                <div class="carousel w-full h-[650px]">
+                    @foreach($latestNews->take(5) as $index => $news)
+                        <div id="newsSlide{{ $index }}" class="carousel-item relative w-full h-full">
+                            <img src="{{ asset('storage/' . $news->image) }}" class="w-full h-full object-cover" alt="{{ $news->title }}" />
+                            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                                <div class="text-center px-6">
+                                    <h2 class="text-white text-4xl md:text-5xl font-bold mb-4">{{ $news->title }}</h2>
+                                    <p class="text-white text-lg hidden md:block">{{ Str::limit(strip_tags($news->content), 150) }}</p>
+                                    <div class="mt-4">
+                                        <a href="{{ route('news.show', $news->id) }}" class="btn btn-secondary">{{ __('Leer más') }}</a>
+                                    </div>
+                                    <span class="mt-6 inline-block bg-primary text-white px-3 py-1 text-sm rounded">{{ $news->category->name }}</span>
                                 </div>
-                            </form>
-                        </template>
-
-                        @auth
-                            @php
-                                $userIsOwner = $comment->user_id === auth()->id();
-                                $userIsAdminOrEditor = auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor');
-                            @endphp
-
-                            <div class="absolute top-3 right-3 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                @if($userIsOwner)
-                                    <button @click="editMode = true" type="button" title="Editar comentario" class="text-indigo-600 hover:text-indigo-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
-                                        </svg>
-                                    </button>
-                                @endif
-
-                                @if($userIsOwner || $userIsAdminOrEditor)
-                                    <form method="POST" action="{{ route('comments.destroy', $comment) }}" onsubmit="return confirmDelete(event)" id="delete-comment-{{ $comment->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" title="Eliminar comentario" class="text-red-600 hover:text-red-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
-                                            </svg>
-                                        </button>
-                                    </form>
-                                @endif
-
-                                <button onclick="confirmReport({{ $comment->id }})" title="Reportar comentario" class="text-yellow-500 hover:text-yellow-700 font-semibold text-sm self-center">
-                                    Reportar
-                                </button>
                             </div>
-                        @endauth
+                            <!--Botones-->
+                            <a href="#newsSlide{{ $index == 0 ? $latestNews->take(5)->count() - 1 : $index - 1 }}"
+                               class="absolute left-5 top-1/2 transform -translate-y-1/2 btn btn-circle bg-white bg-opacity-50 hover:bg-opacity-80">
+                                ❮
+                            </a>
+                            <a href="#newsSlide{{ ($index + 1) % $latestNews->take(5)->count() }}"
+                               class="absolute right-5 top-1/2 transform -translate-y-1/2 btn btn-circle bg-white bg-opacity-50 hover:bg-opacity-80">
+                                ❯
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+
+            <div class="container mx-auto px-4">
+                <section class="mb-12">
+                    <h2 class="text-3xl font-bold mb-6 text-primary">Actualidad</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2 relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
+                            <a href="{{ route('news.show', $latestNews[0]) }}">
+                                <img src="{{ asset('storage/' . $latestNews[0]->image) }}" alt="{{ $latestNews[0]->title }}" class="w-full h-full object-cover rounded" />
+                                <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-4">
+                                    <h3 class="text-white text-xl font-bold">{{ $latestNews[0]->title }}</h3>
+                                </div>
+                                <div class="absolute top-0 left-0 bg-primary text-white px-2 py-1 text-xs rounded-bl">
+                                    {{ $latestNews[0]->category->name }}
+                                </div>
+                            </a>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            @foreach($latestNews->slice(1, 2) as $news)
+                                <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
+                                    <a href="{{ route('news.show', $news) }}">
+                                        <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded" />
+                                        <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
+                                            <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
+                                        </div>
+                                        <div class="absolute top-0 left-0 bg-primary text-white px-2 py-1 text-xs rounded-bl">
+                                            {{ $news->category->name }}
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
+                </section>
+                <!--Noticias por categoría-->
+                @foreach($categoriesWithNews as $category)
+                    <section class="mb-12">
+                        <div class="mb-2 relative">
+                            <h2 class="text-2xl font-bold text-secondary inline-block px-2 relative z-10">{{ $category->category }}</h2>
+                            <hr class="border-t-2 border-secondary mt-2 -translate-y-3">
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            @foreach($category->latestNews as $news)
+                                <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
+                                    <a href="{{ route('news.show', $news) }}">
+                                        <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-36 object-cover rounded" />
+                                        <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
+                                            <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
+                                        </div>
+                                        <div class="absolute top-0 left-0 bg-primary text-white px-2 py-1 text-xs rounded-bl">
+                                            {{ $news->category->name }}
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </section>
                 @endforeach
             </div>
-        </div>
+        </x-layouts.layout>
+
+
     </div>
 </x-layouts.layout>
 <script>

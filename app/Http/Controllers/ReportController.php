@@ -2,25 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Report;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function store(Request $request)
+    public function store($type, $id)
     {
-        $request->validate([
-            'review_id' => 'required|exists:reviews,id',
-            'reason' => 'nullable|string|max:1000',
+        $modelMap = [
+            'comments' => \App\Models\Comment::class,
+            'reviews' => \App\Models\Review::class,
+        ];
+
+        if (!isset($modelMap[$type])) {
+            return response()->json(['message' => 'Tipo de contenido no válido.'], 400);
+        }
+
+        $model = $modelMap[$type]::findOrFail($id);
+        $alreadyReported = $model->reports()->where('user_id', auth()->id())->exists();
+
+        if ($alreadyReported) {
+            return response()->json(['message' => 'Ya reportaste este contenido.'], 409);
+        }
+
+        $model->reports()->create([
+            'user_id' => auth()->id()
         ]);
 
-        Report::create([
-            'user_id' => auth()->id(),
-            'review_id' => $request->review_id,
-            'reason' => $request->reason,
-        ]);
-
-        return back()->with('success', 'Reporte enviado con éxito');
+        return response()->json(['message' => 'Reporte enviado con éxito.']);
     }
 
 }
+

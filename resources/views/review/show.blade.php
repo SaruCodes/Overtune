@@ -37,7 +37,29 @@
         </div>
 
         <div class="mb-10">
+
             <p class="text-gray-800 whitespace-pre-wrap text-lg leading-relaxed">{{ $review->content }}</p>
+            @auth
+                @php
+                    $userIsOwner = $review->user_id === auth()->id();
+                    $userIsAdminOrEditor = auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor');
+                @endphp
+
+                <div class="flex gap-4 mt-4">
+                    @if($userIsOwner)
+                        <a href="{{ route('reviews.edit', $review) }}" class="btn btn-sm btn-primary">Editar</a>
+                    @endif
+
+                    @if($userIsOwner || $userIsAdminOrEditor)
+                        <form method="POST" action="{{ route('reviews.destroy', $review) }}" onsubmit="return confirmDelete(event)">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-error text-white">Eliminar</button>
+                        </form>
+                    @endif
+                    <button onclick="confirmReport('reviews', {{ $review->id }})" class="btn btn-sm btn-warning text-white">Reportar</button>
+                </div>
+            @endauth
         </div>
 
         <div class="max-w-4xl mx-auto mt-12 p-6 bg-gray-50 rounded-lg shadow-inner">
@@ -121,10 +143,9 @@
                                         </button>
                                     </form>
                                 @endif
-
-                                <button onclick="confirmReport({{ $comment->id }})" title="Reportar comentario" class="text-yellow-500 hover:text-yellow-700 font-semibold text-sm self-center">
-                                    Reportar
-                                </button>
+                                    <button onclick="confirmReport('comments', {{ $comment->id }})" title="Reportar comentario" class="text-yellow-500 hover:text-yellow-700 font-semibold text-sm self-center">
+                                        Reportar
+                                    </button>
                             </div>
                         @endauth
                     </div>
@@ -153,26 +174,30 @@
         return false;
     }
 
-    function confirmReport(commentId) {
+    function confirmReport(type, id) {
         Swal.fire({
-            title: '¿Reportar comentario?',
-            text: "Puedes reportar este comentario a los moderadores.",
-            icon: 'info',
+            title: '¿Reportar contenido?',
+            text: "Esto será revisado por los moderadores.",
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Reportar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/comments/${commentId}/report`, {
+                fetch(`/report/${type}/${id}`, {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
                     },
-                }).then(() => {
-                    Swal.fire('Reportado', 'El comentario ha sido reportado.', 'success');
-                });
+                })
+                    .then(response => {
+                        if (response.ok) return response.json();
+                        if (response.status === 409) throw new Error("Ya reportado.");
+                        throw new Error("Error al reportar.");
+                    })
+                    .then(data => Swal.fire('Enviado', data.message, 'success'))
+                    .catch(err => Swal.fire('Error', err.message, 'error'));
             }
         });
     }

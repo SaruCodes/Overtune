@@ -64,7 +64,7 @@
         @foreach($categoriesWithNews as $category)
             <section class="mb-12">
                 <div class="mb-2 relative">
-                    <h2 class="text-2xl font-bold text-secondary inline-block bg-white px-2 relative z-10">{{ $category->name }}</h2>
+                    <h2 class="text-2xl font-bold text-secondary inline-block  px-2 relative z-10">{{ $category->category }}</h2>
                     <hr class="border-t-2 border-secondary mt-2 -translate-y-3">
                 </div>
 

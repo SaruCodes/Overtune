@@ -27,7 +27,7 @@
                 @endguest
                 @auth
                     <details class="relative flex items-center z-50">
-                        <summary class="pt-4 btn btn-soft btn-secondary">{{ __('Acceso') }}</summary>
+                        <summary class="pt-4 btn btn-soft btn-secondary">{{ __('Zona Personal') }}</summary>
                         <ul class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 max-w-[80vw] w-auto bg-purple-950 text-white rounded-md shadow-lg p-2 z-50">
                             <li class="flex items-center space-x-4">
                                 <!-- Enlace al perfil propio -->

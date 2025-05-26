@@ -8,6 +8,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NewsController;
@@ -35,12 +36,11 @@ Route::middleware(['auth', 'can:manage-content'])->group(function () {
 
     Route::put('/reviews/{review}/feature', [ReviewController::class, 'feature'])->name('reviews.feature');
 
-    Route::get('/reportes', [AdminPanelController::class, 'reportes'])->name('admin.report');
+    Route::get('/reportes', [AdminPanelController::class, 'reports'])->name('admin.report');
+
     Route::put('/reportes/{id}/safe', [AdminPanelController::class, 'marcarComoSeguro'])->name('admin.report.safe');
     Route::delete('/reportes/{id}', [AdminPanelController::class, 'eliminarContenido'])->name('admin.report.delete');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
-
-
 });
 
 //Rutas accesibles a ususarios autentificados
@@ -68,6 +68,9 @@ Route::resource('review', ReviewController::class);
 Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');
 Route::resource('lists', ListController::class);
 Route::post('/lists/{list}/favorite', [FavoriteController::class, 'toggle'])->name('lists.favorite');
+Route::post('/report/{type}/{id}', [ReportController::class, 'store'])->middleware('auth');
+Route::resource('reviews', ReviewController::class);
+
 
 
 //Rutas DE PERFIL solo para usuarios autentificados!!

@@ -9,16 +9,16 @@
             <div class="bg-red-100 text-red-800 p-3 rounded mb-4">{{ session('error') }}</div>
         @endif
 
-        <table class="w-full border-collapse border border-gray-300">
+        <table class="w-full border-collapse border bg-purple-900">
             <thead>
-            <tr class="bg-gray-100">
-                <th class="border p-2">ID</th>
-                <th class="border p-2">Tipo</th>
-                <th class="border p-2">ID Contenido</th>
-                <th class="border p-2">Motivo</th>
-                <th class="border p-2">Reportado por</th>
-                <th class="border p-2">Fecha</th>
-                <th class="border p-2">Acciones</th>
+            <tr class="bg-purple-900">
+                <th class="border p-2 text-white">ID</th>
+                <th class="border p-2 text-white">Tipo</th>
+                <th class="border p-2 text-white">ID Contenido</th>
+                <th class="border p-2 text-white">Motivo</th>
+                <th class="border p-2 text-white">Reportado por</th>
+                <th class="border p-2 text-white">Fecha</th>
+                <th class="border p-2 text-white">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -35,7 +35,7 @@
                             @csrf
                             @method('PUT')
                             <button type="submit" class="text-blue-600 hover:underline">Marcar como seguro</button>
-                        </form
+                        </form>
                         <form action="{{ route('admin.report.delete', $report->id) }}" method="POST" class="inline"
                               onsubmit="return confirm('¿Estás seguro de eliminar este contenido?');">
                             @csrf

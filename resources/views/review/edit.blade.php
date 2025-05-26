@@ -51,20 +51,19 @@
             </div>
         </div>
     </div>
-    <script>
-        function updateCounter() {
-            const textarea = document.getElementById('content');
-            const countDisplay = document.getElementById('char-count');
-            const length = textarea.value.length;
-            countDisplay.textContent = length;
-
-            if (length < 100 || length > 3000) {
-                countDisplay.classList.add('text-red-500');
-            } else {
-                countDisplay.classList.remove('text-red-500');
-            }
-        }
-        document.addEventListener('DOMContentLoaded', updateCounter);
-    </script>
-
 </x-layouts.layout>
+<script>
+    function updateCounter() {
+        const textarea = document.getElementById('content');
+        const countDisplay = document.getElementById('char-count');
+        const length = textarea.value.length;
+        countDisplay.textContent = length;
+
+        if (length < 100 || length > 3000) {
+            countDisplay.classList.add('text-red-500');
+        } else {
+            countDisplay.classList.remove('text-red-500');
+        }
+    }
+    document.addEventListener('DOMContentLoaded', updateCounter);
+</script>

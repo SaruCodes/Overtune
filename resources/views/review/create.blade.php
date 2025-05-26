@@ -24,7 +24,7 @@
             @endif
 
             <div>
-                <label for="rating" class="block mb-2 font-semibold text-gray-700">Puntuación</label>
+                <label for="rating" class="block mb-2 font-semibold text-gray-700">{{ __('Calificación') }}</label>
                 <input
                     type="number"
                     id="rating"
@@ -39,7 +39,7 @@
             </div>
 
             <div>
-                <label for="content" class="block mb-2 font-semibold text-gray-700">Contenido</label>
+                <label for="content" class="block mb-2 font-semibold text-gray-700">{{ __('Contenido') }}</label>
                 <textarea
                     id="content"
                     name="content"
@@ -47,7 +47,11 @@
                     required
                     class="textarea textarea-bordered w-full"
                     placeholder="Escribe tu reseña aquí..."
+                    maxlength="3000"
                 ></textarea>
+                <div class="text-sm text-gray-500 mt-1">
+                    Caracteres: <span id="char-count">0</span> / 3000 (mínimo: 100)
+                </div>
             </div>
 
             <div class="text-center">
@@ -57,3 +61,25 @@
         </form>
     </div>
 </x-layouts.layout>
+<script>
+    function updateCounter() {
+        const textarea = document.getElementById('content');
+        const countDisplay = document.getElementById('char-count');
+        const length = textarea.value.length;
+        countDisplay.textContent = length;
+
+        if (length < 100 || length > 3000) {
+            countDisplay.classList.add('text-red-500');
+        } else {
+            countDisplay.classList.remove('text-red-500');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const textarea = document.getElementById('content');
+        textarea.addEventListener('input', updateCounter);
+        updateCounter();
+    });
+</script>
+
+

@@ -6,7 +6,7 @@ use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Genre;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Http;
 
 class AlbumController extends Controller
 {
@@ -51,6 +51,9 @@ class AlbumController extends Controller
             $validated['cover_image'] = $path;
         }
 
+        $artist = Artist::find($validated['artist_id']);
+        $spotifyId = $this->fetchSpotifyAlbumId($validated['title'], $artist->name);
+
         $album = Album::create([
             'title' => $validated['title'],
             'artist_id' => $validated['artist_id'],
@@ -58,6 +61,7 @@ class AlbumController extends Controller
             'cover_image' => $validated['cover_image'] ?? 'images/placeholders/album.png',
             'description' => $validated['description'] ?? null,
             'type' => $validated['type'],
+            'spotify_id' => $spotifyId, // <- aquí se llena automáticamente
         ]);
 
         $album->genres()->sync($validated['genres']);
@@ -138,5 +142,33 @@ class AlbumController extends Controller
         return view('albums.search', compact('albums', 'genres'));
     }
 
+    private function fetchSpotifyAlbumId($title, $artist)
+    {
+        $client_id = config('services.spotify.client_id');
+        $client_secret = config('services.spotify.client_secret');
+
+        $response = Http::asForm()->post('https://accounts.spotify.com/api/token', [
+            'grant_type' => 'client_credentials',
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
+        ]);
+
+        if (!$response->ok()) {
+            return null;
+        }
+
+        $access_token = $response['access_token'];
+        $search = Http::withToken($access_token)->get('https://api.spotify.com/v1/search', [
+            'q' => "album:$title artist:$artist",
+            'type' => 'album',
+            'limit' => 1,
+        ]);
+
+        if ($search->successful() && !empty($search['albums']['items'])) {
+            return $search['albums']['items'][0]['id']; // Este es el spotify_id
+        }
+
+        return null;
+    }
 
 }

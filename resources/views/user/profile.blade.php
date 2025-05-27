@@ -1,9 +1,9 @@
 <x-layouts.layout titulo="Perfil de Usuario - Overtune">
-    <div class="card bg-white shadow-md w-full max-w-lg mx-auto">
+    <div class="card bg-white shadow-md w-full max-w-lg mx-auto mt-12">
         <div class="card-body text-center relative">
             <div class="avatar mx-auto">
                 <div class="w-24 rounded-full">
-                    <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp' }}" />
+                    <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : '/images/placeholder_avatar.png' }}" />
                 </div>
             </div>
             <h2 class="card-title text-2xl font-bold mt-4">{{ auth()->user()->name }}</h2>
@@ -12,9 +12,7 @@
 
             <div class="card-actions justify-center mt-4 space-x-2">
                 <a href="{{ route('user.edit') }}" class="btn btn-primary btn-sm">{{ __('Editar Perfil') }}</a>
-                @if(auth()->check() && auth()->id() === $user->id)
-                    <a href="{{ route('admin.panel') }}" class="btn btn-outline btn-secondary btn-sm">{{__('Panel de Control')}}</a>
-                @endif
+                <a href="{{ route('admin.panel') }}" class="btn btn-outline btn-secondary btn-sm">{{__('Panel de Control')}}</a>
             </div>
         </div>
     </div>
@@ -25,7 +23,7 @@
     <!--Panel de administradores-->
     @if ($user->isAdmin() || $user->isEditor())
         <div class="max-w-4xl mx-auto mt-6">
-            <details class="collapse collapse-arrow bg-base-200">
+            <details class="collapse collapse-arrow bg-purple-300">
                 <summary class="collapse-title text-lg font-medium">Panel de Administración</summary>
                 <div class="collapse-content">
                     <ul class="space-y-3 mt-4">
@@ -66,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="card bg-white shadow">
+            <div class="card bg-white shadow mb-12">
                 <div class="card-body">
                     <h3 class="text-xl font-semibold flex justify-between items-center"> Tus Reseñas
                         @if(auth()->check() && auth()->id() === $user->id)

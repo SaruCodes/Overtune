@@ -1,5 +1,5 @@
 <x-layouts.layout titulo="Editar Noticia">
-    <div class="container">
+    <div class="flex flex-col justify-center items-center min-h-screen py-12">
         <h1>Editar Noticia</h1>
         @if ($errors->any())
             <div class="alert alert-danger">

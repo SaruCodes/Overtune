@@ -73,7 +73,7 @@
             </div>
 
             <div class="flex justify-end space-x-4 mt-6">
-                <a href="{{ route('albums.index') }}" class="btn btn-secondary">Cancelar</a>
+                <a href="{{ route('albums.crud') }}" class="btn btn-secondary">Cancelar</a>
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
         </form>

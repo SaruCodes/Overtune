@@ -32,24 +32,15 @@
 
             <div class="mb-4">
                 <label for="content" class="block text-text-dark font-medium mb-1">Contenido</label>
-                <textarea
-                    name="content"
-                    id="content"
-                    rows="5"
-                    required
-                    class="block w-full mt-1 p-2 border border-gray-300 rounded-md"
-                >{{ old('content') }}</textarea>
+                <textarea name="content" id="content" rows="5" required class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
+                    {{ old('content') }}
+                </textarea>
                 @error('content') <p class="text-error text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div class="mb-4">
                 <label for="category_id" class="block text-text-dark font-medium mb-1">Categoría</label>
-                <select
-                    name="category_id"
-                    id="category_id"
-                    required
-                    class="block w-full mt-1 p-2 border border-gray-300 rounded-md"
-                >
+                <select name="category_id" id="category_id" required class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
                     <option value="">Selecciona una categoría</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
@@ -58,6 +49,12 @@
                     @endforeach
                 </select>
                 @error('category_id') <p class="text-error text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="category_id" class="block text-text-dark font-medium mb-1">Portada de Noticia</label>
+                <input type="file" id="image" name="image" class="file-input file-input-bordered w-full">
+                @error('image') <p class="text-error text-sm">{{ $message }}</p> @enderror
             </div>
 
             <div class="flex justify-end space-x-4 mt-8">

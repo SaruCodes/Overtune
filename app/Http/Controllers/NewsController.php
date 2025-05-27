@@ -27,8 +27,10 @@ class NewsController extends Controller
     public function crud()
     {
         $news = News::with('category')->latest()->paginate(10);
-        return view('news.crud', compact('news'));
+        $categories = Category::all();
+        return view('news.crud', compact('news', 'categories'));
     }
+
 
     public function create()
     {

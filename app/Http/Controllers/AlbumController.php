@@ -62,7 +62,7 @@ class AlbumController extends Controller
 
         $album->genres()->sync($validated['genres']);
 
-        return redirect()->route('albums.index')
+        return redirect()->route('albums.crud')
             ->with('success', 'Álbum creado exitosamente!');
     }
 

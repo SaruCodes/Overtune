@@ -37,7 +37,8 @@
         </div>
     </div>
 
-    <section class="p-8 bg-violet-100 mt-12">
+    <!--Los más reseñados-->
+    <section class="p-8 bg-violet-100 mt-10">
         <h2 class="text-3xl font-semibold text-center mb-8">{{ __('Álbumes más reseñados') }}</h2>
         <div class="flex flex-wrap justify-center gap-6">
             @foreach ($topReviewedAlbums->take(5) as $album)
@@ -45,11 +46,10 @@
                     <img
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         src="{{ $album->cover_image ? asset('storage/' . $album->cover_image) : 'https://via.placeholder.com/200' }}"
-                        alt="{{ $album->titulo }}"
+                        alt="{{ $album->title }}"
                     />
                     <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white text-center p-4">
-                        <h3 class="text-lg font-semibold">{{ $album->titulo }}</h3>
-                        <p class="text-sm">{{ $album->artista }}</p>
+                        <h3 class="text-lg font-semibold">{{ $album->title }}</h3>
                     </div>
                 </a>
             @endforeach
@@ -57,8 +57,8 @@
     </section>
 
 @if ($featuredNews)
-        <section class="bg-purple-900 text-white p-10">
-            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6">
+        <section class="bg-purple-900 text-white p-10 mt-12">
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-14">
                 <div class="w-full md:w-1/2">
                     <img src="{{ $featuredNews->image ? asset('storage/' . $featuredNews->image) : 'https://via.placeholder.com/600x400' }}"
                          class="w-full h-64 object-cover rounded-lg shadow-lg" alt="{{ $featuredNews->title }}">
@@ -83,9 +83,7 @@
                 <div class="w-full md:w-2/3">
                     <h2 class="text-2xl font-bold mb-4">{{ __('Reseña destacada: ') }}{{ $featuredReview->album->titulo }}</h2>
                     <p class="mb-4">{{ Str::limit($featuredReview->content, 500) }}</p>
-                    @if (strlen($featuredReview->content) > 500)
-                        <a href="{{ route('review.show', $featuredReview->id) }}" class="btn btn-secondary">{{ __('Leer más') }}</a>
-                    @endif
+                    <a href="{{ route('review.show', $featuredReview->id) }}" class="btn btn-secondary">{{ __('Leer más') }}</a>
                 </div>
             </div>
         </section>
@@ -147,7 +145,7 @@
     @endguest
 
     @auth
-        <div class="card lg:card-side bg-base-100 shadow-xl mx-4 mt-12 bg-primary/10">
+        <div class="card lg:card-side bg-base-100 shadow-xl bg-primary/30">
             <figure class="lg:w-1/3">
                 <img src="{{ asset('images/review-banner.jpg') }}" alt="Escribe reseñas" class="w-full h-64 lg:h-full object-cover">
             </figure>

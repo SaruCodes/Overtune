@@ -86,7 +86,7 @@
             </div>
 
             <!--Albumes destacados (columna lateral)-->
-            <div class="space-y-6">
+            <div class="space-y-6 hidden lg:block">
                 <div class="card bg-base-100 shadow-lg border border-primary p-6">
                     <h2 class="card-title text-primary mb-4">Álbumes Populares</h2>
                     <div class="space-y-4">

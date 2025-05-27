@@ -9,13 +9,12 @@
             <div class="bg-red-100 text-red-800 p-3 rounded mb-4">{{ session('error') }}</div>
         @endif
 
-        <table class="w-full border-collapse border bg-purple-900">
+        <table class="w-full border-collapse border">
             <thead>
             <tr class="bg-purple-900">
                 <th class="border p-2 text-white">ID</th>
                 <th class="border p-2 text-white">Tipo</th>
                 <th class="border p-2 text-white">ID Contenido</th>
-                <th class="border p-2 text-white">Motivo</th>
                 <th class="border p-2 text-white">Reportado por</th>
                 <th class="border p-2 text-white">Fecha</th>
                 <th class="border p-2 text-white">Acciones</th>
@@ -23,14 +22,13 @@
             </thead>
             <tbody>
             @foreach($reports as $report)
-                <tr>
-                    <td class="border p-2">{{ $report->id }}</td>
-                    <td class="border p-2">{{ ucfirst($report->content_type) }}</td>
-                    <td class="border p-2">{{ $report->content_id }}</td>
-                    <td class="border p-2">{{ $report->reason }}</td>
-                    <td class="border p-2">{{ $report->user->name ?? 'Usuario eliminado' }}</td>
-                    <td class="border p-2">{{ $report->created_at->format('d/m/Y') }}</td>
-                    <td class="border p-2 space-x-2">
+                <tr class="border-purple-900">
+                    <td class="border p-2 border-purple-900">{{ $report->id }}</td>
+                    <td class="border p-2 border-purple-900">{{ ucfirst($report->content_type) }}</td>
+                    <td class="border p-2 border-purple-900">{{ $report->content_id }}</td>
+                    <td class="border p-2 border-purple-900">{{ $report->user->name ?? 'Usuario eliminado' }}</td>
+                    <td class="border p-2 border-purple-900">{{ $report->created_at->format('d/m/Y') }}</td>
+                    <td class="border p-2 space-x-2 border-purple-900">
                         <form action="{{ route('admin.report.safe', $report->id) }}" method="POST" class="inline">
                             @csrf
                             @method('PUT')

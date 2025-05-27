@@ -21,6 +21,13 @@ Route::get('/dashboard', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/contacto', function () {
+    return view('contact');
+})->name('contact');
+
+Route::post('/contacto', [ContactController::class, 'send'])->name('contact.send');
+
+
 //Rutas SOLO accesibles a admin y editor
 Route::middleware(['auth', 'can:manage-content'])->group(function () {
     Route::get('/news/crud', [NewsController::class, 'crud'])->name('news.crud');

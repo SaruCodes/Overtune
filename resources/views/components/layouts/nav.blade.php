@@ -7,7 +7,7 @@
         </a>
     </div>
 
-    <!-- Menú de Navegación -->
+    <!--Menú de Navegación-->
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1 space-x-4 flex items-center h-full">
             <li><a class="btn btn-soft btn-secondary" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
@@ -36,8 +36,8 @@
                                     {{ __('Perfil') }}
                                 </a>
 
-                                <!-- Botón cerrar sesión -->
-                                <form action="{{ route('logout') }}" method="POST" class="inline">
+                                <!--Botón cerrar sesión-->
+                                <form action="{{ route('logout') }}" method="POST" class="ml-0">
                                     @csrf
                                     <button type="submit"
                                             class="btn btn-soft btn-primary">

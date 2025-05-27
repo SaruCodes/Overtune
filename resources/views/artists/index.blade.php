@@ -35,13 +35,17 @@
         </div>
     </div>
 
-    @php $featured = $artists->first(); @endphp
+    @php $featured = $artists->last(); @endphp
     @if ($featured)
         <div class="bg-gray-50 py-12 border-t">
             <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6 px-4">
-                <img src="{{ asset('storage/' . $featured->image) }}" class="w-48 h-48 object-cover rounded shadow-lg" alt="{{ $featured->name }}">
+                <img href="{{ route('artists.show', $artist->id) }}" src="{{ asset('storage/' . $featured->image) }}" class="w-48 h-48 object-cover rounded shadow-lg" alt="{{ $featured->name }}">
                 <div>
-                    <h2 class="text-2xl font-bold text-purple-800">Artista Destacado: {{ $featured->name }}</h2>
+                    <h2 class="text-2xl font-bold text-purple-600">
+                        <a href="{{ route('artists.show', $featured->id) }}" class="text-primary hover:underline hover:text-purple-700 transition">
+                            {{ __('Artista Destacado') }}: {{ $featured->name }}
+                        </a>
+                    </h2>
                     <p class="text-gray-600 mt-2">{{ Str::limit($featured->bio, 300) }}</p>
                     <p class="mt-2 text-sm text-gray-500">Debut: {{ $featured->debut }} | País: {{ $featured->country }}</p>
                 </div>

@@ -22,7 +22,7 @@
 
         <div class="max-h-full overflow-x-auto p-4 flex-grow">
             <table class="table-auto w-full border-collapse border border-gray-300 text-base text-gray-800">
-                <thead class="bg-indigo-400 text-xl font-bold">
+                <thead class="bg-primary text-xl font-bold text-white">
                 <tr>
                     <th class="border border-gray-400 p-2">{{ __('Título') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Artista') }}</th>
@@ -36,7 +36,8 @@
                     <tr class="border border-gray-300 hover:bg-gray-100">
                         <td class="border border-gray-300 p-3">{{ $album->title }}</td>
                         <td class="border border-gray-300 p-3">{{ $album->artist->name }}</td>
-                        <td class="border border-gray-300 p-3">{{ $album->release_date }}</td>
+                        <td class="border border-gray-300 p-3">{{ \Carbon\Carbon::parse($album->release_date)->translatedFormat('d-m-Y') }}</td>
+
                         <td class="border border-gray-300 p-3">
                             @foreach ($album->genres as $genre)
                                 <span class="badge badge-info mr-1">{{ $genre->genre }}</span>

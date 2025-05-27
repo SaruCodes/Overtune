@@ -8,11 +8,12 @@
                         <img src="{{ asset('storage/' . $news->image) }}" class="w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                             <div class="text-center">
-                                <h2 class="text-white text-4xl md:text-5xl font-bold mb-2">{{ $news->title }}</h2>
-                                <span class="bg-primary text-white px-3 py-1 text-sm rounded">{{ $category->name }}</span>
+                                <h2 class="text-white text-4xl md:text-5xl font-bold mb-2 hover:transition duration-300 text-5xl">{{ $news->title }}
+                                    <a href=""></a>
+                                </h2>
                             </div>
                         </div>
-                        <!-- Controls -->
+                        <!--controles carousel-->
                         <a href="#slide{{ $loop->index == 0 ? $categoriesWithNews->take(4)->count() - 1 : $loop->index - 1 }}"
                            class="absolute left-5 top-1/2 transform -translate-y-1/2 btn btn-circle bg-white bg-opacity-50 hover:bg-opacity-80">
                             ❮

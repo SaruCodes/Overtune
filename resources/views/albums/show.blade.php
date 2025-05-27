@@ -22,9 +22,9 @@
             </div>
         </div>
 
-        <!--TARJETA UNICA CON RECOMENDACIONES Y RESEÑAS-->
-        <div class="bg-purple-300 rounded-xl shadow p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="max-w-sm mx-auto lg:mx-0">
+        <!--RECOMENDACIONES Y RESEÑAS EN DOS COLUMNAS-->
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-48">
+            <div class="bg-purple-300 rounded-xl p-6 shadow">
                 <h2 class="text-lg font-semibold mb-4">Recomendaciones</h2>
                 @if($recommendedAlbums->isNotEmpty())
                     <ul class="space-y-3">
@@ -44,15 +44,21 @@
                     <p class="text-sm">No hay recomendaciones disponibles.</p>
                 @endif
             </div>
-            <div>
+
+            <div class="col-span-2">
                 <h2 class="text-lg font-semibold mb-4">Reseñas mejor valoradas</h2>
                 @foreach($album->review->sortByDesc(fn($review) => $review->comments->count()) as $review)
                     <div class="mb-6 border-b pb-4">
                         <p class="font-bold">Por {{ $review->user->name }} el {{ $review->created_at->format('d/m/Y') }}</p>
-                        <p class="text-gray-700 mt-2">{{ $review->content }}</p>
+                        <p class="text-gray-700 mt-2">
+                            {{ Str::limit($review->content, 250) }}
+                        </p>
+                        <a href="{{ route('review.show', $review->id) }}"
+                           class="text-sm text-purple-600 hover:underline">
+                            Leer completa
+                        </a>
                     </div>
                 @endforeach
-                <a href="{{ route('review.show', $album->id) }}" class="block text-right text-purple-600 font-semibold hover:underline">Ver más</a>
             </div>
         </div>
     </div>

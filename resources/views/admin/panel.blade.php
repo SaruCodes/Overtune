@@ -18,9 +18,9 @@
     @if(auth()->user()->isAdmin())
             <section class="mb-8">
                 <h2 class="text-xl font-semibold mb-4">Usuarios</h2>
-                <table class="w-full border-collapse bg-purple-900">
-                    <thead>
-                    <tr class="bg-purple-800 ">
+                <table class="w-full border-collapse ">
+                    <thead class="bg-purple-900">
+                    <tr class="">
                         <th class="border p-2  text-white">ID</th>
                         <th class="border p-2 text-white">Nombre</th>
                         <th class="border p-2 text-white">Email</th>

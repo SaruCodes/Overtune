@@ -43,7 +43,7 @@
         </aside>
     <ul class="menu bg-base-50 rounded-box w-26">
         <li>Menú de Contacto</li>
-        <li><a>Contacto</a></li>
+        <li><a href="{{ route('contact') }}">Contacto</a></li>
         <li><a>Unete al equipo</a></li>
     </ul>
 

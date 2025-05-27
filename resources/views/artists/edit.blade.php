@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="flex justify-end space-x-4 mt-8">
-                    <a href="{{ route('artists.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
+                    <a href="{{ route('artists.crud') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('Guardar Cambios') }}</button>
                 </div>
             </form>

@@ -37,7 +37,7 @@
         </div>
 
         <div class="mb-10">
-
+            <p class="font-bold pb-6">Por {{ $review->user->name }} el {{ $review->created_at->format('d/m/Y') }}</p>
             <p class="text-gray-800 whitespace-pre-wrap text-lg leading-relaxed">{{ $review->content }}</p>
             @auth
                 @php
@@ -84,8 +84,7 @@
                             content: '{{ addslashes($comment->content) }}',
                             originalContent: '{{ addslashes($comment->content) }}'
                         }"
-                        class="border rounded-lg bg-white shadow-sm p-4 relative group hover:shadow-lg transition-shadow"
-                    >
+                        class="border rounded-lg bg-white shadow-sm p-4 relative group hover:shadow-lg transition-shadow">
                         <div class="flex items-center gap-4 mb-3">
                             <img src="{{ $comment->user->avatar ? asset('storage/' . $comment->user->avatar) : 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp' }}"
                                  alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover shadow-sm">
@@ -103,12 +102,7 @@
                             <form method="POST" action="{{ route('comments.update', $comment) }}" class="space-y-2">
                                 @csrf
                                 @method('PUT')
-                                <textarea
-                                    name="content"
-                                    x-model="content"
-                                    class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-purple-900"
-                                    required
-                                ></textarea>
+                                <textarea name="content" x-model="content" class="textarea textarea-bordered w-full h-24 resize-none focus:ring-2 focus:ring-purple-900" required></textarea>
                                 <div class="flex gap-2">
                                     <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
                                     <button type="button" @click="content = originalContent; editMode = false" class="btn btn-secondary btn-sm">Cancelar</button>
@@ -125,8 +119,8 @@
                             <div class="absolute top-3 right-3 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                 @if($userIsOwner)
                                     <button @click="editMode = true" type="button" title="Editar comentario" class="text-indigo-600 hover:text-indigo-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="hover:text-blue-600 w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
                                         </svg>
                                     </button>
                                 @endif
@@ -135,15 +129,14 @@
                                     <form method="POST" action="{{ route('comments.destroy', $comment) }}" onsubmit="return confirmDelete(event)" id="delete-comment-{{ $comment->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <!-- Trash Icon -->
                                         <button type="submit" title="Eliminar comentario" class="text-red-600 hover:text-red-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9M4.772 5.79a48.108 48.108 0 013.478-.397m7.5 0a48.11 48.11 0 013.478.397M18 14v4.75A2.25 2.25 0 0115.75 21H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79" />
                                             </svg>
                                         </button>
                                     </form>
                                 @endif
-                                    <button onclick="confirmReport('comments', {{ $comment->id }})" title="Reportar comentario" class="text-yellow-500 hover:text-yellow-700 font-semibold text-sm self-center">
+                                    <button onclick="confirmReport('comments', {{ $comment->id }})" title="Reportar comentario" class="text-secondary hover:text-yellow-700 font-semibold text-sm self-center">
                                         Reportar
                                     </button>
                             </div>

@@ -7,7 +7,7 @@
             &#9778;
         </label>
 
-        <div class="absolute hidden peer-checked:block bg-gray-300 p-3 rounded-xl flex flex-col">
+        <div class="absolute hidden peer-checked:block p-3 rounded-xl flex flex-col">
             @auth
                 <span class="text-white">{{ auth()->user()->name }}</span>
                 <form action="{{route("logout")}}" method="POST">

@@ -30,7 +30,7 @@
 
         <div class="max-h-full overflow-x-auto p-4 flex-grow">
             <table class="table-auto w-full border-collapse border border-gray-300 text-base text-gray-800">
-                <thead class="bg-indigo-400 text-xl font-bold">
+                <thead class="bg-primary text-xl font-bold text-white">
                 <tr>
                     <th class="border border-gray-400 p-2">{{ __('ID') }}</th>
                     <th class="border border-gray-400 p-2">{{ __('Nombre') }}</th>

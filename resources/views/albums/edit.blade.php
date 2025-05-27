@@ -2,7 +2,7 @@
     <div class="flex flex-col md:flex-row justify-center items-start gap-10 min-h-screen bg-main py-12 px-6">
 
         {{-- Información Actual --}}
-        <div class="bg-base-100 rounded-lg shadow-md p-6 w-full md:w-1/2">
+        <div class="bg-purple-100 rounded-lg shadow-md p-6 w-full md:w-1/2">
             <h2 class="text-xl font-semibold text-primary mb-4">{{ __('Información actual') }}</h2>
 
             <p><strong class="text-text-dark">{{ __('Título') }}:</strong> {{ $album->title }}</p>
@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="flex justify-end space-x-4 mt-8">
-                    <a href="{{ route('albums.index') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
+                    <a href="{{ route('albums.crud') }}" class="btn btn-secondary">{{ __('Cancelar') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('Guardar Cambios') }}</button>
                 </div>
             </form>

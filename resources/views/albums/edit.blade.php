@@ -1,7 +1,6 @@
 <x-layouts.layout titulo="{{ __('Overtune - Editar Álbum') }}">
     <div class="flex flex-col md:flex-row justify-center items-start gap-10 min-h-screen bg-main py-12 px-6">
 
-        {{-- Información Actual --}}
         <div class="bg-purple-100 rounded-lg shadow-md p-6 w-full md:w-1/2">
             <h2 class="text-xl font-semibold text-primary mb-4">{{ __('Información actual') }}</h2>
 
@@ -17,7 +16,6 @@
             @endif
         </div>
 
-        {{-- Formulario de Edición --}}
         <div class="bg-base-100 rounded-lg shadow-md p-6 w-full md:w-1/2">
             <form action="{{ route('albums.update', $album) }}" method="POST" enctype="multipart/form-data">
                 @csrf @method('PUT')

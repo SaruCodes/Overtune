@@ -35,6 +35,6 @@ class Album extends Model
 
     public function lists()
     {
-        return $this->belongsToMany(ListModel::class, 'album_list')->withTimestamps();
+        return $this->belongsToMany(ListModel::class);
     }
 }

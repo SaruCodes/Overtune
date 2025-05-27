@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class NewsController extends Controller
 {
     public function index()
     {
+        $news = News::latest()->paginate(10);
         $carouselNews = News::latest()->take(5)->get();
         $latestNews = News::latest()->take(3)->get();
         $categoriesWithNews = Category::with(['latestNews'])->get();
 
-        return view('news.index', compact('carouselNews', 'latestNews', 'categoriesWithNews'));
+        return view('news.index', 'news', compact('carouselNews', 'latestNews', 'categoriesWithNews'));
     }
 
 
@@ -24,10 +27,19 @@ class NewsController extends Controller
         return view('news.show', compact('news', 'comments'));
     }
 
-    public function crud()
+    public function crud(Request $request)
     {
-        $news = News::with('category')->latest()->paginate(10);
-        $categories = Category::all();
+        $query = News::with('category');
+
+        if ($request->filled('category')) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('category', $request->category);
+            });
+        }
+
+        $news = $query->orderBy('created_at', 'desc')->paginate(10);
+        $categories = Category::select('category')->distinct()->get();
+
         return view('news.crud', compact('news', 'categories'));
     }
 

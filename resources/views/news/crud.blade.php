@@ -1,6 +1,6 @@
 <x-layouts.layout titulo="{{ __('Overtune - Gestión de Noticias') }}">
-    <div class="min-h-screen flex flex-col">
-        @if (session('mensaje'))
+    <div class="flex flex-col min-h-[80vh]">
+    @if (session('mensaje'))
             <div id="message" role="alert" class="alert alert-success">
                 <span>{{ session('mensaje') }}</span>
             </div>

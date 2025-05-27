@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ListModel extends Model
 {
     protected $table = 'lists';
+
     protected $fillable = ['user_id', 'title', 'description'];
 
     public function user()
@@ -16,8 +17,9 @@ class ListModel extends Model
 
     public function albums()
     {
-        return $this->belongsToMany(Album::class, 'album_list')->withTimestamps();
+        return $this->belongsToMany(Album::class, 'album_list', 'list_id', 'album_id');
     }
+
     public function favoritedBy()
     {
         return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
@@ -25,7 +27,7 @@ class ListModel extends Model
 
     public function favorites()
     {
-        return $this->hasMany(Favorite::class, 'list_id');
+        return $this->belongsToMany(User::class, 'favorites', 'list_id', 'user_id');
     }
 
 }

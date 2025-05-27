@@ -34,23 +34,25 @@ class ListController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'albums' => 'required|array',
+            'albums' => 'array',
             'albums.*' => 'exists:albums,id',
         ]);
 
-        $list = new \App\Models\ListModel();
-        $list->title = $request->title;
-        $list->description = $request->description;
-        $list->user_id = auth()->id();
-        $list->save();
-        $list->albums()->sync($request->albums);
-        session()->forget('selected_albums');
-        session()->forget('form_data');
+        $list = ListModel::create([
+            'user_id' => Auth::id(),
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+        ]);
 
-        return redirect()->route('lists.show', $list)->with('success', 'Lista creada correctamente');
+        if (!empty($validated['albums'])) {
+            $list->albums()->attach($validated['albums']);
+        }
+
+        session()->forget('selected_albums');
+        return redirect()->route('lists.index')->with('mensaje', 'Lista creada correctamente.');
     }
 
 
@@ -73,13 +75,23 @@ class ListController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'albums' => 'array',
+            'albums.*' => 'exists:albums,id',
         ]);
 
-        $list->update($validated);
+        $list->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+        ]);
+
+        if (isset($validated['albums'])) {
+            $list->albums()->sync($validated['albums']);
+        } else {
+            $list->albums()->sync([]);
+        }
 
         return redirect()->route('lists.show', $list->id)->with('success', 'Lista actualizada.');
     }
-
 
     public function destroy($id)
     {
@@ -87,26 +99,6 @@ class ListController extends Controller
         $list->delete();
 
         return redirect()->route('lists.index')->with('success', 'Lista eliminada.');
-    }
-
-    public function addAlbumTemp(Request $request)
-    {
-        $request->validate(['album_id' => 'required|exists:albums,id']);
-        $selected = session('selected_albums', []);
-        if (!in_array($request->album_id, $selected)) {
-            $selected[] = $request->album_id;
-            session(['selected_albums' => $selected]);
-        }
-        return redirect()->route('lists.create', ['search' => $request->input('search')]);
-    }
-
-    public function removeAlbumTemp(Request $request)
-    {
-        $request->validate(['album_id' => 'required|exists:albums,id']);
-        $selected = session('selected_albums', []);
-        $selected = array_filter($selected, fn($id) => $id != $request->album_id);
-        session(['selected_albums' => $selected]);
-        return redirect()->route('lists.create', ['search' => $request->input('search')]);
     }
 
 }

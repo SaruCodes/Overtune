@@ -11,20 +11,17 @@
                            value="{{ old('title') }}">
                 </div>
 
-                <div class="mb-4 flex flex-col">
+                <div class="mb-4">
                     <label class="block text-sm font-medium mb-1" for="description">Descripción</label>
                     <textarea name="description" id="description" rows="4" class="textarea textarea-bordered w-full">{{ old('description') }}</textarea>
                 </div>
 
-                <!--Álbumes añadidos-->
                 <div class="mb-4">
-                    <h2 class="text-lg font-semibold mb-2">Álbumes añadidos</h2>
-
+                    <h2 class="text-lg font-semibold mb-2">Álbumes seleccionados</h2>
                     @php
-                        $selectedAlbumIds = old('albums', session('selected_albums', []));
+                        $selectedAlbumIds = old('albums', []);
                     @endphp
-
-                    @if(count($selectedAlbumIds) > 0)
+                    @if(count($selectedAlbumIds))
                         <ul class="space-y-2 max-h-96 overflow-y-auto border rounded p-2 bg-white">
                             @foreach($selectedAlbumIds as $albumId)
                                 @php
@@ -38,22 +35,14 @@
                                             <div class="font-semibold truncate max-w-[140px]">{{ $album->title }}</div>
                                             <div class="text-xs text-gray-600 truncate max-w-[140px]">Artista: {{ $album->artist->name }}</div>
                                         </div>
-                                        <form action="{{ route('lists.removeAlbumTemp') }}" method="POST" class="inline">
-                                            @csrf
-                                            <input type="hidden" name="album_id" value="{{ $album->id }}">
-                                            <button type="submit" class="btn btn-xs btn-error px-2 py-1">Eliminar</button>
-                                        </form>
                                     </li>
                                 @endif
                             @endforeach
                         </ul>
                     @else
-                        <p class="text-gray-600">No has añadido álbumes aún.</p>
+                        <p class="text-gray-600">No has seleccionado álbumes aún.</p>
                     @endif
                 </div>
-                @foreach ($selectedAlbumIds as $albumId)
-                    <input type="hidden" name="albums[]" value="{{ $albumId }}">
-                @endforeach
 
                 <button type="submit" class="btn btn-primary mt-auto">Guardar Lista</button>
             </form>
@@ -70,32 +59,31 @@
                 <a href="{{ route('lists.create') }}" class="btn btn-secondary">Limpiar</a>
             </form>
 
-            <div class="grid grid-cols-3 gap-6 overflow-y-auto max-h-[600px]">
-                @if(isset($albums) && $albums->count())
+            @if(isset($albums) && $albums->count())
+                <form method="POST" action="{{ route('lists.store') }}" class="grid grid-cols-3 gap-6 overflow-y-auto max-h-[600px]">
+                    @csrf
+                    <input type="hidden" name="title" value="{{ old('title') }}">
+                    <input type="hidden" name="description" value="{{ old('description') }}">
                     @foreach($albums as $album)
-                        @php
-                            $alreadyAdded = in_array($album->id, $selectedAlbumIds);
-                        @endphp
                         <div class="border rounded p-3 flex flex-col items-center bg-white shadow-sm">
                             <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}"
                                  class="w-28 h-28 object-cover rounded mb-2">
                             <div class="font-semibold text-center truncate w-full mb-1">{{ $album->title }}</div>
 
-                            @if($alreadyAdded)
-                                <button disabled class="btn btn-sm btn-success w-full">Añadido</button>
-                            @else
-                                <form method="POST" action="{{ route('lists.addAlbumTemp') }}" class="w-full">
-                                    @csrf
-                                    <input type="hidden" name="album_id" value="{{ $album->id }}">
-                                    <button type="submit" class="btn btn-sm btn-primary w-full">Añadir</button>
-                                </form>
-                            @endif
+                            <label class="flex items-center gap-2 text-sm">
+                                <input type="checkbox" name="albums[]" value="{{ $album->id }}"
+                                    {{ in_array($album->id, old('albums', [])) ? 'checked' : '' }}>
+                                Seleccionar
+                            </label>
                         </div>
                     @endforeach
-                @elseif(request()->has('search'))
-                    <p>No se encontraron álbumes para "{{ request('search') }}"</p>
-                @endif
-            </div>
+                    <div class="col-span-3 mt-4">
+                        <button type="submit" class="btn btn-primary w-full">Guardar Lista con Seleccionados</button>
+                    </div>
+                </form>
+            @elseif(request()->has('search'))
+                <p>No se encontraron álbumes para "{{ request('search') }}"</p>
+            @endif
         </section>
     </div>
 </x-layouts.layout>

@@ -25,8 +25,6 @@ Route::get('/contacto', function () {
     return view('contact');
 })->name('contact');
 
-Route::post('/contacto', [ContactController::class, 'send'])->name('contact.send');
-
 
 //Rutas SOLO accesibles a admin y editor
 Route::middleware(['auth', 'can:manage-content'])->group(function () {
@@ -56,8 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('comments', CommentController::class);
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('/review/{review}/comments', [ReviewController::class, 'storeComment'])->name('review.comments.store');
-    Route::get('/listas/crear', [ListController::class, 'create'])->name('lists.create');
-    Route::post('/listas', [ListController::class, 'store'])->name('lists.store');
+    Route::get('/lists/create', [ListController::class, 'create'])->name('lists.create');
+    Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
     Route::post('/listas/album-temp/add', [ListController::class, 'addAlbumTemp'])->name('lists.addAlbumTemp');
     Route::post('/listas/album-temp/remove', [ListController::class, 'removeAlbumTemp'])->name('lists.removeAlbumTemp');
 });
@@ -71,13 +69,16 @@ Route::get('/artists/{artist}', [ArtistController::class, 'show'])->name('artist
 Route::get('/perfil/{user}', [UserController::class, 'show'])->name('user.profile.public');
 Route::get('/albums/search', [AlbumController::class, 'search'])->name('albums.search');
 Route::get('/albums/{album}', [AlbumController::class, 'show'])->name('albums.show');
-Route::resource('review', ReviewController::class);
+Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
+Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('review.show');
+Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
+Route::put('/lists/{list}', [ListController::class, 'update'])->name('lists.update');
+Route::get('/lists/{list}', [ListController::class, 'show'])->name('lists.show');
+Route::get('/lists/{list}/edit', [ListController::class, 'edit'])->name('lists.edit');
 Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');
-Route::resource('lists', ListController::class);
 Route::post('/lists/{list}/favorite', [FavoriteController::class, 'toggle'])->name('lists.favorite');
 Route::post('/report/{type}/{id}', [ReportController::class, 'store'])->middleware('auth');
-Route::resource('reviews', ReviewController::class);
-
 
 
 //Rutas DE PERFIL solo para usuarios autentificados!!

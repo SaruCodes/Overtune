@@ -18,17 +18,6 @@
                             {{ $album->genres->pluck('genre')->join(', ') }}
                         </li>
                     </ul>
-                    @if($album->spotify_id)
-                        <div class="my-8">
-                            <h2 class="text-lg font-semibold mb-2">Escúchalo en Spotify</h2>
-                            <iframe style="border-radius:12px"
-                                    src="https://open.spotify.com/embed/album/{{ $album->spotify_id }}"
-                                    width="100%" height="352" frameBorder="0"
-                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                    loading="lazy">
-                            </iframe>
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>

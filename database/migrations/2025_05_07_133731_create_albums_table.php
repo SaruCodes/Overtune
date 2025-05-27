@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('cover_image')->default('images/placeholders/album.png');
             $table->text('description')->nullable();
             $table->enum('type', ['Album', 'EP', 'Single']);
-            $table->string('spotify_id')->nullable();
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class NewsController extends Controller
         $latestNews = News::latest()->take(3)->get();
         $categoriesWithNews = Category::with(['latestNews'])->get();
 
-        return view('news.index', 'news', compact('carouselNews', 'latestNews', 'categoriesWithNews'));
+        return view('news.index', compact('carouselNews', 'latestNews', 'categoriesWithNews', 'news'));
     }
 
 

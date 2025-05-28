@@ -50,14 +50,17 @@ Route::middleware(['auth', 'can:manage-content'])->group(function () {
 
 //Rutas accesibles a ususarios autentificados
 Route::middleware(['auth'])->group(function () {
-    Route::get('/reviews/crud', [ReviewController::class, 'crud'])->name('review.crud');
+    Route::get('/review/crud', [ReviewController::class, 'crud'])->name('review.crud');
+    Route::get('/review/{review}/edit', [ReviewController::class, 'edit'])->name('review.edit');
+    Route::put('/review/{review}', [ReviewController::class, 'update'])->name('review.update');
+    Route::delete('/review/{review}', [ReviewController::class, 'destroy'])->name('review.destroy');
+    Route::get('/review/create', [ReviewController::class, 'create'])->name('review.create');
+    Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
     Route::resource('comments', CommentController::class);
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::post('/review/{review}/comments', [ReviewController::class, 'storeComment'])->name('review.comments.store');
     Route::get('/lists/create', [ListController::class, 'create'])->name('lists.create');
     Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
-    Route::post('/listas/album-temp/add', [ListController::class, 'addAlbumTemp'])->name('lists.addAlbumTemp');
-    Route::post('/listas/album-temp/remove', [ListController::class, 'removeAlbumTemp'])->name('lists.removeAlbumTemp');
 });
 
 
@@ -70,7 +73,7 @@ Route::get('/perfil/{user}', [UserController::class, 'show'])->name('user.profil
 Route::get('/albums/search', [AlbumController::class, 'search'])->name('albums.search');
 Route::get('/albums/{album}', [AlbumController::class, 'show'])->name('albums.show');
 Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
-Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('review.show');
+Route::get('/review/{review}', [ReviewController::class, 'show'])->name('review.show');
 Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
 Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
 Route::put('/lists/{list}', [ListController::class, 'update'])->name('lists.update');

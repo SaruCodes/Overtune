@@ -90,9 +90,12 @@ class ReviewController extends Controller
 
     public function destroy(Review $review)
     {
-        Gate::authorize('delete', $review);
+        $user = auth()->user();
+        if ($review->user_id !== $user->id && !$user->hasRole('admin') && !$user->hasRole('editor')) {
+            abort(403, 'No tienes permiso para eliminar este comentario.');
+        }
         $review->delete();
-        return redirect()->route('review.crud')
+        return redirect()->route('review.index')
             ->with('success', 'Reseña eliminada!');
     }
 
@@ -121,6 +124,7 @@ class ReviewController extends Controller
 
         return back()->with('success', 'Comentario agregado!');
     }
+
     //Método para las reseñas destacadas
     public function feature(Request $request, Review $review)
     {

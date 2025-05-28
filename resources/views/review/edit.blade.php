@@ -1,6 +1,6 @@
 <x-layouts.layout titulo="Editar Reseña - Overtune">
-    <div class="container mx-auto my-8">
-        <div class="card bg-white shadow-md w-full max-w-lg mx-auto">
+    <div class="container mx-auto">
+        <div class="card w-full max-w-lg mx-auto">
             <div class="card-body">
                 <h2 class="text-2xl font-bold mb-4">{{ __('Editar Reseña') }}</h2>
 

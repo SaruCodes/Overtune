@@ -67,8 +67,6 @@
                               class="w-full mt-1 p-2 border border-gray-300 rounded-md">{{ old('description', $album->description) }}</textarea>
                     @error('description') <p class="text-error text-sm">{{ $message }}</p> @enderror
                 </div>
-
-                {{-- NUEVO: Géneros --}}
                 <div class="mb-4">
                     <x-input-label value="{{ __('Géneros') }}" class="text-text-dark" />
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">

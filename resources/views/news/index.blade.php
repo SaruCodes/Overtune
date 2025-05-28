@@ -8,9 +8,9 @@
                         <img src="{{ asset('storage/' . $news->image) }}" class="w-full h-full object-cover" />
                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                             <div class="text-center">
-                                <h2 class="text-white text-4xl md:text-5xl font-bold mb-2 hover:transition duration-300 text-5xl">{{ $news->title }}
-                                    <a href=""></a>
-                                </h2>
+                                <a href="{{ route('news.show', $news) }}" class="text-white text-4xl md:text-5xl font-bold mb-2 hover:text-purple-300 transition duration-300 block">
+                                    {{ $news->title }}
+                                </a>
                             </div>
                         </div>
                         <!--controles carousel-->
@@ -27,7 +27,6 @@
             @endforeach
         </div>
     </section>
-
 
     <div class="container mx-auto px-4">
         <section class="mb-12">
@@ -48,7 +47,7 @@
                     @foreach($latestNews->slice(1, 2) as $news)
                         <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
                             <a href="{{ route('news.show', $news) }}">
-                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded" />
+                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-70 object-cover rounded" />
                                 <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
                                     <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
                                 </div>
@@ -65,15 +64,15 @@
         @foreach($categoriesWithNews as $category)
             <section class="mb-12">
                 <div class="mb-2 relative">
-                    <h2 class="text-2xl font-bold text-secondary inline-block  px-2 relative z-10">{{ $category->category }}</h2>
-                    <hr class="border-t-2 border-secondary mt-2 -translate-y-3">
+                    <h2 class="text-2xl font-bold text-accent inline-block  px-2 relative z-10">{{ $category->category }}</h2>
+                    <hr class="border-t-2 border-accent mt-2 -translate-y-3">
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     @foreach($category->latestNews as $news)
                         <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
                             <a href="{{ route('news.show', $news) }}">
-                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-36 object-cover rounded" />
+                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded" />
                                 <div class="absolute bottom-0 bg-purple-400 bg-opacity-80 w-full p-2">
                                     <h4 class="text-white text-sm font-semibold">{{ $news->title }}</h4>
                                 </div>

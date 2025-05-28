@@ -82,6 +82,8 @@
                 text: "{{ __('Esta acción no se puede deshacer') }}",
                 icon: "warning",
                 showCancelButton: true,
+                confirmButtonColor: "#783F8E",
+                cancelButtonColor: "#f18701",
                 confirmButtonText: "{{ __('Sí, borrar') }}",
                 cancelButtonText: "{{ __('Cancelar') }}"
             }).then((result) => {

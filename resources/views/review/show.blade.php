@@ -47,17 +47,17 @@
 
                 <div class="flex gap-4 mt-4">
                     @if($userIsOwner)
-                        <a href="{{ route('reviews.edit', $review) }}" class="btn btn-sm btn-primary">Editar</a>
+                        <a href="{{ route('review.edit', $review) }}" class="btn btn-sm btn-primary">Editar</a>
                     @endif
 
                     @if($userIsOwner || $userIsAdminOrEditor)
-                        <form method="POST" action="{{ route('reviews.destroy', $review) }}" onsubmit="return confirmDelete(event)">
+                        <form method="POST" action="{{ route('review.destroy', $review) }}" onsubmit="return confirmDelete(event)">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-error text-white">Eliminar</button>
                         </form>
                     @endif
-                    <button onclick="confirmReport('reviews', {{ $review->id }})" class="btn btn-sm btn-warning text-white">Reportar</button>
+                    <button onclick="confirmReport('review', {{ $review->id }})" class="btn btn-sm btn-warning text-white">Reportar</button>
                 </div>
             @endauth
         </div>
@@ -152,16 +152,19 @@
 <script>
     function confirmDelete(event) {
         event.preventDefault();
+        const form = event.target.closest('form');
         Swal.fire({
             title: '¿Estás seguro?',
             text: "¡Esto eliminará el comentario!",
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: "#783F8E",
+            cancelButtonColor: "#f18701",
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.submit();
+            if (result.isConfirmed && form) {
+                form.submit();
             }
         });
         return false;

@@ -28,9 +28,9 @@ class ListController extends Controller
         if ($query) {
             $albums = Album::where('title', 'like', '%' . $query . '%')->orderBy('title')->get();
         }
-
-        return view('lists.create', compact('albums'));
+        return view('lists.create', compact('albums', 'query'));
     }
+
 
     public function store(Request $request)
     {

@@ -22,7 +22,10 @@
 
 
             <div class="flex flex-col space-y-4">
-                @foreach ($featuredReviews->slice(1, 3) as $review)
+                @auth()
+                <a href="{{ route('albums.search') }}" class="btn btn-md btn-primary">+ Añadir Reseña</a>
+                @endauth
+                    @foreach ($featuredReviews->slice(1, 3) as $review)
                     <div class="card bg-base-100 shadow-md border border-transparent hover:border-primary hover:shadow-xl transform hover:scale-[1.02] transition duration-300 ease-in-out p-4 flex gap-4">
                         <img src="{{ asset('storage/' . $review->album->cover_image) }}"
                              class="w-20 h-20 object-cover rounded ring-2 ring-primary" alt="{{ $review->album->title }}">

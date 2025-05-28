@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4 pt-10 mb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div>
-                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="rounded-xl shadow-md w-full max-w-sm mx-auto md:mx-0" />
+                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="rounded-xl shadow-md w-full max-w-sm md:mx-0" />
             </div>
             <div>
                 <h1 class="text-4xl font-bold mb-4">{{ $album->title }}</h1>
@@ -45,7 +45,7 @@
                 @endif
             </div>
 
-            <div class="col-span-2">
+            <div class="col-span-2 ml-12">
                 <h2 class="text-lg font-semibold mb-4">Reseñas mejor valoradas</h2>
                 @foreach($album->review->sortByDesc(fn($review) => $review->comments->count()) as $review)
                     <div class="mb-6 border-b pb-4">

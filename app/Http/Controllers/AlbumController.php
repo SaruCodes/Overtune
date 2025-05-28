@@ -79,20 +79,33 @@ class AlbumController extends Controller
             'title' => 'required|string|max:255',
             'artist_id' => 'required|exists:artists,id',
             'release_date' => 'required|date',
-            'cover_image' => 'nullable|url',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'type' => 'required|in:Album,EP,Single',
             'genres' => 'required|array',
             'genres.*' => 'exists:genres,id',
         ]);
 
+        if ($request->hasFile('cover_image')) {
+            if ($album->cover_image) {
+                \Illuminate\Support\Facades\Storage::delete('public/' . $album->cover_image);
+            }
+
+            $path = $request->file('cover_image')->store('album-covers', 'public');
+            $validated['cover_image'] = $path;
+        } else {
+            unset($validated['cover_image']);
+        }
+
         $albumData = $validated;
         unset($albumData['genres']);
 
         $album->update($albumData);
         $album->genres()->sync($validated['genres']);
+
         return redirect()->route('albums.crud')->with('success', 'Álbum actualizado correctamente.');
     }
+
 
     public function destroy(Album $album)
     {

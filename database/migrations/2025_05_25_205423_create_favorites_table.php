@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade');
+            $table->morphs('favoritable');
             $table->timestamps();
-            $table->unique(['user_id', 'list_id']);
+
+            $table->unique(['user_id', 'favoritable_id', 'favoritable_type']);
         });
+
 
     }
 

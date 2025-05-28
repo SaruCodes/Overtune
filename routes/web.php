@@ -43,7 +43,6 @@ Route::middleware(['auth', 'can:manage-content'])->group(function () {
     Route::put('/reviews/{review}/feature', [ReviewController::class, 'feature'])->name('reviews.feature');
 
     Route::get('/reportes', [AdminPanelController::class, 'reports'])->name('admin.report');
-
     Route::put('/reportes/{id}/safe', [AdminPanelController::class, 'marcarComoSeguro'])->name('admin.report.safe');
     Route::delete('/reportes/{id}', [AdminPanelController::class, 'eliminarContenido'])->name('admin.report.delete');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
@@ -62,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/review/{review}/comments', [ReviewController::class, 'storeComment'])->name('review.comments.store');
     Route::get('/lists/create', [ListController::class, 'create'])->name('lists.create');
     Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
+    Route::put('/user/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
 });
 
 //Barra bsuqueda
@@ -70,17 +70,19 @@ Route::get('/search', [SearchController::class, 'global'])->name('search.results
 //Rutas Públicas
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/news/category/{id}', [NewsController::class, 'byCategory'])->name('news.byCategory');
 Route::get('/artists', [ArtistController::class, 'index'])->name('artists.index');
 Route::get('/artists/{artist}', [ArtistController::class, 'show'])->name('artists.show');
 Route::get('/perfil/{user}', [UserController::class, 'show'])->name('user.profile.public');
 Route::get('/albums/search', [AlbumController::class, 'search'])->name('albums.search');
 Route::get('/albums/{album}', [AlbumController::class, 'show'])->name('albums.show');
+Route::post('/favorite/{type}/{id}', [FavoriteController::class, 'toggleFavorite'])->name('favorite.toggle');
 Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
 Route::get('/review/{review}', [ReviewController::class, 'show'])->name('review.show');
 Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+Route::get('/lists/{list}', [ListController::class, 'show'])->name('lists.show');
 Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
 Route::put('/lists/{list}/update', [ListController::class, 'update'])->name('lists.update');
-Route::get('/lists/{list}', [ListController::class, 'show'])->name('lists.show');
 Route::get('/lists/{list}/edit', [ListController::class, 'edit'])->name('lists.edit');
 Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');
 Route::post('/lists/{list}/favorite', [FavoriteController::class, 'toggle'])->name('lists.favorite');

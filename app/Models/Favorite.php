@@ -6,9 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model
 {
-    public function list()
+    protected $fillable = [
+        'user_id',
+        'favoritable_id',
+        'favoritable_type',
+    ];
+
+    public function favoritable()
     {
-        return $this->belongsTo(ListModel::class, 'list_model_id');
+        return $this->morphTo();
     }
 
     public function user()

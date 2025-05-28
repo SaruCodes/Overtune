@@ -37,4 +37,10 @@ class Album extends Model
     {
         return $this->belongsToMany(ListModel::class);
     }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
+
 }

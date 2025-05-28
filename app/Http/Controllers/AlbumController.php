@@ -124,8 +124,6 @@ class AlbumController extends Controller
 
         return view('albums.show', compact('album', 'recommendedAlbums'));
     }
-
-
     public function search(Request $request)
     {
         $query = Album::query()->with(['artist', 'genres']);

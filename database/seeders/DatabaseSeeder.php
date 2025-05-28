@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(NewsSeeder::class);
         $this->call(ReviewSeeder::class);
         $this->call(AlbumGenreSeeder::class);
+        $this->call(ListSeeder::class);
+        $this->call(AlbumListSeeder::class);
     }
 }

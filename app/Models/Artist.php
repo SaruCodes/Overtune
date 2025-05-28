@@ -25,6 +25,12 @@ class Artist extends Model
         return $this->hasMany(Album::class);
     }
 
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
+
+
 }
 
 

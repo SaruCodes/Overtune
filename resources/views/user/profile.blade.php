@@ -1,5 +1,5 @@
 <x-layouts.layout titulo="Perfil de Usuario - Overtune">
-    <div class="card bg-white shadow-md w-full max-w-lg mx-auto mt-12">
+    <div class="card bg-white shadow-md w-full max-w-md mx-auto mt-12">
         <div class="card-body text-center relative">
             <div class="avatar mx-auto">
                 <div class="w-24 rounded-full">
@@ -20,7 +20,7 @@
     @php
         $user = auth()->user();
     @endphp
-    <!--Panel de administradores-->
+        <!--Panel de administradores-->
     @if ($user->isAdmin() || $user->isEditor())
         <div class="max-w-4xl mx-auto mt-6">
             <details class="collapse collapse-arrow bg-purple-300">
@@ -42,11 +42,56 @@
         </div>
     @endif
 
+    <div class="card bg-white shadow max-w-4xl mx-auto mt-8">
+        <div class="card-body">
+            <h3 class="text-xl font-semibold mb-4">Favoritos</h3>
+
+            <div class="mb-6">
+                <h4 class="font-semibold mb-2">Listas</h4>
+                <ul class="space-y-3">
+                    @foreach($user->favoriteLists()->with('favoritable')->get() as $fav)
+                        <li class="flex items-center space-x-4">
+                            {{-- Miniatura si existe --}}
+                            @php $list = $fav->favoritable; @endphp
+                            <img src="{{ $list->cover_image ? asset('storage/' . $list->cover_image) : '/images/placeholder_list.png' }}" alt="Miniatura lista" class="w-12 h-12 rounded object-cover">
+                            <a href="{{ route('lists.show', $list->id) }}" class="text-blue-600 hover:underline font-medium">{{ $list->title }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-semibold mb-2">Álbumes</h4>
+                <ul class="space-y-3">
+                    @foreach($user->favoriteAlbums()->with('favoritable')->get() as $fav)
+                        <li class="flex items-center space-x-4">
+                            @php $album = $fav->favoritable; @endphp
+                            <img src="{{ $album->cover_image ? asset('storage/' . $album->cover_image) : '/images/placeholder_album.png' }}" alt="Miniatura álbum" class="w-12 h-12 rounded object-cover">
+                            <a href="{{ route('albums.show', $album->id) }}" class="text-blue-600 hover:underline font-medium">{{ $album->title }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-2">Artistas</h4>
+                <ul class="space-y-3">
+                    @foreach($user->favoriteArtists()->with('favoritable')->get() as $fav)
+                        <li class="flex items-center space-x-4">
+                            @php $artist = $fav->favoritable; @endphp
+                            <img src="{{ $artist->image ? asset('storage/' . $artist->image) : '/images/placeholder_artist.png' }}" alt="Miniatura artista" class="w-12 h-12 rounded-full object-cover">
+                            <a href="{{ route('artists.show', $artist->id) }}" class="text-blue-600 hover:underline font-medium">{{ $artist->name }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+
     @if (auth()->check())
         <div class="max-w-4xl mx-auto mt-8 space-y-6">
-
             <!--Listas-->
-            <div class="card bg-white shadow">
+            <div class="card bg-white shadow max-w-4xl mx-auto">
                 <div class="card-body">
                     <div class="flex justify-between items-center">
                         <h3 class="text-xl font-semibold">Tus Listas</h3>
@@ -64,7 +109,7 @@
                 </div>
             </div>
 
-            <div class="card bg-white shadow mb-12">
+            <div class="card bg-white shadow max-w-4xl mx-auto mb-12">
                 <div class="card-body">
                     <h3 class="text-xl font-semibold flex justify-between items-center"> Tus Reseñas
                         @if(auth()->check() && auth()->id() === $user->id)
@@ -75,7 +120,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                         @foreach ($user->reviews->sortByDesc('created_at') as $review)
                             <a href="{{ route('review.show', $review->id) }}" class="block border rounded shadow hover:shadow-lg overflow-hidden">
-                                <img src="{{ asset('storage/' . $review->album->cover_image) }}" />
+                                <img src="{{ asset('storage/' . $review->album->cover_image) }}" alt="Cover album" />
                                 <div class="p-3">
                                     <h4 class="font-semibold">{{ $review->album->title }}</h4>
                                     <p class="text-gray-600 text-sm">{{ \Illuminate\Support\Str::limit($review->content, 80) }}</p>
@@ -86,5 +131,6 @@
                     </div>
                 </div>
             </div>
+        </div>
     @endif
 </x-layouts.layout>

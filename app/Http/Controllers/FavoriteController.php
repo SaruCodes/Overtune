@@ -2,21 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
+use App\Models\Artist;
 use App\Models\ListModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    public function toggle($listId)
+    public function toggleFavorite(Request $request, $type, $id)
     {
-        $user = Auth::user();
-        $list = ListModel::findOrFail($listId);
+        $user = auth()->user();
 
-        if ($user->favoriteLists()->where('list_id', $list->id)->exists()) {
-            $user->favoriteLists()->detach($list);
+        $modelClass = match ($type) {
+            'album' => Album::class,
+            'lista' => ListModel::class,
+            'artist' => Artist::class,
+            default => null,
+        };
+
+        if (!$modelClass) {
+            abort(404);
+        }
+
+        $model = $modelClass::findOrFail($id);
+
+        $existing = $user->favorites()
+            ->where('favoritable_type', $modelClass)
+            ->where('favoritable_id', $model->id)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
         } else {
-            $user->favoriteLists()->attach($list);
+            $user->favorites()->create([
+                'favoritable_id' => $model->id,
+                'favoritable_type' => $modelClass,
+            ]);
         }
 
         return back();

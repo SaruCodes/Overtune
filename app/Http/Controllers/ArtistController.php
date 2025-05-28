@@ -62,7 +62,7 @@ class ArtistController extends Controller
 
         Artist::create($validated);
 
-        return redirect()->route('artists.index')->with('success', 'Artista creado correctamente.');
+        return redirect()->route('artists.crud')->with('success', 'Artista creado correctamente.');
     }
 
     public function show(Artist $artist)
@@ -78,11 +78,11 @@ class ArtistController extends Controller
     public function update(Request $request, Artist $artist)
     {
         $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'bio'     => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'bio' => 'nullable|string',
             'country' => 'nullable|string|max:100',
-            'debut'   => 'nullable|integer',
-            'image'   => 'nullable|image|max:2048',
+            'debut' => 'nullable|integer',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
@@ -91,13 +91,13 @@ class ArtistController extends Controller
 
         $artist->update($validated);
 
-        return redirect()->route('artists.index')->with('success', 'Artista actualizado correctamente.');
+        return redirect()->route('artists.crud')->with('success', 'Artista actualizado correctamente.');
     }
 
     public function destroy(Artist $artist)
     {
         $artist->delete();
-        return redirect()->route('artists.index')->with('success', 'Artista eliminado correctamente.');
+        return redirect()->route('artists.crud')->with('success', 'Artista eliminado correctamente.');
     }
 }
 

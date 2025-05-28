@@ -27,7 +27,9 @@ class ListModel extends Model
 
     public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'list_id', 'user_id');
+        return $this->morphMany(Favorite::class, 'favoritable');
     }
+
+
 
 }

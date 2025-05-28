@@ -101,5 +101,14 @@ class NewsController extends Controller
         $news->delete();
         return redirect()->route('news.crud')->with('mensaje', 'Noticia eliminada con éxito');
     }
+
+    public function byCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $news = $category->latestNews()->paginate(12);
+
+        return view('news.categories', compact('category', 'news'));
+    }
+
 }
 

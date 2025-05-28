@@ -64,12 +64,12 @@
         @foreach($categoriesWithNews as $category)
             <section class="mb-12">
                 <div class="mb-2 relative">
-                    <h2 class="text-2xl font-bold text-accent inline-block  px-2 relative z-10">{{ $category->category }}</h2>
+                    <h2 class="text-2xl font-bold text-accent inline-block px-2 relative z-10">{{ $category->category }}</h2>
                     <hr class="border-t-2 border-accent mt-2 -translate-y-3">
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    @foreach($category->latestNews as $news)
+                    @foreach($category->latestNews->take(5) as $news)
                         <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
                             <a href="{{ route('news.show', $news) }}">
                                 <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded" />
@@ -83,7 +83,16 @@
                         </div>
                     @endforeach
                 </div>
+
+                @if($category->latestNews->count() > 5)
+                    <div class="mt-4 text-center">
+                        <a href="{{ route('news.byCategory', $category->id) }}" class="btn btn-outline btn-secondary">
+                            Ver más de {{ $category->category }}
+                        </a>
+                    </div>
+                @endif
             </section>
         @endforeach
+
     </div>
 </x-layouts.layout>

@@ -11,32 +11,30 @@
     <!--Menú de Navegación-->
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1 space-x-4 flex items-center h-full relative">
-            <li><a class="btn btn-sm btn-outline btn-secondary" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
+            <li class="hidden md:inline-flex"><a class="btn btn-sm btn-outline btn-secondary" href="{{ route('home') }}">{{ __('Inicio') }}</a></li>
             <li><a class="btn btn-sm btn-outline btn-secondary" href="{{ route('news.index') }}">{{ __('Noticias') }}</a></li>
             <li><a class="btn btn-sm btn-outline btn-secondary" href="{{ route('review.index') }}">{{ __('Reseñas') }}</a></li>
             <li><a class="btn btn-sm btn-outline btn-secondary" href="{{ route('artists.index') }}">{{ __('Artistas') }}</a></li>
             <li><a class="btn btn-sm btn-outline btn-secondary" href="{{ route('lists.index') }}">{{ __('Listas') }}</a></li>
 
             <!-- Botón lupa -->
-            <li class="relative">
-                <button id="btnSearchToggle" type="button" class="btn btn-square btn-ghost">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 1110.607-10.607 7.5 7.5 0 01-10.607 10.607z" />
+            <li class="relative hidden md:inline-flex">
+                <button id="btnSearchToggle" type="button" class="btn btn-square btn-ghost p-2 text-secondary hover:text-accent">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </button>
-
-                <!-- Formulario búsqueda oculto inicialmente -->
                 <form id="searchForm" action="{{ route('search.results') }}" method="GET"
-                      class="hidden absolute right-0 top-full mt-2 flex space-x-2 bg-base-100 p-2 rounded shadow-lg w-64 z-50">
+                      class="hidden absolute right-0 top-full mt-2 flex space-x-2 bg-base-100 p-2 rounded shadow-lg min-w-[16rem] transition-all duration-200 z-50">
                     <input type="search" name="q" placeholder="Buscar..." required
                            class="input input-sm input-bordered flex-grow" />
                     <button type="submit" class="btn btn-sm btn-primary">Buscar</button>
                 </form>
             </li>
 
-            <li class="flex items-center relative z-50">
+            <li class="flex items-center relative z-50 hidden md:inline-flex">
                 @guest
                     <details class="relative flex items-center z-50">
                         <summary class="btn btn-sm btn-outline btn-secondary">{{ __('Acceso') }}</summary>

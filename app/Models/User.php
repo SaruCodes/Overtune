@@ -36,7 +36,6 @@ class User extends Authenticatable
         ];
     }
 
-    // Helpers de rol
     public function isAdmin(): bool   { return $this->role === self::ROLE_ADMIN; }
     public function isEditor(): bool  { return $this->role === self::ROLE_EDITOR; }
 
@@ -57,16 +56,6 @@ class User extends Authenticatable
         return $this->hasMany(News::class, 'author_id');
     }
 
-    public function favoriteAlbums()
-    {
-        return $this->belongsToMany(Album::class, 'favorite_albums');
-    }
-
-    public function favoriteArtists()
-    {
-        return $this->belongsToMany(Artist::class, 'favorite_artists');
-    }
-
     public function lists()
     {
         return $this->hasMany(ListModel::class);
@@ -77,8 +66,25 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+
     public function favoriteLists()
     {
-        return $this->belongsToMany(ListModel::class, 'favorites')->withTimestamps();
+        return $this->favorites()->where('favoritable_type', ListModel::class);
     }
+
+    public function favoriteAlbums()
+    {
+        return $this->favorites()->where('favoritable_type', Album::class);
+    }
+
+    public function favoriteArtists()
+    {
+        return $this->favorites()->where('favoritable_type', Artist::class);
+    }
+
 }

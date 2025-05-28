@@ -58,7 +58,7 @@ class ListController extends Controller
 
     public function show($id)
     {
-        $list = ListModel::where('user_id', Auth::id())->findOrFail($id);
+        $list = ListModel::findOrFail($id);
         return view('lists.show', compact('list'));
     }
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NewsController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lists', [ListController::class, 'store'])->name('lists.store');
 });
 
+//Barra bsuqueda
+Route::get('/search', [SearchController::class, 'global'])->name('search.results');
 
 //Rutas Públicas
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
@@ -76,7 +79,7 @@ Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
 Route::get('/review/{review}', [ReviewController::class, 'show'])->name('review.show');
 Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
 Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
-Route::put('/lists/{list}', [ListController::class, 'update'])->name('lists.update');
+Route::put('/lists/{list}/update', [ListController::class, 'update'])->name('lists.update');
 Route::get('/lists/{list}', [ListController::class, 'show'])->name('lists.show');
 Route::get('/lists/{list}/edit', [ListController::class, 'edit'])->name('lists.edit');
 Route::get('/category/{category}', [CategoryController::class, 'show'])->name('category.show');

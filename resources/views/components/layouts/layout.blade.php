@@ -1,3 +1,4 @@
+@props(['titulo' => '', 'query' => null])
 <!doctype html>
 <html lang="en">
     <head>
@@ -11,7 +12,7 @@
     </head>
     <body class="flex flex-col min-h-screen bg-main">
         <x-layouts.header />
-        <x-layouts.nav />
+        <x-layouts.nav :query="$query" />
 
         <main class="flex-1">
             {{ $slot }}

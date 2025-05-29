@@ -15,8 +15,8 @@ class NewsController extends Controller
         $news = News::latest()->paginate(10);
         $carouselNews = News::latest()->take(5)->get();
         $latestNews = News::latest()->take(3)->get();
-        $categoriesWithNews = Category::with(['latestNews'])->get();
-
+        $categoriesWithNews = Category::withCount('news')->with(['latestNewsLimited.category'])->get();
+        
         return view('news.index', compact('carouselNews', 'latestNews', 'categoriesWithNews', 'news'));
     }
 

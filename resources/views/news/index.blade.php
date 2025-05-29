@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    @foreach($category->latestNews->take(5) as $news)
+                    @foreach($category->latestNewsLimited as $news)
                         <div class="relative group overflow-hidden rounded shadow hover:shadow-lg transition-shadow">
                             <a href="{{ route('news.show', $news) }}">
                                 <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded" />
@@ -84,9 +84,9 @@
                     @endforeach
                 </div>
 
-                @if($category->latestNews->count() > 5)
-                    <div class="mt-4 text-center">
-                        <a href="{{ route('news.byCategory', $category->id) }}" class="btn btn-outline btn-secondary">
+                @if($category->news_count > 5)
+                    <div class="mt-4 text-right">
+                        <a href="{{ route('news.byCategory', $category->id) }}" class="btn btn-secondary">
                             Ver más de {{ $category->category }}
                         </a>
                     </div>

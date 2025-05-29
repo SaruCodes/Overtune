@@ -10,6 +10,11 @@ class Category extends Model
     {
         return $this->hasMany(News::class);
     }
+    public function latestNewsLimited()
+    {
+        return $this->hasMany(News::class)->latest()->take(5);
+    }
+
     public function latestNews()
     {
         return $this->hasMany(News::class)->latest()->limit(5);

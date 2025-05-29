@@ -12,7 +12,9 @@
 
             <div class="card-actions justify-center mt-4 space-x-2">
                 <a href="{{ route('user.edit') }}" class="btn btn-primary btn-sm">{{ __('Editar Perfil') }}</a>
+                @if ($user->isAdmin())
                 <a href="{{ route('admin.panel') }}" class="btn btn-outline btn-secondary btn-sm">{{__('Panel de Control')}}</a>
+                @endif
             </div>
         </div>
     </div>
@@ -21,7 +23,7 @@
         $user = auth()->user();
     @endphp
         <!--Panel de administradores-->
-    @if ($user->isAdmin())
+    @if ($user->isAdmin() || $user->isEditor())
         <div class="max-w-4xl mx-auto mt-6">
             <details class="collapse collapse-arrow bg-purple-300">
                 <summary class="collapse-title text-lg font-medium">Panel de Administración</summary>

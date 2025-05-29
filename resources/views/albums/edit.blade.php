@@ -44,10 +44,9 @@
                 </div>
 
                 <div class="mb-4">
-                    <x-input-label for="release_date" value="{{ __('Fecha de Lanzamiento') }}" class="text-text-dark" />
-                    <x-text-input id="release_date" name="release_date" type="date"
-                                  value="{{ old('release_date', $album->release_date->format('Y-m-d')) }}"
-                                  class="block mt-1 w-full" required />
+                    <input type="date" id="release_date" name="release_date"
+                           value="{{ old('release_date', $album->release_date->format('Y-m-d')) }}"
+                           class="w-full p-2 border rounded mt-1" required>
                     @error('release_date') <p class="text-error text-sm">{{ $message }}</p> @enderror
                 </div>
 

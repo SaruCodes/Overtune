@@ -4,7 +4,7 @@
                 <h1 class="text-3xl font-bold flex items-center gap-3"/>
                     {{ $list->title }}
                 @auth
-                    <form action="{{ route('favorite.toggle', ['type' => 'list', 'id' => $list->id]) }}" method="POST">
+                    <form action="{{ route('favorite.toggle', ['type' => 'list', 'id' => $list->id]) }}" method="POST" >
                     @csrf
                         <button type="submit" class="text-red-500 hover:text-red-600">
                             @if(auth()->user()?->favorites()->where('favoritable_type', \App\Models\ListModel::class)->where('favoritable_id', $list->id)->exists())
@@ -58,15 +58,15 @@
         @if($list->albums->isEmpty())
             <p>No hay álbumes en esta lista.</p>
         @else
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-3 gap-6">
                 @foreach($list->albums as $album)
                     <a href="{{ route('albums.show', $album->id) }}"
-                       class="group relative block rounded overflow-hidden shadow hover:shadow-md transition-all duration-300">
-                        <div class="aspect-square w-16 h-16 overflow-hidden mt-8 mx-auto">
-                            <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="w-16 h-16 object-cover rounded mb-2 group-hover:scale-105" loading="lazy"/>
+                       class="group relative bg-purple-300 block rounded overflow-hidden shadow hover:shadow-md transition-all duration-300">
+                        <div class="aspect-square w-40 overflow-hidden mt-8 mx-auto">
+                            <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="w-full h-full object-cover rounded mb-2 group-hover:scale-105" loading="lazy"/>
                         </div>
-                        <div class="font-semibold text-center text-sm truncate w-full mb-1">{{ $album->title }}</div>
-                        <div class="text-xs text-gray-500 truncate w-full mb-2">{{ $album->artist->name }}</div>
+                        <div class="font-semibold text-center text-sm truncate w-full mt-2 mb-2 m-2">{{ $album->title }}</div>
+                        <div class="text-sm text-center truncate w-full mb-3">{{ $album->artist->name }}</div>
                     </a>
                 @endforeach
             </div>

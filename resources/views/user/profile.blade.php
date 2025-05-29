@@ -21,7 +21,7 @@
         $user = auth()->user();
     @endphp
         <!--Panel de administradores-->
-    @if ($user->isAdmin() || $user->isEditor())
+    @if ($user->isAdmin())
         <div class="max-w-4xl mx-auto mt-6">
             <details class="collapse collapse-arrow bg-purple-300">
                 <summary class="collapse-title text-lg font-medium">Panel de Administración</summary>
@@ -51,10 +51,8 @@
                 <ul class="space-y-3">
                     @foreach($user->favoriteLists()->with('favoritable')->get() as $fav)
                         <li class="flex items-center space-x-4">
-                            {{-- Miniatura si existe --}}
                             @php $list = $fav->favoritable; @endphp
-                            <img src="{{ $list->cover_image ? asset('storage/' . $list->cover_image) : '/images/placeholder_list.png' }}" alt="Miniatura lista" class="w-12 h-12 rounded object-cover">
-                            <a href="{{ route('lists.show', $list->id) }}" class="text-blue-600 hover:underline font-medium">{{ $list->title }}</a>
+                            <a href="{{ route('lists.show', $list->id) }}" class="text-primary hover:underline font-medium">{{ $list->title }}</a>
                         </li>
                     @endforeach
                 </ul>
@@ -67,7 +65,7 @@
                         <li class="flex items-center space-x-4">
                             @php $album = $fav->favoritable; @endphp
                             <img src="{{ $album->cover_image ? asset('storage/' . $album->cover_image) : '/images/placeholder_album.png' }}" alt="Miniatura álbum" class="w-12 h-12 rounded object-cover">
-                            <a href="{{ route('albums.show', $album->id) }}" class="text-blue-600 hover:underline font-medium">{{ $album->title }}</a>
+                            <a href="{{ route('albums.show', $album->id) }}" class="text-primary hover:underline font-medium">{{ $album->title }}</a>
                         </li>
                     @endforeach
                 </ul>
@@ -80,7 +78,7 @@
                         <li class="flex items-center space-x-4">
                             @php $artist = $fav->favoritable; @endphp
                             <img src="{{ $artist->image ? asset('storage/' . $artist->image) : '/images/placeholder_artist.png' }}" alt="Miniatura artista" class="w-12 h-12 rounded-full object-cover">
-                            <a href="{{ route('artists.show', $artist->id) }}" class="text-blue-600 hover:underline font-medium">{{ $artist->name }}</a>
+                            <a href="{{ route('artists.show', $artist->id) }}" class="text-primary hover:underline font-medium">{{ $artist->name }}</a>
                         </li>
                     @endforeach
                 </ul>
@@ -100,7 +98,7 @@
                     <ul class="mt-4 space-y-2">
                         @foreach ($user->lists as $list)
                             <li>
-                                <a href="{{ route('lists.show', $list->id) }}" class="text-blue-600 hover:underline">
+                                <a href="{{ route('lists.show', $list->id) }}" class="text-primary hover:underline">
                                     {{ $list->title }}
                                 </a>
                             </li>

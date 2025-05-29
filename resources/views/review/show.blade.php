@@ -57,7 +57,7 @@
                             <button type="submit" class="btn btn-sm btn-error text-white">Eliminar</button>
                         </form>
                     @endif
-                    <button onclick="confirmReport('review', {{ $review->id }})" class="btn btn-sm btn-warning text-white">Reportar</button>
+                    <button onclick="confirmReport('reviews', {{ $review->id }})" class="btn btn-sm btn-warning text-white">Reportar</button>
                 </div>
             @endauth
         </div>

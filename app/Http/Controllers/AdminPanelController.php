@@ -70,4 +70,29 @@ class AdminPanelController extends Controller
 
         return view('admin.report', compact('reports'));
     }
+    public function deleteContent($id)
+    {
+        $report = Report::with('reportable')->findOrFail($id);
+        $reportable = $report->reportable;
+
+        if ($reportable) {
+            $reportable->delete();
+        }
+
+        Report::where('reportable_type', get_class($reportable))
+            ->where('reportable_id', $reportable->id)
+            ->delete();
+
+        return redirect()->back()->with('success', 'Contenido y reportes eliminados.');
+    }
+
+    public function markAsSafe($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->delete();
+
+        return redirect()->back()->with('success', 'Reporte marcado como seguro y eliminado.');
+    }
+
+
 }

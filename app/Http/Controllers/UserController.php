@@ -49,7 +49,7 @@ class UserController extends Controller
             ->with('success','Perfil actualizado correctamente.');
     }
 
-    public function updateRole(Request $request, \App\Models\User $user)
+    public function updateRole(Request $request, User $user)
     {
         $validated = $request->validate([
             'role' => 'required|in:user,editor,admin',

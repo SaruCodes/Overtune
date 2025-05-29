@@ -3,11 +3,11 @@
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-3xl font-bold flex items-center gap-3">
                     {{ $list->title }}
-
+                @auth
                     <form action="{{ route('favorite.toggle', ['type' => 'list', 'id' => $list->id]) }}" method="POST">
                     @csrf
                         <button type="submit" class="text-red-500 hover:text-red-600">
-                            @if(auth()->user()?->favorites()->where('favoritable_type', \App\Models\ListModel::class)->where('favoritable_id', $lista->id)->exists())
+                            @if(auth()->user()?->favorites()->where('favoritable_type', \App\Models\ListModel::class)->where('favoritable_id', $list->id)->exists())
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="size-[1.2em]" viewBox="0 0 24 24">
                                     <path d="M12 21s-9-4.78-9-12a4.5 4.5 0 014.688-4.5c1.935 0 3.597 1.126 4.312 2.733C12.715 5.876 14.377 4.75 16.313 4.75A4.5 4.5 0 0121 8.25c0 7.22-9 12-9 12z"/>
                                 </svg>
@@ -18,6 +18,11 @@
                             @endif
                         </button>
                     </form>
+                @endauth
+                <a href="{{ route('lists.index') }}"
+                   class="bg-accent hover:bg-orange-700 text-white text-sm py-2 px-4 rounded">
+                    ← Volver
+                </a>
                 <div class="flex space-x-3">
 
                 @auth

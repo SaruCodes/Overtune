@@ -9,14 +9,13 @@
         </div>
     @endif
 
-
     <h1 class="text-4xl font-bold text-violet-900 text-center mb-16">{{ $artist->name }}</h1>
-
 
     <!--ficha artista-->
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-24 mb-16">
         <div class="bg-white rounded-lg shadow-md p-6">
             <!--favoritos-->
+            @auth
             <form action="{{ route('favorite.toggle', ['type' => 'artist', 'id' => $artist->id]) }}" method="POST">
                 @csrf
                 <button type="submit" class="text-red-500 hover:text-red-600">
@@ -31,6 +30,7 @@
                     @endif
                 </button>
             </form>
+            @endauth
             <h2 class="text-xl font-semibold text-violet-800 mb-4">{{ __('Información del artista') }}</h2>
             <p><strong>{{ __('País:') }}</strong> {{ $artist->country ?? __('No especificado') }}</p>
             <p class="mt-4"><strong>{{ __('Debut:') }}</strong> {{ $artist->debut ?? __('No especificado') }}</p>

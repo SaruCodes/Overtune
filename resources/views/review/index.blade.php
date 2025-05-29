@@ -75,7 +75,7 @@
                                     <div class="card-actions justify-between">
                                         <a href="{{ route('review.show', $review) }}"
                                            class="btn btn-sm bg-accent text-white hover:bg-secondary transition">Leer completa</a>
-                                        <span class="text-xs text-gray-500">{{ $review->comentarios_count }} comentarios</span>
+                                        <span class="text-xs text-gray-500">{{ $review->comments_count }} comentarios</span>
                                     </div>
                                 </div>
                             </div>
@@ -94,15 +94,15 @@
                     <h2 class="card-title text-primary mb-4">Álbumes Populares</h2>
                     <div class="space-y-4">
                         @foreach ($topAlbums as $album)
-                            <div class="flex items-center gap-4">
-                                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="w-16 h-16 object-cover">
+                            <a href="{{ route('albums.show', $album) }}" class="flex items-center gap-4 hover:bg-base-200 p-2 rounded transition">
+                                <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="w-16 h-16 object-cover rounded">
                                 <div>
                                     <h3 class="font-semibold text-sm text-primary">{{ $album->title }}</h3>
                                     <p class="text-xs text-gray-500">
-                                        {{ $album->reviews_count }} reseñas
+                                        {{ $album->review_count }} reseñas
                                     </p>
                                 </div>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>

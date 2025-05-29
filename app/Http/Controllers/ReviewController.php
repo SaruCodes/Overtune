@@ -21,8 +21,10 @@ class ReviewController extends Controller
             ->get();
 
         $recentReviews = Review::with('user', 'album')
+            ->withCount('comments')
             ->orderByDesc('created_at')
             ->paginate(6);
+;
 
         $topAlbums = Album::withCount('review')
             ->orderByDesc('review_count')
@@ -117,7 +119,7 @@ class ReviewController extends Controller
             'content' => 'required|string|min:10|max:500'
         ]);
 
-        $review->comentarios()->create([
+        $review->comments()->create([
             'user_id' => auth()->id(),
             'content' => $validated['content']
         ]);

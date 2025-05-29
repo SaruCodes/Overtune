@@ -5,8 +5,9 @@
                 <img src="{{ asset('storage/' . $album->cover_image) }}" alt="{{ $album->title }}" class="rounded-xl shadow-md w-full max-w-sm md:mx-0" />
             </div>
             <div>
-                <h1 class="text-4xl font-bold mb-4">{{ $album->title }}</h1>
+                <h1 class="text-4xl font-bold mb-4">{{ $album->title }}
                     <!--Favoritos-->
+                @auth
                 <form action="{{ route('favorite.toggle', ['type' => 'album', 'id' => $album->id]) }}" method="POST">
                     @csrf
                     <button type="submit" class="text-red-500 hover:text-red-600">
@@ -21,6 +22,9 @@
                         @endif
                     </button>
                 </form>
+                @endauth
+                </h1>
+
                 <p class="text-gray-700 mb-4">{{ $album->description ?? 'Sin descripción.' }}</p>
 
                 <div class="bg-purple-300 p-6 rounded-xl shadow">

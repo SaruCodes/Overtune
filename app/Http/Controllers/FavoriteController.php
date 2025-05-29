@@ -10,13 +10,17 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    public function toggleFavorite(Request $request, $type, $id)
+    public function toggleFavorite($type, $id)
     {
         $user = auth()->user();
 
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Debe iniciar sesión para usar favoritos.');
+        }
+
         $modelClass = match ($type) {
             'album' => Album::class,
-            'lista' => ListModel::class,
+            'list' => ListModel::class,
             'artist' => Artist::class,
             default => null,
         };

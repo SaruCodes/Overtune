@@ -1,7 +1,6 @@
 <x-layouts.layout titulo="Panel de Administracion">
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-3xl font-bold mb-6">Panel de Control</h1>
-        <!--Mensajes de alerta de exito o error-->
         @if(session('success'))
             <div class="bg-green-100 text-green-800 p-3 rounded mb-4">{{ session('success') }}</div>
         @endif
@@ -62,30 +61,6 @@
                 </table>
             </section>
         @endif
-        @if(auth()->user()->isEditor())
-        <section class="mb-8">
-            <h2 class="text-xl font-semibold mb-4">Reseñas Destacadas</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @foreach($reviews as $review)
-                    <div class="border rounded p-4 shadow bg-header text-white select-text-black">
-                    <h3 class="font-semibold">{{ $review->album->title }} - {{ $review->user->name }}</h3>
-                        <p class="mb-2">{{ \Illuminate\Support\Str::limit($review->content, 100) }}</p>
-                        <form action="{{ route('reviews.feature', $review) }}" method="POST" class="mb-2">
-                            @csrf
-                            @method('PUT')
-                            <select name="type" onchange="this.form.submit()" class="text-black">
-                            <option value="">Destacar como...</option>
-                                <option value="primary" @if($review->is_featured_primary) selected @endif>Principal</option>
-                                <option value="secondary" @if($review->is_featured_secondary) selected @endif>Secundaria</option>
-                            </select>
-                        </form>
-                    </div>
-                @endforeach
-            </div>
-            <div class="mt-4">
-                {{ $reviews->onEachSide(1)->links('components.pagination') }}
-            </div>
-            @endif
         </section>
     </div>
 </x-layouts.layout>

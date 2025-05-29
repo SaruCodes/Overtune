@@ -10,6 +10,7 @@ class ReportController extends Controller
 {
     public function store($type, $id)
     {
+
         $modelMap = [
             'comments' => \App\Models\Comment::class,
             'reviews' => \App\Models\Review::class,

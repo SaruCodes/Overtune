@@ -13,9 +13,9 @@ class ListController extends Controller
     public function index()
     {
         $lists = ListModel::where('user_id', Auth::id())->get();
-        $latestLists = ListModel::latest()->take(10)->get();
+        $latestLists = ListModel::latest()->take(8)->get();
         $recommendedLists = ListModel::inRandomOrder()->take(8)->get();
-        $popularLists = ListModel::withCount('favorites')->orderBy('favorites_count', 'desc')->take(8)->get();
+        $popularLists = ListModel::withCount('favorites')->orderBy('favorites_count', 'desc')->take(4)->get();
 
         return view('lists.index', compact('lists', 'latestLists', 'recommendedLists', 'popularLists'));
     }

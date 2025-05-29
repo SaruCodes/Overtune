@@ -131,6 +131,28 @@
         </section>
     @endif
 
+    <!--Lista Spotify-->
+    <section class="p-10 bg-purple-950 text-center">
+        <h2 class="text-3xl font-semibold text-accent mb-4">{{ __('Playlist semanal de Overtune') }}</h2>
+        <p class="text-lg text-white mb-8">
+            {{ __('Cada semana, nuestros editores seleccionan canciones especiales para que las disfrutes. ¡Descubre nuevos sonidos con Overtune!') }}
+        </p>
+        <div class="max-w-4xl mx-auto shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-500">
+            <iframe
+                style="border-radius:12px"
+                src="https://open.spotify.com/embed/playlist/1ak1NMLOH4a1dBSFVbEuB2?utm_source=generator&theme=0"
+                width="100%"
+                height="352"
+                frameBorder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                class="w-full"
+            ></iframe>
+        </div>
+    </section>
+
+
     @guest
         <section class="p-8 bg-purple-300">
             <h2 class="text-3xl font-semibold text-center mb-8">{{__ ('Bienvenido a Overtune')}}</h2>

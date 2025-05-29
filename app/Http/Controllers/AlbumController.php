@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Genre;
+use App\Services\SpotifyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -113,17 +114,20 @@ class AlbumController extends Controller
         return redirect()->route('albums.crud')->with('success', 'Álbum eliminado.');
     }
 
-    public function show($id)
+    public function show($id, SpotifyService $spotify)
     {
         $album = Album::with(['artist', 'genres', 'review.user', 'review.comments'])->findOrFail($id);
         $recommendedAlbums = Album::where('id', '!=', $album->id)->where(function ($query) use ($album) {
-            $query->where('artist_id', $album->artist_id)->orWhereHas('genres', function ($q) use ($album) {
-                return $q->whereIn('genres.id', $album->genres->pluck('id'));
-            });
-            })->with('artist')->limit(5)->get();
+            $query->where('artist_id', $album->artist_id)
+                ->orWhereHas('genres', function ($q) use ($album) {
+                    return $q->whereIn('genres.id', $album->genres->pluck('id'));
+                });
+        })->with('artist')->limit(5)->get();
+        $spotifyAlbum = $spotify->searchAlbum($album->title, $album->artist->name);
 
-        return view('albums.show', compact('album', 'recommendedAlbums'));
+        return view('albums.show', compact('album', 'recommendedAlbums', 'spotifyAlbum'));
     }
+
     public function search(Request $request)
     {
         $query = Album::query()->with(['artist', 'genres']);

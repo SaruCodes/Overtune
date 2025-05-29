@@ -27,7 +27,7 @@
                             </option>
                         @endforeach
                     </select>
-                    <button type="submit" class="btn btn-outline btn-info">{{ __('Filtrar') }}</button>
+                    <button type="submit" class="btn btn-outline btn-primary">{{ __('Filtrar') }}</button>
                 </div>
             </form>
         </div>

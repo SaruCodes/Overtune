@@ -1,7 +1,7 @@
 <x-layouts.layout titulo="Detalles de la Lista">
     <div class="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-12 mb-8">
             <div class="flex justify-between items-center mb-4">
-                <h1 class="text-3xl font-bold flex items-center gap-3">
+                <h1 class="text-3xl font-bold flex items-center gap-3"/>
                     {{ $list->title }}
                 @auth
                     <form action="{{ route('favorite.toggle', ['type' => 'list', 'id' => $list->id]) }}" method="POST">
@@ -19,10 +19,7 @@
                         </button>
                     </form>
                 @endauth
-                <a href="{{ route('lists.index') }}"
-                   class="bg-accent hover:bg-orange-700 text-white text-sm py-2 px-4 rounded">
-                    ← Volver
-                </a>
+
                 <div class="flex space-x-3">
 
                 @auth
@@ -44,6 +41,10 @@
                 @endif
             @endauth
             </div>
+                    <a href="{{ route('lists.index') }}"
+                       class="bg-accent hover:bg-orange-700 text-white text-sm py-2 px-4 rounded">
+                        ← Volver
+                    </a>
         </div>
 
         @if($list->description)
